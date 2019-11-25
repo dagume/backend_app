@@ -133,6 +133,20 @@ type Detail{
     delivery_amount:Int
     subtotal:Int
 }
+#Document_reference
+type Document_reference{
+    id: ID!
+    parent_document: Document_reference
+    document_references: Document_reference
+    name: String
+    type: Boolean
+    activity: Activity
+    project: Project
+    contact: Contact
+    accounting_movements_id: integer
+    module: Module
+    drive_id: String
+}
 #Miembros
 type Member{
     id:ID!
@@ -142,6 +156,11 @@ type Member{
     hours_week:Int
     hours_month:Int
     state:Int!
+}
+#Module
+type Module{
+    id: ID
+    name: String
 }
 #Ordenes
 type Order{
