@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Document_reference;
+use App\Project;
 use App\User;
 use Caffeinated\Shinobi\Models\Permission;
 use Caffeinated\Shinobi\Models\Role;
@@ -11,11 +14,51 @@ use Illuminate\Http\Request;
 
 class RolesController extends Controller
 {
+    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
+
     public function __construct()
     {}
-    public function index()
+    public function index(Request $request)
     {
-        //dd(Role::findOrfail(1));
+        //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        //$doc_ref_project->name = 'Proyectos';
+        //$doc_ref_project->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$project_folder = Conection_Drive()->files->create(Create_Folder('Proyectos', $this->folder_id), ['fields' => 'id']);
+        //$doc_ref_project->drive_id = $project_folder->id;
+        //$doc_ref_project->save();
+//
+        //$doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        //$doc_ref_account->name = 'Cuentas';
+        //$doc_ref_account->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$account_folder = Conection_Drive()->files->create(Create_Folder('Cuentas', $this->folder_id), ['fields' => 'id']);
+        //$doc_ref_account->drive_id = $account_folder->id;
+        //$doc_ref_account->save();
+//
+        //$doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        //$doc_ref_contact->name = 'Contactos';
+        //$doc_ref_contact->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$contact_folder = Conection_Drive()->files->create(Create_Folder('Contactos', $this->folder_id), ['fields' => 'id']);
+        //$doc_ref_contact->drive_id = $contact_folder->id;
+        //$doc_ref_contact->save();
+//
+        //$doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        //$doc_ref_2019->name = '2019';
+        //$doc_ref_2019->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
+        //$doc_ref_2019->drive_id = $year_folder->id;
+        //$doc_ref_2019->save();
+        $document = new Document_reference;
+        $document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
+
+
+            $document->name = 'name';
+            $document->drive_id = $document_reference->drive_id;
+            echo($document);
+
+
+
+        //dd(Project::findOrFail(1)->folder_id);
+       //dd(Role::findOrfail(1));
         //$role1 = Role::findOrfail(1);
         //$role2 = Role::findOrfail(2);
         //$role3 = Role::findOrfail(3);

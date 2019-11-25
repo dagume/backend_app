@@ -30,6 +30,7 @@ class CreateContact
                 'mimeType' => 'application/vnd.google-apps.folder',
                 'parents' => [$this->folder_id ],
             ]);
+            dd(User::max('id') + 1);
             $contact = new User;
             $contact->parent_contact_id     =$args['parent_contact_id'];
             $contact->type                  =$args['type'];

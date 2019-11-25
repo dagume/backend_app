@@ -1,6 +1,14 @@
 <?php
 
-
+function  Create_Folder($name, $parent_folder)
+{
+    $fileMetadata = new \Google_Service_Drive_DriveFile([
+        'name' => $name,
+        'mimeType' => 'application/vnd.google-apps.folder',
+        'parents' => [$parent_folder],
+    ]);
+    return $fileMetadata;
+}
 function Conection_Drive()
 {
     //Correo APP

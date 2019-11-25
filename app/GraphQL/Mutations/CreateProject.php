@@ -24,13 +24,10 @@ class CreateProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        //Transaccion para create
         DB::transaction(function () use($args){
-            $fileMetadata = new \Google_Service_Drive_DriveFile([
-                'name'     => $args['name'],
-                'mimeType' => 'application/vnd.google-apps.folder',
-                'parents' => [$this->folder_id ],
-            ]);
-            $project = new Project;
+
+            $project = new Project; //Capturando datos del proyecto
             $project->project_type_id       =$args['project_type_id'];
             $project->parent_project_id     =$args['parent_project_id'];
             $project->name                  =$args['name'];
@@ -44,8 +41,19 @@ class CreateProject
             $project->type                  =$args['type'];
             $project->association           =$args['association'];
             $project->consortium_name       =$args['consortium_name'];
-            $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
-            $project->folder_id         =$folder->id;
+            //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
+            $folder = Conection_Drive()->files->create(Create_Folder($args['name'], DB::table('document_reference')->where('name', date("Y"))->get('drive_id')), ['fields' => 'id']);
+            $project->folder_id = $folder->id; //Id del folder que se creo en drive
+
+            $doc_reference = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+            $doc_reference->parent_document_id = Project::max('id') + 1;
+            $doc_reference->name = $args['name'];
+            $doc_reference->project_id = $args['project_id'];
+            $doc_reference->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+
+            //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
+            $activity_folder = Conection_Drive()->files->create(Create_Folder('Actividades', $folder->id), ['fields' => 'id']);
+
             $project->save();
         }, 3);
         return [

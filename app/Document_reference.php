@@ -23,7 +23,6 @@ class Document_reference extends Model
         'module_id',
         'drive_id'
     ];
-
     //falta relacion accounting_movements
 
     public function parent_document()

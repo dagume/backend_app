@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use App\Activity;
+use App\Document_reference;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
@@ -48,6 +49,17 @@ class CreateActivity
             $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
             $activity->drive_id             = $folder->id;
             $activity->save();
+            $fileMetadata = new \Google_Service_Drive_DriveFile([
+                'name'     => $args['name'],
+                'mimeType' => 'application/vnd.google-apps.folder',
+                'parents' => [$this->folder_id ],
+            ]);
+            $doc_reference = new Document_reference;
+
+            $doc_reference->name            = $args['name'];
+            $doc_reference->project_id      = $args['project_id'];
+            $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
+
         }, 3);
         return [
             'message' => 'Actividad creada'

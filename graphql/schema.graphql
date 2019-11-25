@@ -143,7 +143,7 @@ type Document_reference{
     activity: Activity
     project: Project
     contact: Contact
-    accounting_movements_id: integer
+    accounting_movements_id: Int
     module: Module
     drive_id: String
 }
