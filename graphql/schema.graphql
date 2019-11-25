@@ -1,0 +1,482 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+type Query {
+    #me
+    me: Contact @auth(guard:"api")
+    #Query proyectos
+    filter_name_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+
+    #Query Project_type
+    filter_name_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") #@middleware(checks:["auth:api"])
+    Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") #@middleware(checks:["auth:api"])
+    Projects_type: [Project_type!]! @all(model: "App\\Project_type")# @middleware(checks:["auth:api"])
+
+    #Query Contacts
+    filter_name_contact(name: String! @where(operator: "like")): [Contact] @all(model: "App\\User") #@middleware(checks:["auth:api"])
+    contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
+    contacts: [Contact!]! @all(model: "App\\User")  @middleware(checks:["auth:api"])
+    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") #@middleware(checks:["auth:api"])
+
+   #Query roles
+    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+
+    #Query permissions
+    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+
+    #Members
+    members: [Member] @paginate(type: "paginator" model: "App\\Member") #@middleware(checks:["auth:api"])
+
+    #Categories
+    category(name: String! @eq): Category @find(model: "App\\Category")#@middleware(checks:["auth:api"])
+    categories: [Category!]! @all(model: "App\\Category") #@middleware(checks:["auth:api"])
+    categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")#@middleware(checks:["auth:api"])
+
+    #Products
+    filter_name_product(name: String! @where(operator: "like")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
+    product(name: String! @eq): Product @find(model: "App\\Product")#@middleware(checks:["auth:api"])
+    products: [Product!]! @all(model: "App\\Product")#@middleware(checks:["auth:api"])
+    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")#@middleware(checks:["auth:api"])
+
+    #Orders
+    filter_name_order(name: String! @where(operator: "like")): [Order] @all(model: "App\\Order") #@middleware(checks:["auth:api"])
+    order(name: String! @eq): Order @find(model: "App\\Order")#@middleware(checks:["auth:api"])
+    orders: [Order!]! @all(model: "App\\Order")#@middleware(checks:["auth:api"])
+    orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
+
+    #Actividades
+    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    activity(name: String @eq id_activity:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
+
+    #GlobalSearch
+    #globalSearch(name: String!): [GlobalSearch]
+    #Search(Keyword:String!): [GlobalSearch]
+}
+
+#interface GlobalSearch
+#    @interface(resolveType: "App\\GraphQL\\Interfaces\\GlobalSearch@resolveType"){
+#    id:ID!
+#    name:String!
+#}
+# Busqueda Global
+#union GlobalSearch @union(resolveType: "App\\GraphQL\\Unions\\General@resolveType")
+#    = Contact | Project
+
+#Actividades
+type Activity { #implements GlobalSearch{
+    id:ID!
+    #project:Project!
+    activities:[Activity]
+    name:String!
+    description:String
+    date_start:Date
+    date_end:Date
+    state:String
+    completed:Boolean
+    priority:String
+    notes: String
+    amount:Int
+    is_added:Boolean
+    is_folder:Boolean
+}
+#Categorias
+type Category {#implements GlobalSearch{
+    id:ID!
+    name:String!
+    description:String
+    Products:[Product]
+}
+#Contact
+type Contact {#implements GlobalSearch{
+    id:ID!
+    contact:Contact
+    type:contactType!
+    name:String!
+    lastname:String
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    locate:String
+    city:String
+    address:String
+    web_site:String
+    password: String
+    remember_token:String
+    folder_id:String
+    members:[Member]
+    orders:[Order]
+    quotations:[Quotation]
+}
+#Detales
+type Detail{
+    id: ID!
+    product:Product!
+    order:Order!
+    quantity:Int!
+    value:Int
+    measure:String
+    delivery_amount:Int
+    subtotal:Int
+}
+#Miembros
+type Member{
+    id:ID!
+    project:Project!
+    contact:Contact!
+    role:Role
+    hours_week:Int
+    hours_month:Int
+    state:Int!
+}
+#Ordenes
+type Order{
+    id:ID!
+    quotations:[Quotation]
+    project:Project
+    contact:Contact
+    details:[Detail]
+    name:String!
+    code:String
+    application_date: Date!
+    state: String#!
+    description:String
+    delivery_site:String
+    sender_data__:Contact
+    subtotal:Int
+    total:Int
+}
+#Permisos
+type Permission {
+    id: ID!
+    name: String!
+    slug: String!
+    description: String
+}
+#Productos
+type Product {#implements GlobalSearch{
+    id:ID!
+    category:Category
+    name:String!
+    description:String
+}
+#tipos de proyecto
+type Project_type {
+    id:ID!
+    name_project_type:String
+    description_project_type:String
+}
+#Proyecto
+type Project {#implements GlobalSearch{
+    id: ID!
+    project_type:Project_type
+    parent_project:Project
+    name: String!
+    start_date: Date
+    end_date: Date
+    description: String
+    contract_value: Int
+    expenses: Int
+    process: Int
+    state: String
+    place:String
+    address:String
+    type:typeProject
+    association:associationProject
+    consortium_name:String
+    id_folder: String
+    members: [Member]
+    activities:[Activity]
+}
+#Cotizacion
+type Quotation{
+    id:ID!
+    order:Order!
+    contact:Contact!
+    folder_id:String
+    authorization:Boolean
+    date: Date
+}
+#Role
+type Role {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  special: String
+  permissions: [Permission]
+}
+#Mensaje exitoso de creacion
+type MessageSuccess {
+    message: String
+}
+
+#Mensaje de creado de folder
+type MessageSuccessFolder {
+    folder: String
+}
+#tipos de contacto
+enum contactType{
+    persona @enum(value: 1)
+    empresa @enum(value: 2)
+}
+#Tipo de identificacion Contacto
+enum contactIdType{
+    CC @enum(value: 1)
+    nit @enum(value: 2)
+    pasaporte @enum(value: 3)
+    extranjera @enum(value: 4)
+}
+#Tipos proyecto
+enum typeProject {
+    publico @enum(value: 0)
+    privado @enum(value: 1)
+}
+#association proyecto
+enum associationProject {
+    consorcio @enum(value: 0)
+    APP @enum(value: 1)
+}
+#Estados proyecto
+enum statesProject {
+    proceso
+    finalizado
+    archivado
+}
+#Categorias del Proyecto
+enum parentProject {
+    remodelacion @enum(value: 1)
+    mantenimiento @enum(value: 2)
+    construccion @enum(value: 3)
+    estudio_suelos @enum(value: 4)
+    diseno @enum(value: 5)
+}
+input LoginInput {
+    username: String!
+    password: String!
+}
+input RefreshTokenInput {
+    refresh_token: String
+}
+type AuthPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+    contact: Contact!
+}
+type RefreshTokenPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+}
+type LogoutResponse {
+    status: String!
+    message: String
+}
+type ForgotPasswordResponse {
+    status: String!
+    message: String
+}
+input ForgotPasswordInput {
+    email: String!
+}
+input NewPasswordWithCodeInput {
+    email: String!
+    token: String!
+    password: String!
+    password_confirmation: String!
+}
+type Mutation {
+    #Auth
+    login(data: LoginInput): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
+    refreshToken(data: RefreshTokenInput): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
+    logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
+    forgotPassword(data: ForgotPasswordInput!): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
+    updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
+    ########################projects
+    #Crear Proyecto
+    createProject(
+        project_type_id: Int @rules(apply: ["integer","required"])
+        #Revisar siguiente linea
+        parent_project_id: parentProject
+        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        start_date: Date @rules(apply: ["nullable","date"])
+        end_date: Date @rules(apply: ["nullable","date"])
+        description: String @rules(apply: ["nullable"])
+        contract_value: Int
+        state: String = "seleccion"
+        place: String
+        address: String
+        type: typeProject
+        association: associationProject
+        consortium_name:String
+        folder_id: String
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+    #Editar Proyecto
+    updateProject(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        description: String @rules(apply: ["nullable"])
+        place: String
+        address: String
+        consortium_name: String
+    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
+    #Editar estado Proyecto
+    updateStateProject(
+        id: ID! @rules(apply: ["required"])
+        state: String @rules(apply: ["required", "in:ejecucion, suspendido"])
+    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
+
+    ######################Contacts
+    createContact(
+        parent_contact_id: Int @rules(apply: ["nullable"])
+        type: contactType @rules(apply: ["required", "integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["max:255"])
+        identification_type: contactIdType
+        identification_number: Int @rules(apply: ["unique:contacts,identification_number"])
+        email: String @rules(apply: ["required", "max:255","unique:contacts,email"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int = 1
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+        password: String @bcrypt @rules(apply: ["min:8", "nullable"])
+    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
+
+    updateContact(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["max:255"])
+        identification_type: contactIdType @rules(apply: ["integer"])
+        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["required"])
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
+
+    #member
+    member_has_project(
+        project_id: Int! @rules(apply: ["integer"])
+        contact_id: Int! @rules(apply: ["integer"])
+        rol_id:     Int! @rules(apply: ["integer"])
+        hours_week: Int  @rules(apply: ["integer"])
+        hours_month:Int  @rules(apply: ["integer"])
+        state:  Int = 1
+        ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
+    #Category
+    createCategory(
+        name: String @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+    ): Category @create(model: "App\\Category")
+    updateCategory(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+    ): Category @update(model: "App\\Category")
+    #Product
+    createProduct(
+        category_id: Int! @rules(apply: ["required","integer"])
+        name: String! @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+    ): Product @create(model: "App\\Product")
+    updateProduct(
+        id: ID! @rules(apply: ["required"])
+        category_id: Int! @rules(apply: ["required"])
+        name: String! @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+    ): Product @update(model: "App\\Product")
+    #SolicitudCotizacon
+    createApplication(
+        name: String! @rules(apply: ["required", "max:255"])
+        code:String!
+        application_date: Date @rules(apply: ["date"])
+        #state: String = "Open"
+        description: String @rules(apply: ["max:255"])
+        delivery_site:String! @rules(apply: ["max:255"])
+        sender_data:Int
+        email_contacts:[Int]
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
+
+    #updateOrder(
+    #    id_order:ID! @rules(apply:["required"])
+    #    id_members: Int! @rules(apply: ["required","integer"])
+    #    name: String! @rules(apply: ["required", "max:255"])
+    #    code: String! @rules(apply: ["required","max:255"])
+    #    description: String @rules(apply: ["max:255"])
+    #    date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
+    #    notes: String @rules(apply: ["max:255"])
+    #): Order @update(model: "App\\Order")
+    #detail
+    createDetailForApplication(
+        product_id: Int! @rules(apply: ["required","integer"])
+        order_id: Int! @rules(apply: ["required","integer"])
+        quantity: Int! @rules(apply: ["required", "integer"])
+    ): Detail @create(model: "App\\Detail")
+
+    createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+    #Crear actividad
+    createActivity(
+        project_id: Int @rules(apply: ["integer","nullable"])
+        parent_activity_id: Int @rules(apply: ["integer","nullable"])
+        name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+        description: String @rules(apply: ["nullable"])
+        date_start: Date @rules(apply: ["date"])
+        date_end: Date @rules(apply: ["date"])
+        state: String @rules(apply: ["required", "max:5"])
+        completed:Boolean
+        priority:String
+        notes:String
+        amount: Int @rules(apply: ["nullable", "integer"])
+        is_added: Boolean
+        is_folder: Boolean
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
+
+    ##Editar Proyecto
+    #updateActivity(
+    #    id_activity: ID! @rules(apply: ["required"])
+    #    name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+    #    description: String @rules(apply: ["nullable"])
+    #    date_start: Date @rules(apply: ["date"])
+    #    date_end: Date @rules(apply: ["date"])
+    #): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
+}
+#input ContactInput{
+#    id_parent_contact: Int @rules(apply: ["integer"])
+#    id_job: Int @rules(apply: ["integer"])
+#    type: contactType @rules(apply: ["integer"])
+#    name: String @rules(apply: ["required", "max:255"])
+#    lastname: String @rules(apply: ["required", "max:255"])
+#    identification_type: contactIdType @rules(apply: ["required"])
+#    identification_number: Int @rules(apply: ["required"])
+#    email: String @rules(apply: ["required", "max:255"])
+#    phones:String @rules(apply: ["max:30"])
+#    state:Int @rules(apply: ["required"])
+#    locate:String @rules(apply: ["max:255"])
+#    city:String @rules(apply: ["max:255"])
+#    address:String @rules(apply: ["max:255"])
+#    web_site:String @rules(apply: ["max:255"])
+#}
+
+

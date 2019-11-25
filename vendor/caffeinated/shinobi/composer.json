@@ -1,0 +1,39 @@
+{
+    "name": "caffeinated/shinobi",
+    "description": "Laravel Roles and Permissions",
+    "keywords": ["shinobi", "roles", "permissions", "auth", "laravel", "caffeinated"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Shea Lewis",
+        "email": "shea.lewis89@gmail.com"
+    }],
+    "require": {
+        "php": "^7.1.3",
+        "illuminate/support": "5.7.*|5.8.*|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Caffeinated\\Shinobi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Caffeinated\\Shinobi\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Caffeinated\\Shinobi\\ShinobiServiceProvider"
+            ],
+            "aliases": {
+                "Shinobi": "Caffeinated\\Shinobi\\Facades\\Shinobi"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "orchestra/testbench": "^3.7",
+        "doctrine/dbal": "^2.10@dev"
+    }
+}
