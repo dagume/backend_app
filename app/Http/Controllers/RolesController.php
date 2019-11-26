@@ -42,18 +42,19 @@ class RolesController extends Controller
         //$doc_ref_contact->save();
 //
         //$doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        //$doc_ref_2019->parent_document_id = DB::table('document_reference')->where('name', 'Proyectos')->first()->id;
         //$doc_ref_2019->name = '2019';
         //$doc_ref_2019->type = 1; // 0 = Tipo File, 1 = Tipo Folder
         //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
         //$doc_ref_2019->drive_id = $year_folder->id;
         //$doc_ref_2019->save();
         $document = new Document_reference;
-        $document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
+        //$document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
 
 
             $document->name = 'name';
-            $document->drive_id = $document_reference->drive_id;
-            echo($document);
+            $document->drive_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
+            echo(DB::table('document_reference')->where('name', date("Y"))->first()->drive_id);
 
 
 

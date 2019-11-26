@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Document_reference;
 use App\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -25,12 +26,7 @@ class CreateContact
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-            $fileMetadata = new \Google_Service_Drive_DriveFile([
-                'name'     => $args['name'],
-                'mimeType' => 'application/vnd.google-apps.folder',
-                'parents' => [$this->folder_id ],
-            ]);
-            dd(User::max('id') + 1);
+
             $contact = new User;
             $contact->parent_contact_id     =$args['parent_contact_id'];
             $contact->type                  =$args['type'];
@@ -46,9 +42,18 @@ class CreateContact
             $contact->address               =$args['address'];
             $contact->web_site              =$args['web_site'];
             $contact->password              =$args['password'];
-            $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
-            $contact->folder_id             =$folder->id;
+            $contact_folder = Conection_Drive()->files->create(Create_Folder($args['name'], DB::table('document_reference')->where('name', 'Contactos')->first()->drive_id),['fields' => 'id']);
+            $contact->folder_id             =$contact_folder->id;
             $contact->save();
+
+            $doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+            $doc_ref_contact->parent_document_id = DB::table('document_reference')->where('name', 'Contactos')->first()->id;
+            $doc_ref_contact->name = $args['name'];
+            $doc_ref_contact->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_contact->contact_id = User::max('id');
+            $doc_ref_contact->drive_id = $contact_folder->id;
+            $doc_ref_contact->save();
+
         }, 3);
         return [
             'message' => 'Contacto creado exitosamente'
