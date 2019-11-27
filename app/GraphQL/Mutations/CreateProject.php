@@ -52,6 +52,7 @@ class CreateProject
             $doc_ref_project->name = $args['name'];
             $doc_ref_project->type = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_project->project_id = Project::max('id');
+            $doc_ref_project->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_project->drive_id = $project_folder->id;
             $doc_ref_project->save();
             //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php

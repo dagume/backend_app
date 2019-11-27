@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Document_reference;
+use App\Module;
 use App\Project;
 use App\User;
 use Caffeinated\Shinobi\Models\Permission;
@@ -20,6 +21,20 @@ class RolesController extends Controller
     {}
     public function index(Request $request)
     {
+        dd();
+        //$module = new Module;
+        //$module->name = 'Actividad';
+        //$module->save();
+        //$module1 = new Module;
+        //$module1->name = 'Proyecto';
+        //$module1->save();
+        //$module2 = new Module;
+        //$module2->name = 'Contacto';
+        //$module2->save();
+        //$module3 = new Module;
+        //$module3->name = 'Cuenta';
+        //$module3->save();
+
         //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_project->name = 'Proyectos';
         //$doc_ref_project->type = 1; // 0 = Tipo File, 1 = Tipo Folder
@@ -48,13 +63,13 @@ class RolesController extends Controller
         //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
         //$doc_ref_2019->drive_id = $year_folder->id;
         //$doc_ref_2019->save();
-        $document = new Document_reference;
+        //$document = new Document_reference;
         //$document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
 
 
-            $document->name = 'name';
-            $document->drive_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
-            echo(DB::table('document_reference')->where('name', date("Y"))->first()->drive_id);
+            //$document->name = 'name';
+            //$document->drive_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
+            //echo(DB::table('document_reference')->where('name', date("Y"))->first()->drive_id);
 
 
 

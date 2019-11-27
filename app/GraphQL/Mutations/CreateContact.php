@@ -10,8 +10,6 @@ use DB;
 
 class CreateContact
 {
-    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
-
     public function __construct(){
     }
     /**
@@ -51,6 +49,7 @@ class CreateContact
             $doc_ref_contact->name = $args['name'];
             $doc_ref_contact->type = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_contact->contact_id = User::max('id');
+            $doc_ref_contact->module_id = 3; //id 3 pertenece al modulo Contact
             $doc_ref_contact->drive_id = $contact_folder->id;
             $doc_ref_contact->save();
 

@@ -27,11 +27,7 @@ class CreateActivity
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-            $fileMetadata = new \Google_Service_Drive_DriveFile([
-                'name'     => $args['name'],
-                'mimeType' => 'application/vnd.google-apps.folder',
-                'parents' => [$this->folder_id ],
-            ]);
+
             $activity = new Activity;
             $activity->project_id           = $args['project_id'];
             $activity->parent_activity_id   = $args['parent_activity_id'];
@@ -46,20 +42,21 @@ class CreateActivity
             $activity->amount               = $args['amount'];
             $activity->is_added             = $args['is_added'];
             $activity->is_folder            = $args['is_folder'];
-            $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
-            $activity->drive_id             = $folder->id;
+            //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
+            $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], DB::table('document_reference')->where('project_id', $args['project_id'])->where('name', 'Actividades')->first()->drive_id), ['fields' => 'id']);
+            $activity->drive_id             = $activity_folder->id;
             $activity->save();
-            $fileMetadata = new \Google_Service_Drive_DriveFile([
-                'name'     => $args['name'],
-                'mimeType' => 'application/vnd.google-apps.folder',
-                'parents' => [$this->folder_id ],
-            ]);
+
+
             $doc_reference = new Document_reference;
-
+            $doc_reference->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('name', 'Actividades')->first()->id;
             $doc_reference->name            = $args['name'];
+            $doc_reference->activity_id      = Activity::max('id');
             $doc_reference->project_id      = $args['project_id'];
-            $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
-
+            $doc_reference->project_id      = $args['project_id'];
+            $doc_reference->module_id = 1; //id 1 pertenece al modulo Activity
+            $doc_reference->drive_id        = $activity_folder->id;
+            $doc_reference->save();
         }, 3);
         return [
             'message' => 'Actividad creada'
