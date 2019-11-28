@@ -457,7 +457,7 @@ type Mutation {
     createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
     #Crear actividad
     createActivity(
-        project_id: Int @rules(apply: ["integer","nullable"])
+        project_id: Int! @rules(apply: ["integer"])
         parent_activity_id: Int @rules(apply: ["integer","nullable"])
         name: String @rules(apply: ["required", "max:255","unique:activities,name"])
         description: String @rules(apply: ["nullable"])

@@ -21,7 +21,7 @@ class RolesController extends Controller
     {}
     public function index(Request $request)
     {
-        dd();
+        dd(DB::table('document_reference')->where('project_id', 8)->where('name', 'Actividades')->first());
         //$module = new Module;
         //$module->name = 'Actividad';
         //$module->save();
