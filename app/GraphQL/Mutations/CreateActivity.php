@@ -38,7 +38,6 @@ class CreateActivity
                 $doc_reference->type                = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $doc_reference->activity_id         = Activity::max('id') + 1;
                 $doc_reference->project_id          = $args['project_id'];
-                $doc_reference->project_id          = $args['project_id'];
                 $doc_reference->module_id           = 1; //id 1 pertenece al modulo Activity
                 $doc_reference->drive_id            = $activity_folder->id;
             }else {

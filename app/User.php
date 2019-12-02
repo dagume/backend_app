@@ -38,7 +38,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    //Falta Relacion con cuentas
+    public function accounts(){
+        return $this->hasMany('App\Account', 'contact_id', 'id');
+    }
     public function contact()
     {
         return $this->BelongsTo(User::class, 'parent_contact_id');

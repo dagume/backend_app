@@ -30,6 +30,7 @@ class CreateApplication
             $order->name                = $args['name'];
             $order->code                = $args['code'];
             $order->application_date    = now();
+            //pendiente revisar modulo estado en DB
             //$order->state             = $args['state'];
             $order->description         = $args['description'];
             $order->__delivery_site     = $args['__delivery_site'];
@@ -46,7 +47,7 @@ class CreateApplication
             }
         }, 3);
 
-        
+
         return [
             'message' => 'Solicitud Enviada correctamente'
         ];

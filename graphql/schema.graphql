@@ -74,7 +74,15 @@ type Query {
 # Busqueda Global
 #union GlobalSearch @union(resolveType: "App\\GraphQL\\Unions\\General@resolveType")
 #    = Contact | Project
-
+#Cuentas
+type Account {
+    id:ID!
+    contact_id: Int
+    project_id: Int
+    parent_account_id: Int
+    name_account: String
+    type_account: String
+}
 #Actividades
 type Activity { #implements GlobalSearch{
     id:ID!
@@ -121,6 +129,7 @@ type Contact {#implements GlobalSearch{
     members:[Member]
     orders:[Order]
     quotations:[Quotation]
+    accounts: [Account]
 }
 #Detales
 type Detail{
@@ -220,6 +229,7 @@ type Project {#implements GlobalSearch{
     id_folder: String
     members: [Member]
     activities:[Activity]
+    accounts: [Account]
 }
 #Cotizacion
 type Quotation{
@@ -447,6 +457,7 @@ type Mutation {
     #    date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
     #    notes: String @rules(apply: ["max:255"])
     #): Order @update(model: "App\\Order")
+
     #detail
     createDetailForApplication(
         product_id: Int! @rules(apply: ["required","integer"])
@@ -472,14 +483,14 @@ type Mutation {
         is_folder: Boolean
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
 
-    ##Editar Proyecto
-    #updateActivity(
-    #    id_activity: ID! @rules(apply: ["required"])
-    #    name: String @rules(apply: ["required", "max:255","unique:activities,name"])
-    #    description: String @rules(apply: ["nullable"])
-    #    date_start: Date @rules(apply: ["date"])
-    #    date_end: Date @rules(apply: ["date"])
-    #): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    #Editar actividad
+    updateActivity(
+        id_activity: ID! @rules(apply: ["required"])
+        completed:Boolean
+        description: String @rules(apply: ["nullable"])
+        date_start: Date @rules(apply: ["date"])
+        date_end: Date @rules(apply: ["date"])
+    ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
 }
 #input ContactInput{
 #    id_parent_contact: Int @rules(apply: ["integer"])

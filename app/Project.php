@@ -30,6 +30,9 @@ class Project extends Model
         'consortium_name',
         'folder_id',
     ];
+    public function accounts(){
+        return $this->hasMany('App\Account', 'contact_id', 'id');
+    }
     public function project_type()
     {
         return $this->belongsTo('App\Project_type');
