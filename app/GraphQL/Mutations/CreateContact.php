@@ -7,11 +7,17 @@ use App\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
+use App\Repositories\ContactRepository;
 
 class CreateContact
 {
-    public function __construct(){
+    protected $contactRepo;
+
+    public function __construct(ContactRepository $repository)
+    {
+        $this->contactRepo = $repository;
     }
+
     /**
      * Return a value for the field.
      *
@@ -24,7 +30,6 @@ class CreateContact
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-
             $contact = new User;
             $contact->parent_contact_id     =$args['parent_contact_id'];
             $contact->type                  =$args['type'];
