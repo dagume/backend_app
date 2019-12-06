@@ -21,9 +21,10 @@ class RolesController extends Controller
     {}
     public function index(Request $request)
     {
-        $contact = DB::select('SELECT id FROM document_reference ORDER BY id DESC LIMIT 1');
-        dd($contact);
+        //$contact = DB::select('SELECT id FROM document_reference ORDER BY id DESC LIMIT 1');
+        //dd($contact);
         //dd(DB::table('document_reference')->where('name', 'Contactos')->first()->drive_id);
+
         //$module = new Module;
         //$module->name = 'Actividad';
         //$module->save();

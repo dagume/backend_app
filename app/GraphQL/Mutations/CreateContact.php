@@ -35,7 +35,6 @@ class CreateContact
             $args['folder_id'] = $contact_folder->id;
             $contact = $this->contactRepo->create($args);
 
-
             $doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_contact->parent_document_id = $this->contactRepo->getFolderContact()->id;
             $doc_ref_contact->name = $args['name'];

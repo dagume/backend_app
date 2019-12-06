@@ -21,7 +21,7 @@ class ContactRepository extends BaseRepository
     public function refeFolder()
     {
         //User::max('id')
-        $reference = DB::select('SELECT id FROM document_reference ORDER BY id DESC LIMIT 1');
+        $reference = DB::select('SELECT id FROM contacts ORDER BY id DESC LIMIT 1');
         return $reference[0];
     }
 

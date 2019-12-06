@@ -402,7 +402,7 @@ type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8", "nullable"])
-    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")@middleware(checks:["auth:api"])
+    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
 
     updateContact(
         id: ID! @rules(apply: ["required"])
