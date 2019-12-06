@@ -8,58 +8,58 @@ type Query {
     #me
     me: Contact @auth(guard:"api")
     #Query proyectos
-    filter_name_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    filter_name_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
 
     #Query Project_type
-    filter_name_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") #@middleware(checks:["auth:api"])
-    Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") #@middleware(checks:["auth:api"])
-    Projects_type: [Project_type!]! @all(model: "App\\Project_type")# @middleware(checks:["auth:api"])
+    filter_name_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
+    Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") @middleware(checks:["auth:api"])
+    Projects_type: [Project_type!]! @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
 
     #Query Contacts
-    filter_name_contact(name: String! @where(operator: "like")): [Contact] @all(model: "App\\User") #@middleware(checks:["auth:api"])
-    contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
+    filter_name_contact(name: String! @where(operator: "like")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])
+    contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") @middleware(checks:["auth:api"])
     contacts: [Contact!]! @all(model: "App\\User")  @middleware(checks:["auth:api"])
-    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") #@middleware(checks:["auth:api"])
+    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api"])
 
    #Query roles
-    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
-    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
-    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
+    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
+    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
 
     #Query permissions
-    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
-    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
-    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") @middleware(checks:["auth:api"])
+    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") @middleware(checks:["auth:api"])
+    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") @middleware(checks:["auth:api"])
 
     #Members
-    members: [Member] @paginate(type: "paginator" model: "App\\Member") #@middleware(checks:["auth:api"])
+    members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
 
     #Categories
-    category(name: String! @eq): Category @find(model: "App\\Category")#@middleware(checks:["auth:api"])
-    categories: [Category!]! @all(model: "App\\Category") #@middleware(checks:["auth:api"])
-    categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")#@middleware(checks:["auth:api"])
+    category(name: String! @eq): Category @find(model: "App\\Category")@middleware(checks:["auth:api"])
+    categories: [Category!]! @all(model: "App\\Category") @middleware(checks:["auth:api"])
+    categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")@middleware(checks:["auth:api"])
 
     #Products
-    filter_name_product(name: String! @where(operator: "like")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
-    product(name: String! @eq): Product @find(model: "App\\Product")#@middleware(checks:["auth:api"])
-    products: [Product!]! @all(model: "App\\Product")#@middleware(checks:["auth:api"])
-    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")#@middleware(checks:["auth:api"])
+    filter_name_product(name: String! @where(operator: "like")): [Product] @all(model: "App\\Product") @middleware(checks:["auth:api"])
+    product(name: String! @eq): Product @find(model: "App\\Product")@middleware(checks:["auth:api"])
+    products: [Product!]! @all(model: "App\\Product")@middleware(checks:["auth:api"])
+    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")@middleware(checks:["auth:api"])
 
     #Orders
-    filter_name_order(name: String! @where(operator: "like")): [Order] @all(model: "App\\Order") #@middleware(checks:["auth:api"])
-    order(name: String! @eq): Order @find(model: "App\\Order")#@middleware(checks:["auth:api"])
-    orders: [Order!]! @all(model: "App\\Order")#@middleware(checks:["auth:api"])
-    orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
+    filter_name_order(name: String! @where(operator: "like")): [Order] @all(model: "App\\Order") @middleware(checks:["auth:api"])
+    order(name: String! @eq): Order @find(model: "App\\Order")@middleware(checks:["auth:api"])
+    orders: [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
+    orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")@middleware(checks:["auth:api"])
 
     #Actividades
-    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
-    activity(name: String @eq id_activity:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api"])
+    activity(name: String @eq id_activity:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api"])
 
     #GlobalSearch
     #globalSearch(name: String!): [GlobalSearch]
@@ -370,7 +370,7 @@ type Mutation {
         association: associationProject
         consortium_name:String
         folder_id: String
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(
         id: ID! @rules(apply: ["required"])
@@ -379,12 +379,12 @@ type Mutation {
         place: String
         address: String
         consortium_name: String
-    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
     #Editar estado Proyecto
     updateStateProject(
         id: ID! @rules(apply: ["required"])
         state: String @rules(apply: ["required", "in:ejecucion, suspendido"])
-    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
 
     ######################Contacts
     createContact(
@@ -402,7 +402,7 @@ type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8", "nullable"])
-    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
+    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")@middleware(checks:["auth:api"])
 
     updateContact(
         id: ID! @rules(apply: ["required"])
@@ -417,13 +417,13 @@ type Mutation {
         city:String @rules(apply: ["max:255"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
-    ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
+    ): Contact @update(model: "App\\User") @middleware(checks:["auth:api"])
 
     #member
     member_has_project(
         project_id: Int! @rules(apply: ["integer"])
         contact_id: Int! @rules(apply: ["integer"])
-        rol_id:     Int! @rules(apply: ["integer"])
+        role_id:     Int! @rules(apply: ["integer"])
         hours_week: Int  @rules(apply: ["integer"])
         hours_month:Int  @rules(apply: ["integer"])
         state:  Int = 1
@@ -460,7 +460,7 @@ type Mutation {
         delivery_site:String! @rules(apply: ["max:255"])
         sender_data:Int
         email_contacts:[Int]
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])
@@ -479,7 +479,7 @@ type Mutation {
         quantity: Int! @rules(apply: ["required", "integer"])
     ): Detail @create(model: "App\\Detail")
 
-    createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+    createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
     #Crear actividad
     createActivity(
         project_id: Int! @rules(apply: ["integer"])
@@ -495,16 +495,20 @@ type Mutation {
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean
         is_folder: Boolean
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
 
     #Editar actividad
     updateActivity(
         id_activity: ID! @rules(apply: ["required"])
+        name:String
         completed:Boolean
         description: String @rules(apply: ["nullable"])
+        priority:String
+        notes:String
+        state:String
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
-    ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    ): Activity @update(model: "App\\Activity") @middleware(checks:["auth:api"])
 }
 #input ContactInput{
 #    id_parent_contact: Int @rules(apply: ["integer"])

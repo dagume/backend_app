@@ -24,7 +24,7 @@ class Member_has_project
             $member = new Member;
             $member->project_id     = $args['project_id'];
             $member->contact_id     = $args['contact_id'];
-            $member->rol_id         = $args['rol_id'];
+            $member->role_id         = $args['role_id'];
             $member->hours_week     = $args['hours_week'];
             $member->hours_month    = $args['hours_month'];
             $member->state          = $args['state'];
