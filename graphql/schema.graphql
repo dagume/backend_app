@@ -92,9 +92,9 @@ type Activity { #implements GlobalSearch{
     description:String
     date_start:Date
     date_end:Date
-    state:String
+    state:stateActivity
     completed:Boolean
-    priority:String
+    priority:priorityActivity
     notes: String
     amount:Int
     is_added:Boolean
@@ -257,6 +257,19 @@ type MessageSuccess {
 #Mensaje de creado de folder
 type MessageSuccessFolder {
     folder: String
+}
+#estados de actividad
+enum stateActivity{
+    Archivado
+    Completa
+    Proceso
+    Atrasada
+}
+#estados de actividad
+enum priorityActivity{
+    Alta
+    Media
+    Baja    
 }
 #tipos de contacto
 enum contactType{
@@ -475,9 +488,9 @@ type Mutation {
         description: String @rules(apply: ["nullable"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
-        state: String @rules(apply: ["required", "max:5"])
+        state: stateActivity 
         completed:Boolean
-        priority:String
+        priority:priorityActivity
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean
