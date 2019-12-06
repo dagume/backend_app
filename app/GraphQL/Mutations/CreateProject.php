@@ -64,6 +64,15 @@ class CreateProject
             $doc_ref_activity->project_id = Project::max('id');
             $doc_ref_activity->drive_id = $activity_folder->id;
             $doc_ref_activity->save();
+            //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
+            $account_folder = Conection_Drive()->files->create(Create_Folder('Contabilidad', $project_folder->id), ['fields' => 'id']);
+            $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+            $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
+            $doc_ref_account->name ='Contabilidad';
+            $doc_ref_account->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_account->project_id = Project::max('id');
+            $doc_ref_account->drive_id = $account_folder->id;
+            $doc_ref_account->save();
         }, 3);
         return [
             'message' => 'Proyecto creado exitosamente'
