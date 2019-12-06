@@ -48,6 +48,8 @@ class UploadFile
         //    $doc_ref_file->drive_id = $args['drive_id'];
         //    $doc_ref_file->save();
         //}  
-        
+        return [
+            'message' => 'Archivo cargado'
+        ];
     }
 }
