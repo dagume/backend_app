@@ -286,14 +286,6 @@ enum statesProject {
     finalizado
     archivado
 }
-#Categorias del Proyecto
-enum parentProject {
-    remodelacion @enum(value: 1)
-    mantenimiento @enum(value: 2)
-    construccion @enum(value: 3)
-    estudio_suelos @enum(value: 4)
-    diseno @enum(value: 5)
-}
 input LoginInput {
     username: String!
     password: String!
@@ -339,13 +331,20 @@ type Mutation {
     forgotPassword(data: ForgotPasswordInput!): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
     updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
     #upload drive
-    
+    uploadFile(
+        name:String @rules(apply: ["required", "max:255"])      
+        activity_id:Int @rules(apply: ["nullable"])
+        project_id:Int @rules(apply: ["nullable"])
+        contact_id:Int @rules(apply: ["nullable"])
+        accounting_movements_id: Int @rules(apply: ["nullable"])
+        drive_id:String @rules(apply: ["required"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
     ########################projects
     #Crear Proyecto
     createProject(
         project_type_id: Int @rules(apply: ["integer","required"])
         #Revisar siguiente linea
-        parent_project_id: parentProject
+        parent_project_id: Int
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
         end_date: Date @rules(apply: ["nullable","date"])
