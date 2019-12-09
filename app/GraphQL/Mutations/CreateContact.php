@@ -8,15 +8,17 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
 use App\Repositories\ContactRepository;
+use App\Repositories\Document_referenceRepository;
 
 class CreateContact
 {
     protected $contactRepo;
+    protected $documentRepo;
 
-    public function __construct(ContactRepository $repository)
+    public function __construct(ContactRepository $conRepo, Document_referenceRepository $docRepo)
     {
-        $this->contactRepo = $repository;
-
+        $this->contactRepo = $conRepo;
+        $this->documentRepo = $docRepo;
     }
 
     /**
@@ -30,20 +32,18 @@ class CreateContact
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-            DB::transaction(function () use($args){
-            $contact_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->contactRepo->getFolderContact()->drive_id),['fields' => 'id']);
-            $args['folder_id'] = $contact_folder->id;
-            $contact = $this->contactRepo->create($args);
+        DB::transaction(function () use($args){            
+            //crea el folder para el nuevo contacto en GOOGLE DRIVE
+            $contact_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderContact()->drive_id),['fields' => 'id']);
+            $args['folder_id'] = $contact_folder->id; //enviamos el folder_id al $args            
+            $contact = $this->contactRepo->create($args); //guarda registro del nuevo contacto
 
-            $doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-            $doc_ref_contact->parent_document_id = $this->contactRepo->getFolderContact()->id;
-            $doc_ref_contact->name = $args['name'];
-            $doc_ref_contact->type = 1; // 0 = Tipo File, 1 = Tipo Folder
-            $doc_ref_contact->contact_id = $this->contactRepo->refeFolder()->id;
-            $doc_ref_contact->module_id = 3; //id 3 pertenece al modulo Contact
-            $doc_ref_contact->drive_id = $contact_folder->id;
-            $doc_ref_contact->save();
-
+            $args['parent_document_id'] = $this->documentRepo->getFolderContact()->id;       
+            $args['type'] = 1; // 0 = Tipo File, 1 = Tipo Folder      
+            $args['contact_id'] = $this->contactRepo->lastContact()->id;
+            $args['module_id'] = 3; //id 3 pertenece al modulo Contact
+            $args['drive_id'] = $contact_folder->id; 
+            $document = $this->documentRepo->create($args); //guarda registro del folder del nuevo contacto          
         }, 3);
         return [
             'message' => 'Contacto creado exitosamente'

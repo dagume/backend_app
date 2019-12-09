@@ -110,7 +110,7 @@ type Category {#implements GlobalSearch{
 #Contact
 type Contact {#implements GlobalSearch{
     id:ID!
-    contact:Contact
+    parent_contact:Contact
     type:contactType!
     name:String!
     lastname:String
@@ -260,10 +260,10 @@ type MessageSuccessFolder {
 }
 #estados de actividad
 enum stateActivity{
-    Archi
-    Compl
-    Proce
-    Atras
+    Archivado
+    Completado
+    Proceso
+    Atrasado
 }
 #estados de actividad
 enum priorityActivity{

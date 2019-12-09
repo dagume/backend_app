@@ -12,16 +12,11 @@ class ContactRepository extends BaseRepository
     {
         return new User;
     }
-
-    public function getFolderContact()
-    {
-        $folderContact = DB::select('SELECT id, drive_id FROM document_reference WHERE name = ?', ['Contactos']);
-        return $folderContact[0];
-    }
-    public function refeFolder()
-    {
-        //User::max('id')
-        $reference = DB::select('SELECT id FROM contacts ORDER BY id DESC LIMIT 1');
+    
+    public function lastContact()
+    {        
+        //Trae ultimo contacto registrado
+        $reference = DB::select('SELECT id FROM contacts ORDER BY id DESC LIMIT 1'); //User::max('id')
         return $reference[0];
     }
 

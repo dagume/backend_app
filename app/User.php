@@ -41,7 +41,7 @@ class User extends Authenticatable
     public function accounts(){
         return $this->hasMany('App\Account', 'contact_id', 'id');
     }
-    public function contact()
+    public function parent_contact()
     {
         return $this->BelongsTo(User::class, 'parent_contact_id');
     }
