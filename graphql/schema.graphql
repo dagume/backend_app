@@ -253,7 +253,6 @@ type Role {
 type MessageSuccess {
     message: String
 }
-
 #Mensaje de creado de folder
 type MessageSuccessFolder {
     folder: String
@@ -432,7 +431,7 @@ type Mutation {
     createCategory(
         name: String @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-    ): Category @create(model: "App\\Category")
+    ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateCategory@resolve") @middleware(checks:["auth:api"])
     updateCategory(
         id: ID! @rules(apply: ["required"])
         name: String @rules(apply: ["required", "max:255"])
@@ -443,7 +442,7 @@ type Mutation {
         category_id: Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-    ): Product @create(model: "App\\Product")
+    ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") @middleware(checks:["auth:api"])
     updateProduct(
         id: ID! @rules(apply: ["required"])
         category_id: Int! @rules(apply: ["required"])

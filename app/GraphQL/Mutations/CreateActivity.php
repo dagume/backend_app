@@ -7,12 +7,17 @@ use App\Document_reference;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Document_referenceRepository;
+use App\Repositories\ActivityRepository;
 use DB;
 
 class CreateActivity
 {
-    
-    public function __construct(){
+    protected $documentRepo;
+    protected $activityRepo;
+
+    public function __construct(Document_referenceRepository $docRepo, ActivityRepository $actRepo){
+        $this->documentRepo = $docRepo;
+        $this->activityRepo = $actRepo;
     }
     /**
      * Return a value for the field.
@@ -28,18 +33,15 @@ class CreateActivity
         DB::transaction(function () use($args){
             //verifica si la actividad es padre o hija para asi saber donde crear el folder
             if ($args['parent_activity_id'] == null) {
-                //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php y
-                //Buscamos el folder padre donde se va crear el nuevo folder
-                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], DB::table('document_reference')->where('project_id', $args['project_id'])->where('name', 'Actividades')->first()->drive_id), ['fields' => 'id']);
-                $doc_reference = new Document_reference;
+                //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php                
+                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
                 //Buscamos el ID del folder padre donde se creó la nueva actividad
-                $doc_reference->parent_document_id  = DB::table('document_reference')->where('project_id', $args['project_id'])->where('name', 'Actividades')->first()->id;
-                $doc_reference->name                = $args['name'];
-                $doc_reference->type                = 1; // 0 = Tipo File, 1 = Tipo Folder
-                $doc_reference->activity_id         = Activity::max('id') + 1;
-                $doc_reference->project_id          = $args['project_id'];
-                $doc_reference->module_id           = 1; //id 1 pertenece al modulo Activity
-                $doc_reference->drive_id            = $activity_folder->id;
+                $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
+                $args['type']               = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $args['activity_id']        = $this->activityRepo->lastActivity()->id + 1;
+                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                $args['drive_id']           = $activity_folder->id;
+                
             }else {
                 //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php y
                 //Buscamos el folder padre donde se va crear el nuevo folder
@@ -70,7 +72,7 @@ class CreateActivity
                 $activity->is_folder            = $args['is_folder'];
                 $activity->drive_id             = $activity_folder->id;
                 $activity->save();
-                $doc_reference->save();
+                $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
         }, 3);
         return [
             'message' => 'Actividad creada'

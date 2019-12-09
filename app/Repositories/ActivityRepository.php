@@ -12,18 +12,19 @@ class ActivityRepository extends BaseRepository
     {
         return new Activity;
     }
-
+    public function lastActivity()
+    {        
+        //Trae la ultima actividad registrada
+        $reference = DB::select('SELECT id FROM activities ORDER BY id DESC LIMIT 1'); //Activity::max('id')
+        return $reference[0];
+    }
+     
     //public function getFolderContact()
     //{
     //    //trae la referencia del folder raiz de Contactos
     //    $folderContact = DB::select('SELECT id, drive_id FROM document_reference WHERE name = ?', ['Contactos']);
     //    return $folderContact[0];
     //}
-    //public function lastContact()
-    //{        
-    //    //Trae ultimo contacto registrado
-    //    $reference = DB::select('SELECT id FROM contacts ORDER BY id DESC LIMIT 1'); //User::max('id')
-    //    return $reference[0];
-    //}
+    
     
 }
