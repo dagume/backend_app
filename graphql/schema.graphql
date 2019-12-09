@@ -59,7 +59,7 @@ type Query {
 
     #Actividades
     activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api"])
-    activity(name: String @eq id_activity:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api"])
+    activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api"])
 
     #GlobalSearch
     #globalSearch(name: String!): [GlobalSearch]
@@ -260,10 +260,10 @@ type MessageSuccessFolder {
 }
 #estados de actividad
 enum stateActivity{
-    Archivado
-    Completa
-    Proceso
-    Atrasada
+    Archi
+    Compl
+    Proce
+    Atras
 }
 #estados de actividad
 enum priorityActivity{
