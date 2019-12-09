@@ -6,12 +6,12 @@ use App\Activity;
 use App\Document_reference;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\Repositories\Document_referenceRepository;
 use DB;
 
 class CreateActivity
 {
-    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
-
+    
     public function __construct(){
     }
     /**

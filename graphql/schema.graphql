@@ -41,13 +41,13 @@ type Query {
     members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
 
     #Categories
-    category(name: String! @eq): Category @find(model: "App\\Category")@middleware(checks:["auth:api"])
+    category(name: String! @eq id:ID @eq): Category @find(model: "App\\Category")@middleware(checks:["auth:api"])
     categories: [Category!]! @all(model: "App\\Category") @middleware(checks:["auth:api"])
     categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")@middleware(checks:["auth:api"])
 
     #Products
     filter_name_product(name: String! @where(operator: "like")): [Product] @all(model: "App\\Product") @middleware(checks:["auth:api"])
-    product(name: String! @eq): Product @find(model: "App\\Product")@middleware(checks:["auth:api"])
+    product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product")@middleware(checks:["auth:api"])
     products: [Product!]! @all(model: "App\\Product")@middleware(checks:["auth:api"])
     products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")@middleware(checks:["auth:api"])
 
