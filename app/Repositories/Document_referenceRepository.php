@@ -23,5 +23,10 @@ class Document_referenceRepository extends BaseRepository
         $folderActivity = DB::select('SELECT id, drive_id FROM document_reference WHERE project_id = ? AND name = ?', [$project_id , 'Actividades']);
         return $folderActivity[0];
     }
+    public function getFolderSubActivity($project_id, $parent_activity_id){
+        //Buscamos el folder padre donde se va crear el nuevo folder
+        $folderSubActivity = DB::select('SELECT id, drive_id FROM document_reference WHERE project_id = ? AND activity_id = ?', [$project_id, $parent_activity_id]);
+        return $folderSubActivity[0];
+    }
     
 }
