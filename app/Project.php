@@ -31,7 +31,7 @@ class Project extends Model
         'folder_id',
     ];
     public function accounts(){
-        return $this->hasMany('App\Account', 'contact_id', 'id');
+        return $this->hasMany('App\Account', 'project_id', 'id');
     }
     public function project_type()
     {
@@ -48,5 +48,9 @@ class Project extends Model
     public function activities()
     {
         return $this->hasMany('App\Activity');
+    }
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
     }
 }

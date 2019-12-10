@@ -8,11 +8,21 @@ use App\Mail\RequestForQuotation;
 use App\Quotation;
 use Illuminate\Support\Facades\Mail;
 use GraphQL\Type\Definition\ResolveInfo;
-use DB;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\Repositories\OrderRepository;
+use App\Repositories\QuotationRepository;
+use DB;
 
 class CreateApplication
 {
+    protected $orderRepo;
+    protected $quotationRepo;    
+
+    public function __construct(OrderRepository $ordRepo, QuotationRepository $quoRepo)
+    {
+        $this->quotationRepo = $quoRepo;
+        $this->orderRepo = $ordRepo;
+    }
     /**
      * Return a value for the field.
      *
@@ -25,29 +35,20 @@ class CreateApplication
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-            //dd(User::find(1)->email);
-            $order = new Order;
-            $order->name                = $args['name'];
-            $order->code                = $args['code'];
-            $order->application_date    = now();
+            $args['application_date']   = now();
             //pendiente revisar modulo estado en DB
-            //$order->state             = $args['state'];
-            $order->description         = $args['description'];
-            $order->__delivery_site     = $args['__delivery_site'];
-            $order->sender_data__       = auth()->user()->id_contact;
-            $order->save();
+            //$order->state             = $args['state'];           
+            $args['sender_data']        = auth()->user()->id;
+            $this->orderRepo->create($args);
 
             $emails = $args['email_contacts'];
             foreach ($emails as $ema ) {
-                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find(2)));
-                $quotation = new Quotation;
-                $quotation->id_order = (int) Order::max('id_order');
-                $quotation->id_contact = $ema;
-                $quotation->save();
+                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema)));                
+                $quotation['order_id'] = $this->orderRepo->lastOrder()->id;
+                $quotation['contact_id'] = $ema;                
+                $this->quotationRepo->create($quotation);
             }
         }, 3);
-
-
         return [
             'message' => 'Solicitud Enviada correctamente'
         ];

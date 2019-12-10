@@ -85,8 +85,7 @@ type Account {
 }
 #Actividades
 type Activity { #implements GlobalSearch{
-    id:ID!
-    #project:Project!
+    id:ID!              
     activities:[Activity]
     name:String!
     description:String
@@ -184,7 +183,7 @@ type Order{
     state: String#!
     description:String
     delivery_site:String
-    sender_data__:Contact
+    sender_data:Contact
     subtotal:Int
     total:Int
 }
@@ -230,6 +229,7 @@ type Project {#implements GlobalSearch{
     members: [Member]
     activities:[Activity]
     accounts: [Account]
+    orders: [Order]
 }
 #Cotizacion
 type Quotation{
@@ -451,6 +451,7 @@ type Mutation {
     ): Product @update(model: "App\\Product")
     #SolicitudCotizacon
     createApplication(
+        project_id:Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         code:String!
         application_date: Date @rules(apply: ["date"])
