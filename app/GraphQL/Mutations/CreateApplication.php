@@ -36,8 +36,7 @@ class CreateApplication
     {
         DB::transaction(function () use($args){
             $args['application_date']   = now();
-            //pendiente revisar modulo estado en DB
-            //$order->state             = $args['state'];           
+            $args['state']              = 0; //el valor 0 es el estado de Application           
             $args['sender_data']        = auth()->user()->id;
             $this->orderRepo->create($args);
 

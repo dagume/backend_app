@@ -110,6 +110,15 @@ type Module{
     id: ID
     name: String
 }
+#documentos de ordenes
+type Order_documents{
+    id:ID!
+    order:Order
+    document_id:String
+    document_type:String
+    code:String
+    created_at:Date    
+}
 #Ordenes
 type Order{
     id:ID!
@@ -120,12 +129,15 @@ type Order{
     name:String!
     code:String
     application_date: Date!
-    state: String#!
+    state: Int!
     description:String
-    delivery_site:String
-    sender_data:Contact
+    delivery_site:String    
     subtotal:Int
     total:Int
+    sender_data:Contact
+    lat:Float
+    lon:Float
+    order_documents:[Order_documents]
 }
 #Permisos
 type Permission {
@@ -393,12 +405,20 @@ type Mutation {
     createApplication(
         project_id:Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
-        code:String!
-        application_date: Date @rules(apply: ["date"])
-        #state: String = "Open"
         description: String @rules(apply: ["max:255"])
-        delivery_site:String! @rules(apply: ["max:255"])
-        sender_data:Int
+        delivery_site: String @rules(apply: ["max:255"])            
+        lat: Float
+        lon: Float   
+        email_contacts:[Int]
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
+    #EnviarSolicitudCotizacon
+    createApplication(
+        project_id:Int! @rules(apply: ["required","integer"])
+        name: String! @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+        delivery_site: String @rules(apply: ["max:255"])            
+        lat: Float
+        lon: Float   
         email_contacts:[Int]
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
@@ -419,7 +439,7 @@ type Mutation {
         quantity: Int! @rules(apply: ["required", "integer"])
     ): Detail @create(model: "App\\Detail")
 
-    createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
+    #createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
     #Crear actividad
     createActivity(
         project_id: Int! @rules(apply: ["integer"])

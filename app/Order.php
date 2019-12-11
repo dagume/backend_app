@@ -17,14 +17,15 @@ class Order extends Model
         'project_id',
         'contact_id',
         'name',
-        'code',
         'application_date',
         'state',
         'description',
         'delivery_site',
-        'sender_data',
         'subtotal',
-        'total'
+        'total',
+        'sender_data',
+        'lat',
+        'lon'
     ];
     public function quotations()
     {
@@ -41,6 +42,10 @@ class Order extends Model
     public function details()
     {
         return $this->hasMany('App\Detail');
+    }
+    public function order_documents()
+    {
+        return $this->hasMany('App\Order_document');
     }
 
 

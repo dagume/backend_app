@@ -47,7 +47,7 @@ type Query {
 
     #Orders
     filter_name_order(name: String! @where(operator: "like")): [Order] @all(model: "App\\Order") @middleware(checks:["auth:api"])
-    order(name: String! @eq): Order @find(model: "App\\Order")@middleware(checks:["auth:api"])
+    order(state: Int! @eq): Order @find(model: "App\\Order")@middleware(checks:["auth:api"])
     orders: [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")@middleware(checks:["auth:api"])
 
