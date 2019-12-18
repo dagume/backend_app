@@ -10,17 +10,42 @@ use Caffeinated\Shinobi\Models\Permission;
 use Caffeinated\Shinobi\Models\Role;
 use DB;
 
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Filesystem;
+use Illuminate\Support\Facades\Cache;
+use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+
 use Illuminate\Http\Request;
 
 
 class RolesController extends Controller
 {
+
+    private $cacheFileObjects = [];
     protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
 
     public function __construct()
     {}
+
     public function index(Request $request)
     {
+        $adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
+        $filesystem = new Filesystem($adapter);
+        // here we are uploading files from local storage
+        // we first get all the files
+        $files = Storage::files();
+        // loop over the found files
+        foreach ($files as $file) {
+            // read the file content
+            $read = Storage::get($file);
+            // save to google drive
+            $archivo = $filesystem->write($file, $read);
+            $prueba = $filesystem->getMetadata($file);
+            dd($prueba['path']);
+        }
+
+
+
         //$contact = DB::select('SELECT id FROM document_reference ORDER BY id DESC LIMIT 1');
         //dd($contact);
         //dd(DB::table('document_reference')->where('name', 'Contactos')->first()->drive_id);

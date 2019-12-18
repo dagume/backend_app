@@ -333,7 +333,7 @@ class GoogleDriveAdapter extends AbstractAdapter
      *
      * @param string $path
      *
-     * @return bool
+     * @return boolz
      */
     public function delete($path)
     {

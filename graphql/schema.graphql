@@ -25,7 +25,7 @@ type Account {
 }
 #Actividades
 type Activity { #implements GlobalSearch{
-    id:ID!              
+    id:ID!
     activities:[Activity]
     name:String!
     description:String
@@ -38,6 +38,7 @@ type Activity { #implements GlobalSearch{
     amount:Int
     is_added:Boolean
     is_folder:Boolean
+    drive_id:String
 }
 #Categorias
 type Category {#implements GlobalSearch{
@@ -117,7 +118,7 @@ type Order_documents{
     document_id:String
     document_type:String
     code:String
-    created_at:Date    
+    created_at:Date
 }
 #Ordenes
 type Order{
@@ -131,7 +132,7 @@ type Order{
     application_date: Date!
     state: Int!
     description:String
-    delivery_site:String    
+    delivery_site:String
     subtotal:Int
     total:Int
     sender_data:Contact
@@ -220,7 +221,7 @@ enum stateActivity{
 enum priorityActivity{
     Alta
     Media
-    Baja    
+    Baja
 }
 #tipos de contacto
 enum contactType{
@@ -296,7 +297,7 @@ type Mutation {
     updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
     #upload drive
     uploadFile(
-        name:String @rules(apply: ["required", "max:255"])      
+        name:String @rules(apply: ["required", "max:255"])
         activity_id:Int @rules(apply: ["nullable"])
         project_id:Int @rules(apply: ["nullable"])
         contact_id:Int @rules(apply: ["nullable"])
@@ -406,9 +407,9 @@ type Mutation {
         project_id:Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-        delivery_site: String @rules(apply: ["max:255"])            
+        delivery_site: String @rules(apply: ["max:255"])
         lat: Float
-        lon: Float   
+        lon: Float
         email_contacts:[Int]
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
     #EnviarSolicitudCotizacon
@@ -416,9 +417,9 @@ type Mutation {
         project_id:Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-        delivery_site: String @rules(apply: ["max:255"])            
+        delivery_site: String @rules(apply: ["max:255"])
         lat: Float
-        lon: Float   
+        lon: Float
         email_contacts:[Int]
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
@@ -448,7 +449,7 @@ type Mutation {
         description: String @rules(apply: ["nullable"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
-        state: stateActivity 
+        state: stateActivity
         completed:Boolean
         priority:priorityActivity
         notes:String
