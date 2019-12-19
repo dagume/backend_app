@@ -11,17 +11,20 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\OrderRepository;
 use App\Repositories\QuotationRepository;
+use App\Repositories\DetailRepository;
 use DB;
 
 class CreateApplication
 {
     protected $orderRepo;
     protected $quotationRepo;    
+    protected $detailRepo;    
 
-    public function __construct(OrderRepository $ordRepo, QuotationRepository $quoRepo)
+    public function __construct(OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo)
     {
         $this->quotationRepo = $quoRepo;
         $this->orderRepo = $ordRepo;
+        $this->detailRepo = $detRepo;
     }
     /**
      * Return a value for the field.
@@ -34,11 +37,21 @@ class CreateApplication
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        foreach ($args['updetails'] as $arg) {
+            dd($arg);
+        }
+        
         DB::transaction(function () use($args){
             $args['application_date']   = now();
             $args['state']              = 0; //el valor 0 es el estado de Application           
+            //subtotal
+            //Total
             $args['sender_data']        = auth()->user()->id;
             $this->orderRepo->create($args);
+
+            $this->orderRepo->create($args);
+
+            
 
             $emails = $args['email_contacts'];
             foreach ($emails as $ema ) {

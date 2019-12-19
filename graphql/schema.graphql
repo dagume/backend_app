@@ -288,6 +288,11 @@ input NewPasswordWithCodeInput {
     password: String!
     password_confirmation: String!
 }
+input UploadDetails {
+    product_id:Int
+    order_id:Int
+    quantity:Float  
+}
 type Mutation {
     #Auth
     login(data: LoginInput): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
@@ -402,16 +407,6 @@ type Mutation {
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
     ): Product @update(model: "App\\Product")
-    #SolicitudCotizacon
-    createApplication(
-        project_id:Int! @rules(apply: ["required","integer"])
-        name: String! @rules(apply: ["required", "max:255"])
-        description: String @rules(apply: ["max:255"])
-        delivery_site: String @rules(apply: ["max:255"])
-        lat: Float
-        lon: Float
-        email_contacts:[Int]
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
     #EnviarSolicitudCotizacon
     createApplication(
         project_id:Int! @rules(apply: ["required","integer"])
@@ -419,10 +414,11 @@ type Mutation {
         description: String @rules(apply: ["max:255"])
         delivery_site: String @rules(apply: ["max:255"])
         lat: Float
-        lon: Float
+        lon: Float        
+        updetails:[UploadDetails] 
         email_contacts:[Int]
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
-
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
+    
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])
     #    id_members: Int! @rules(apply: ["required","integer"])

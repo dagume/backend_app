@@ -16,8 +16,7 @@ class Detail extends Model
         'product_id',
         'order_id',
         'quantity',
-        'value',
-        'measure',
+        'value',        
         'delivered_amount',
         'subtotal'
     ];
