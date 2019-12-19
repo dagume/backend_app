@@ -291,7 +291,6 @@ input NewPasswordWithCodeInput {
 }
 input UploadDetails {
     product_id:Int
-    order_id:Int
     quantity:Float  
 }
 type Mutation {
@@ -420,7 +419,7 @@ type Mutation {
         lon: Float        
         updetails:[UploadDetails] 
         email_contacts:[Int]
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
     
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])

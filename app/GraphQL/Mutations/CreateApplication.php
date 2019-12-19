@@ -13,6 +13,7 @@ use App\Repositories\OrderRepository;
 use App\Repositories\QuotationRepository;
 use App\Repositories\DetailRepository;
 use DB;
+use PDF;
 
 class CreateApplication
 {
@@ -36,30 +37,29 @@ class CreateApplication
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
-        foreach ($args['updetails'] as $arg) {
-            dd($arg);
-        }
-        
+    {        
+        //dd($this->orderRepo->lastOrder()->id);
         DB::transaction(function () use($args){
-            $args['application_date']   = now();
-            $args['state']              = 0; //el valor 0 es el estado de Application           
-            //subtotal
-            //Total
-            $args['sender_data']        = auth()->user()->id;
-            $this->orderRepo->create($args);
+            //$args['application_date']   = now();
+            //$args['state']              = 0; //el valor 0 es el estado de Application                       
+            //$args['sender_data']        = auth()->user()->id;
+            //$this->orderRepo->create($args);
+            //
+            //foreach ($args['updetails'] as $arg) {
+            //    $arg['order_id'] = $this->orderRepo->lastOrder()->id;
+            //    $this->detailRepo->create($arg);
+            //}
 
-            $this->orderRepo->create($args);
-
-            
-
-            $emails = $args['email_contacts'];
-            foreach ($emails as $ema ) {
-                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema)));                
-                $quotation['order_id'] = $this->orderRepo->lastOrder()->id;
-                $quotation['contact_id'] = $ema;                
-                $this->quotationRepo->create($quotation);
-            }
+            $data = ['title' => 'Solicitud de cotizacion'];
+            $pdf = PDF::loadView('solicitud', $data);  
+            $pdf->download('itsolutionstuff.pdf');
+            //$emails = $args['email_contacts'];
+            //foreach ($emails as $ema ) {
+            //    Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema)));                
+            //    $quotation['order_id'] = $this->orderRepo->lastOrder()->id;
+            //    $quotation['contact_id'] = $ema;                
+            //    $this->quotationRepo->create($quotation);
+            //}
         }, 3);
         return [
             'message' => 'Solicitud Enviada correctamente'
