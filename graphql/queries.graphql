@@ -2,8 +2,7 @@ type Query {
     #me
     me: Contact @auth(guard:"api")
     #Query proyectos
-    filter_name_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    filter_name_Project_paginator(name: String! @where(operator: "like")): [Project] @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+    filter_name_Project(name: String! @where(operator: "like") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
     project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
