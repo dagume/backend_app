@@ -166,7 +166,7 @@ type Project {#implements GlobalSearch{
     id: ID!
     project_type:Project_type
     parent_project:Project
-    name: String!
+    name: String
     start_date: Date
     end_date: Date
     description: String
@@ -332,7 +332,7 @@ type Mutation {
     #Editar Proyecto
     updateProject(
         id: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        name: String @rules(apply: ["max:255"])
         description: String @rules(apply: ["nullable"])
         place: String
         address: String
