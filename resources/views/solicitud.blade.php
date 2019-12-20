@@ -1,15 +1,13 @@
-<! DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title> Hola </title>
+ <title>{{ $title }}</title>
 </head>
-<cuerpo>
-	<h1> Bienvenido a ItSolutionStuff.com -</h1>
-	<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	temporizador incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor en reprehenderit en voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occasionecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+<body>
+  <h1>{{ $heading}}</h1>
+  <div>
+     <p>{{$content}}</p>
+  </div>
+</body>
 </body>
 </html>

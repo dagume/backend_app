@@ -94,6 +94,13 @@
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
             </div>
+            <div>
+                <h1>Exportar PDF</h1>
+                <p>
+                Clic <a href="{{route('users.pdf')}}">aqui</a>
+                para descargar PDF
+                </p>
+            </div>
         </div>
     </body>
 </html>

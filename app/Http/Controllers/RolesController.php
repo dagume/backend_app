@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 
 
 class RolesController extends Controller
@@ -27,6 +28,7 @@ class RolesController extends Controller
     public function __construct()
     {}
 
+    
     public function index(Request $request)
     {
         $adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
@@ -38,6 +40,7 @@ class RolesController extends Controller
         foreach ($files as $file) {
             // read the file content
             $read = Storage::get($file);
+            dd($read);
             // save to google drive
             $archivo = $filesystem->write($file, $read);
             $prueba = $filesystem->getMetadata($file);

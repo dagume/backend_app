@@ -13,7 +13,7 @@ use App\Repositories\OrderRepository;
 use App\Repositories\QuotationRepository;
 use App\Repositories\DetailRepository;
 use DB;
-use PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class CreateApplication
 {
@@ -37,7 +37,8 @@ class CreateApplication
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {        
+    {      
+        exportPdf();   
         //dd($this->orderRepo->lastOrder()->id);
         DB::transaction(function () use($args){
             //$args['application_date']   = now();
@@ -49,10 +50,13 @@ class CreateApplication
             //    $arg['order_id'] = $this->orderRepo->lastOrder()->id;
             //    $this->detailRepo->create($arg);
             //}
+            
+            
+              
 
-            $data = ['title' => 'Solicitud de cotizacion'];
-            $pdf = PDF::loadView('solicitud', $data);  
-            $pdf->download('itsolutionstuff.pdf');
+            //$data = ['title' => 'Solicitud de cotizacion'];
+            //$pdf = PDF::loadView('solicitud', $data);  
+            //$pdf->download('itsolutionstuff.pdf');
             //$emails = $args['email_contacts'];
             //foreach ($emails as $ema ) {
             //    Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema)));                

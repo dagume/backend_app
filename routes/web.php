@@ -14,6 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('user-list-pdf', 'RolesController@exportPdf')->name('users.pdf');
 Route::resource('roles', 'RolesController');
 
