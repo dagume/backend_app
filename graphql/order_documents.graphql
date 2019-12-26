@@ -1,0 +1,9 @@
+#documentos de ordenes
+type Order_documents{
+    id:ID!
+    order:Order
+    document_id:String
+    document_type:String
+    code:String
+    created_at:Date
+}

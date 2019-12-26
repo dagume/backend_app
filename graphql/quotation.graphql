@@ -1,0 +1,10 @@
+
+#Cotizacion
+type Quotation{
+    id:ID!
+    order:Order!
+    contact:Contact!
+    folder_id:String
+    authorization:Boolean
+    date: Date
+}

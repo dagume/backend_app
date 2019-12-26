@@ -1,0 +1,67 @@
+#Actividades
+type Activity { #implements GlobalSearch{
+    id:ID!
+    activities:[Activity]
+    name:String!
+    description:String
+    date_start:Date
+    date_end:Date
+    state:stateActivity
+    completed:Boolean
+    priority:priorityActivity
+    notes: String
+    amount:Int
+    is_added:Boolean
+    is_folder:Boolean
+    drive_id:String
+}
+#estados de actividad
+enum stateActivity{
+    Archivado
+    Completado
+    Proceso
+    Atrasado
+}
+#estados de actividad
+enum priorityActivity{
+    Alta
+    Media
+    Baja
+}
+extend type Query{
+    #Actividades
+    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api"])
+    activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api"])
+
+}
+extend type Mutation {
+     #Crear actividad
+    createActivity(
+        project_id: Int! @rules(apply: ["integer"])
+        parent_activity_id: Int @rules(apply: ["integer","nullable"])
+        name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+        description: String @rules(apply: ["nullable"])
+        date_start: Date @rules(apply: ["date"])
+        date_end: Date @rules(apply: ["date"])
+        state: stateActivity
+        completed:Boolean
+        priority:priorityActivity
+        notes:String
+        amount: Int @rules(apply: ["nullable", "integer"])
+        is_added: Boolean
+        is_folder: Boolean
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
+
+    #Editar actividad
+    updateActivity(
+        id_activity: ID! @rules(apply: ["required"])
+        name:String
+        completed:Boolean
+        description: String @rules(apply: ["nullable"])
+        priority:String
+        notes:String
+        state:String
+        date_start: Date @rules(apply: ["date"])
+        date_end: Date @rules(apply: ["date"])
+    ): Activity @update(model: "App\\Activity") @middleware(checks:["auth:api"])
+}

@@ -1,0 +1,25 @@
+#Miembros
+type Member{
+    id:ID!
+    project:Project!
+    contact:Contact!
+    role:Role
+    hours_week:Int
+    hours_month:Int
+    state:Int!
+}
+extend type Query{
+    #Members
+    members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
+}
+extend type Mutation {
+    #member
+    member_has_project(
+        project_id: Int! @rules(apply: ["integer"])
+        contact_id: Int! @rules(apply: ["integer"])
+        role_id:     Int! @rules(apply: ["integer"])
+        hours_week: Int  @rules(apply: ["integer"])
+        hours_month:Int  @rules(apply: ["integer"])
+        state:  Int = 1
+    ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
+}

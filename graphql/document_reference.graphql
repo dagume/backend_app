@@ -1,0 +1,15 @@
+
+#Document_reference
+type Document_reference{
+    id: ID!
+    parent_document: Document_reference
+    document_references: Document_reference
+    name: String
+    type: Boolean
+    activity: Activity
+    project: Project
+    contact: Contact
+    accounting_movements_id: Int
+    module: Module
+    drive_id: String
+}

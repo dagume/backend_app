@@ -1,0 +1,21 @@
+#Detales
+type Detail{
+    id: ID!
+    product:Product!
+    order:Order!
+    quantity:Int!
+    value:Int
+    measure:String
+    delivery_amount:Int
+    subtotal:Int
+}
+
+extend type Mutation {
+    #detail
+    createDetailForApplication(
+        product_id: Int! @rules(apply: ["required","integer"])
+        order_id: Int! @rules(apply: ["required","integer"])
+        quantity: Int! @rules(apply: ["required", "integer"])
+    ): Detail @create(model: "App\\Detail")
+
+}

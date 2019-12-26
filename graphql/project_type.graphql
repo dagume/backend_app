@@ -1,0 +1,14 @@
+#tipos de proyecto
+type Project_type {
+    id:ID!
+    name_project_type:String
+    description_project_type:String
+}
+
+extend type Query {
+    #Query Project_type
+    filter_name_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
+    Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") @middleware(checks:["auth:api"])
+    Projects_type: [Project_type!]! @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
+
+}

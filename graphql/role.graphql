@@ -1,0 +1,17 @@
+#Role
+type Role {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  special: String
+  permissions: [Permission]
+}
+
+extend type Query{
+    #Query roles
+    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
+    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
+    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
+}
+

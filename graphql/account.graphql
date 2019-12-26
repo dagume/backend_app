@@ -1,0 +1,9 @@
+#Cuentas
+type Account {
+    id:ID!
+    contact_id: Int
+    project_id: Int
+    parent_account_id: Int
+    name_account: String
+    type_account: String
+}

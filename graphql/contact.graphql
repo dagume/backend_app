@@ -1,0 +1,77 @@
+#Contact
+type Contact {#implements GlobalSearch{
+    id:ID!
+    parent_contact:Contact
+    type:contactType!
+    name:String!
+    lastname:String
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    locate:String
+    city:String
+    address:String
+    web_site:String
+    password: String
+    remember_token:String
+    folder_id:String
+    members:[Member]
+    orders:[Order]
+    quotations:[Quotation]
+    accounts: [Account]
+}
+#tipos de contacto
+enum contactType{
+    persona @enum(value: 1)
+    empresa @enum(value: 2)
+}
+#Tipo de identificacion Contacto
+enum contactIdType{
+    CC @enum(value: 1)
+    nit @enum(value: 2)
+    pasaporte @enum(value: 3)
+    extranjera @enum(value: 4)
+}
+extend type Query{
+    #Query Contacts
+    filter_name_contact(name: String! @where(operator: "like")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])
+    contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") @middleware(checks:["auth:api"])
+    contacts: [Contact!]! @all(model: "App\\User")  @middleware(checks:["auth:api"])
+    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api"])
+}
+extend type Mutation {
+    ######################Contacts
+    createContact(
+        parent_contact_id: Int @rules(apply: ["nullable"])
+        type: contactType @rules(apply: ["required", "integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["max:255"])
+        identification_type: contactIdType
+        identification_number: Int @rules(apply: ["unique:contacts,identification_number"])
+        email: String @rules(apply: ["required", "max:255","unique:contacts,email"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int = 1
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+        password: String @bcrypt @rules(apply: ["min:8", "nullable"])
+    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
+
+    updateContact(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["max:255"])
+        identification_type: contactIdType @rules(apply: ["integer"])
+        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["required"])
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Contact @update(model: "App\\User") @middleware(checks:["auth:api"])
+}

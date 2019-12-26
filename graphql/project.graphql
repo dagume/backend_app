@@ -1,0 +1,81 @@
+#Proyecto
+type Project {#implements GlobalSearch{
+    id: ID!
+    project_type:Project_type
+    parent_project:Project
+    name: String
+    start_date: Date
+    end_date: Date
+    description: String
+    contract_value: Int
+    expenses: Int
+    process: Int
+    state: String
+    place:String
+    address:String
+    type:typeProject
+    association:associationProject
+    consortium_name:String
+    id_folder: String
+    members: [Member]
+    activities:[Activity]
+    accounts: [Account]
+    orders: [Order]
+}
+
+#Tipos proyecto
+enum typeProject {
+    publico @enum(value: 0)
+    privado @enum(value: 1)
+}
+#association proyecto
+enum associationProject {
+    consorcio @enum(value: 0)
+    APP @enum(value: 1)
+}
+
+extend type Query{
+    #Query proyectos
+    filter_name_Project(name: String! @where(operator: "like") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+}
+
+extend type Mutation {
+    #Crear Proyecto
+    createProject(
+        project_type_id: Int @rules(apply: ["integer","required"])
+        #Revisar siguiente linea
+        parent_project_id: Int
+        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        start_date: Date @rules(apply: ["nullable","date"])
+        end_date: Date @rules(apply: ["nullable","date"])
+        description: String @rules(apply: ["nullable"])
+        contract_value: Int
+        state: String = "seleccion"
+        place: String
+        address: String
+        type: typeProject
+        association: associationProject
+        consortium_name:String
+        folder_id: String
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
+    #Editar Proyecto
+    updateProject(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["max:255"])
+        description: String @rules(apply: ["nullable"])
+        place: String
+        address: String
+        consortium_name: String
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
+    #Editar estado Proyecto
+    updateStateProject(
+        id: ID! @rules(apply: ["required"])
+        state: String @rules(apply: ["required", "in:ejecucion, suspendido"])
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
+}

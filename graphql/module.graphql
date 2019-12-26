@@ -1,0 +1,5 @@
+#Module
+type Module{
+    id: ID
+    name: String
+}
