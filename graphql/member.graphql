@@ -1,12 +1,12 @@
 #Miembros
 type Member{
     id:ID!
-    project:Project!
-    contact:Contact!
+    project:Project
+    contact:Contact
     role:Role
     hours_week:Int
     hours_month:Int
-    state:Int!
+    state:Int
 }
 extend type Query{
     #Members
@@ -15,11 +15,13 @@ extend type Query{
 extend type Mutation {
     #member
     member_has_project(
-        project_id: Int! @rules(apply: ["integer"])
-        contact_id: Int! @rules(apply: ["integer"])
-        role_id:     Int! @rules(apply: ["integer"])
+        project_id: Int @rules(apply: ["integer", "required"])
+        contact_id: Int @rules(apply: ["integer","required"])
+        role_id:     Int @rules(apply: ["integer","required"])
         hours_week: Int  @rules(apply: ["integer"])
         hours_month:Int  @rules(apply: ["integer"])
         state:  Int = 1
     ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
+
+    delete_member(id: ID!): Member @delete
 }

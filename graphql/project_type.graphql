@@ -7,7 +7,7 @@ type Project_type {
 
 extend type Query {
     #Query Project_type
-    filter_name_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
+    filter_name_Project_type(name_project_type: String! @where(operator: "ilike")): [Project_type] @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
     Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") @middleware(checks:["auth:api"])
     Projects_type: [Project_type!]! @all(model: "App\\Project_type") @middleware(checks:["auth:api"])
 

@@ -30,5 +30,11 @@ class Document_referenceRepository extends BaseRepository
         $folderSubActivity = DB::select('SELECT id, drive_id FROM document_reference WHERE project_id = ? AND activity_id = ?', [$project_id, $parent_activity_id]);
         return $folderSubActivity[0];
     }
-    
+    public function getFolderActYear()
+    {
+        //Buscamos el folder del año actual
+        $folderYear = DB::select('SELECT id, drive_id FROM document_reference WHERE name = ? ', [date("Y")]);
+        return $folderYear[0];
+    }
+
 }

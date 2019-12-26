@@ -7,13 +7,18 @@ use App\Project;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
-
+use App\Repositories\ProjectRepository;
+use App\Repositories\Document_referenceRepository;
 
 class CreateProject
 {
-    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
+    protected $projectRepo;
+    protected $documentRepo;
 
-    public function __construct(){}
+    public function __construct(ProjectRepository $proRepo, Document_referenceRepository $docRepo){
+        $this->projectRepo = $proRepo;
+        $this->documentRepo = $docRepo;
+    }
     /**
      * Return a value for the field.
      *
@@ -27,25 +32,18 @@ class CreateProject
     {
         //Transaccion para create
         DB::transaction(function () use($args){
-
-            $project = new Project; //Capturando datos del proyecto
-            $project->project_type_id       =$args['project_type_id'];
-            $project->parent_project_id     =$args['parent_project_id'];
-            $project->name                  =$args['name'];
-            $project->start_date            =$args['start_date'];
-            $project->end_date              =$args['end_date'];
-            $project->description           =$args['description'];
-            $project->contract_value        =$args['contract_value'];
-            $project->state                 =$args['state'];
-            $project->place                 =$args['place'];
-            $project->address               =$args['address'];
-            $project->type                  =$args['type'];
-            $project->association           =$args['association'];
-            $project->consortium_name       =$args['consortium_name'];
+            //buscamos el id del projecto para asignarlo a su nombre en DRIVE
+            $id = $this->projectRepo->lastProject()->id + 1;
+            if ($args['type'] = 0) {
+                $folder_name = $id.'_pub_' . $args['name'];
+            }else {
+                $folder_name = $id.'_priv_' . $args['name'];
+            }
             //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
-            $project_folder = Conection_Drive()->files->create(Create_Folder($args['name'], DB::table('document_reference')->where('name', date("Y"))->first()->drive_id), ['fields' => 'id']);
-            $project->folder_id = $project_folder->id; //Id del folder que se creo en drive
-            $project->save();
+            $project_folder = Conection_Drive()->files->create(Create_Folder($folder_name, $this->documentRepo->getFolderActYear()->drive_id), ['fields' => 'id']);
+            $args['folder_id'] = $project_folder->id; //Id del folder que se creo en drive
+            $project = $this->projectRepo->create($args); //guarda registro del nuevo proyecto
+
 
             $doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_project->parent_document_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;

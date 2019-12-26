@@ -36,7 +36,7 @@ enum associationProject {
 
 extend type Query{
     #Query proyectos
-    filter_name_Project(name: String! @where(operator: "like") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
     project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
@@ -49,7 +49,6 @@ extend type Mutation {
     #Crear Proyecto
     createProject(
         project_type_id: Int @rules(apply: ["integer","required"])
-        #Revisar siguiente linea
         parent_project_id: Int
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
@@ -59,7 +58,7 @@ extend type Mutation {
         state: String = "seleccion"
         place: String
         address: String
-        type: typeProject
+        type: typeProject @rules(apply: ["required"])
         association: associationProject
         consortium_name:String
         folder_id: String
