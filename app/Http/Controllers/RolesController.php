@@ -28,24 +28,24 @@ class RolesController extends Controller
     public function __construct()
     {}
 
-    
+
     public function index(Request $request)
     {
-        $adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
-        $filesystem = new Filesystem($adapter);
-        // here we are uploading files from local storage
-        // we first get all the files
-        $files = Storage::files();
-        // loop over the found files
-        foreach ($files as $file) {
-            // read the file content
-            $read = Storage::get($file);
-            dd($read);
-            // save to google drive
-            $archivo = $filesystem->write($file, $read);
-            $prueba = $filesystem->getMetadata($file);
-            dd($prueba['path']);
-        }
+        //$adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
+        //$filesystem = new Filesystem($adapter);
+        //// here we are uploading files from local storage
+        //// we first get all the files
+        //$files = Storage::files();
+        //// loop over the found files
+        //foreach ($files as $file) {
+        //    // read the file content
+        //    $read = Storage::get($file);
+        //    dd($read);
+        //    // save to google drive
+        //    $archivo = $filesystem->write($file, $read);
+        //    $prueba = $filesystem->getMetadata($file);
+        //    dd($prueba['path']);
+        //}
 
 
 
@@ -65,7 +65,7 @@ class RolesController extends Controller
         //$module3 = new Module;
         //$module3->name = 'Cuenta';
         //$module3->save();
-
+//
         //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_project->name = 'Proyectos';
         //$doc_ref_project->type = 1; // 0 = Tipo File, 1 = Tipo Folder
@@ -94,10 +94,9 @@ class RolesController extends Controller
         //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
         //$doc_ref_2019->drive_id = $year_folder->id;
         //$doc_ref_2019->save();
+
         //$document = new Document_reference;
         //$document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
-
-
             //$document->name = 'name';
             //$document->drive_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
             //echo(DB::table('document_reference')->where('name', date("Y"))->first()->drive_id);
@@ -111,12 +110,17 @@ class RolesController extends Controller
         //$role3 = Role::findOrfail(3);
         //$role4 = Role::findOrfail(4);
         //$role5 = Role::findOrfail(5);
-        //$role2 = Role::create(['name' => 'Prestamista']);
-        //$role3 = Role::create(['name' => 'Proveedor']);
+        //$role6 = Role::findOrfail(6);
+        //$role7 = Role::findOrfail(7);
+        //$role8 = Role::findOrfail(8);
         //$role1 = Role::create(['name' => 'Super Admin']);
-        //$role2 = Role::create(['name' => 'Equipo de trabajo']);
-        //$role3 = Role::create(['name' => 'Cliente']);
-        //$role4 = Role::create(['name' => 'Socio']);
+        //$role2 = Role::create(['name' => 'Residente']);
+        //$role3 = Role::create(['name' => 'Contador']);
+        //$role4 = Role::create(['name' => 'Cliente']);
+        //$role5 = Role::create(['name' => 'Socio']);
+        //$role6 = Role::create(['name' => 'Banco']);
+        //$role7 = Role::create(['name' => 'Prestamista']);
+        //$role8 = Role::create(['name' => 'Proveedor']);
 //
         //$permission1 = Permission::findOrfail(1);
         //$permission2 = Permission::findOrfail(2);
@@ -145,6 +149,7 @@ class RolesController extends Controller
         //$permission25= Permission::findOrfail(25);
         //$permission26= Permission::findOrfail(26);
         //$permission27= Permission::findOrfail(27);
+
         //$permission1 = Permission::create(['name' => 'Listar proyectos']);
         //$permission2 = Permission::create(['name' => 'Buscar proyecto']);
         //$permission3 = Permission::create(['name' => 'Crear proyectos']);
@@ -219,7 +224,6 @@ class RolesController extends Controller
         //$role2->givePermissionTo($permission19);
         //$role3->givePermissionTo($permission19);
         //$role5->givePermissionTo($permission19);
-
         //$role2->givePermissionTo($permission20);
         //$role3->givePermissionTo($permission20);
         //$role5->givePermissionTo($permission20);

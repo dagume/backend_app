@@ -16,8 +16,6 @@ class Member extends Model
         'project_id',
         'contact_id',
         'role_id',
-        'hours_week',
-        'hours_month',
         'state'
     ];
 

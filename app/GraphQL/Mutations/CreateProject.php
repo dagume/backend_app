@@ -39,12 +39,14 @@ class CreateProject
             }else {
                 $folder_name = $id.'_priv_' . $args['name'];
             }
-            //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
+            if ($args['parent_project_id'] != null) {
+                //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
             $project_folder = Conection_Drive()->files->create(Create_Folder($folder_name, $this->documentRepo->getFolderActYear()->drive_id), ['fields' => 'id']);
             $args['folder_id'] = $project_folder->id; //Id del folder que se creo en drive
+            }
             $project = $this->projectRepo->create($args); //guarda registro del nuevo proyecto
 
-
+            if ($args['parent_project_id'] != null) {
             $doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_project->parent_document_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
             $doc_ref_project->name = $args['name'];
@@ -71,6 +73,7 @@ class CreateProject
             $doc_ref_account->project_id = Project::max('id');
             $doc_ref_account->drive_id = $account_folder->id;
             $doc_ref_account->save();
+            }
         }, 3);
         return [
             'message' => 'Proyecto creado exitosamente'

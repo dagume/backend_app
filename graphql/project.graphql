@@ -56,11 +56,12 @@ extend type Mutation {
         description: String @rules(apply: ["nullable"])
         contract_value: Int
         state: String = "seleccion"
-        place: String
+        place: String @rules(apply: ["nullable"])
         address: String
-        type: typeProject @rules(apply: ["required"])
+        type: typeProject @rules(apply: ["nullable"])
         association: associationProject
         consortium_name:String
+        consortium_nit:Int
         folder_id: String
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
     #Editar Proyecto

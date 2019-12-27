@@ -18,8 +18,6 @@ extend type Mutation {
         project_id: Int @rules(apply: ["integer", "required"])
         contact_id: Int @rules(apply: ["integer","required"])
         role_id:     Int @rules(apply: ["integer","required"])
-        hours_week: Int  @rules(apply: ["integer"])
-        hours_month:Int  @rules(apply: ["integer"])
         state:  Int = 1
     ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
 

@@ -25,11 +25,8 @@ class Member_has_project
             $member->project_id     = $args['project_id'];
             $member->contact_id     = $args['contact_id'];
             $member->role_id         = $args['role_id'];
-            $member->hours_week     = $args['hours_week'];
-            $member->hours_month    = $args['hours_month'];
             $member->state          = $args['state'];
             $member->save();
-            //Aqui se le crea la cuenta al rol
         }, 3);
         return [
             'message' => 'Miembro agregado exitosamente'

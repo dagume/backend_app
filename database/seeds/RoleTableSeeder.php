@@ -20,8 +20,8 @@ class RoleTableSeeder extends Seeder
         ]);
 
         Role::create([
-        'name'          => 'Ingeniero Residente',
-        'slug'          => 'ingenieroResidente',
+        'name'          => 'Residente',
+        'slug'          => 'residente',
         ]);
 
         Role::create([

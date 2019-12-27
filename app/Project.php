@@ -28,6 +28,7 @@ class Project extends Model
         'type',
         'association',
         'consortium_name',
+        'consortium_nit',
         'folder_id',
     ];
     public function accounts(){
