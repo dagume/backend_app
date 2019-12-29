@@ -6,7 +6,7 @@ type Contact {#implements GlobalSearch{
     name:String!
     lastname:String
     identification_type:contactIdType!
-    identification_number:Int!
+    identification_number:Int
     email:String!
     phones:String!
     state:Int!
@@ -49,7 +49,7 @@ extend type Mutation {
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType
-        identification_number: Int @rules(apply: ["unique:contacts,identification_number"])
+        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
         email: String @rules(apply: ["required", "max:255","unique:contacts,email"])
         phones:String @rules(apply: ["max:30"])
         state:Int = 1
