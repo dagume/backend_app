@@ -6,6 +6,7 @@ type Role {
   description: String
   special: String
   permissions: [Permission]
+  required_documents:[Required_documents]
 }
 
 extend type Query{

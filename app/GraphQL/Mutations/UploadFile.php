@@ -19,7 +19,7 @@ class UploadFile
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $doc_ref_file = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas        
+        $doc_ref_file = new Document_reference;
         if ($args['activity_id'] != null && $args['project_id'] != null) {
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
@@ -39,6 +39,13 @@ class UploadFile
             $doc_ref_file->drive_id = $args['drive_id'];
             $doc_ref_file->save();
         }
+        if ($args['member_id'] != null) {
+            $doc_mem = new Document_member;
+            $doc_mem->member_id = $args['member_id'];
+            $doc_mem->date = now();
+            $doc_mem->file_id = $args['drive_id'];
+            $doc_mem->save();
+        }
         //if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
         //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;
         //    $doc_ref_file->name = $args['name'];
@@ -47,7 +54,7 @@ class UploadFile
         //    $doc_ref_file->module_id = 3; //id 3 pertenece al modulo Contact
         //    $doc_ref_file->drive_id = $args['drive_id'];
         //    $doc_ref_file->save();
-        //}  
+        //}
         return [
             'message' => 'Archivo cargado'
         ];

@@ -3,6 +3,7 @@
 namespace Caffeinated\Shinobi\Models;
 
 use App\Member;
+use App\Required_documents;
 use Illuminate\Database\Eloquent\Model;
 use Caffeinated\Shinobi\Concerns\HasPermissions;
 use Caffeinated\Shinobi\Contracts\Role as RoleContract;
@@ -42,6 +43,10 @@ class Role extends Model implements RoleContract
     //{
     //    return $this->hasMany('App\User', 'id_role');
     //}
+    public function required_documents(): BelongsToMany
+    {
+        return $this->belongsToMany(Required_documents::class,'documents_rol','role_id', 'required_document_id');
+    }
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();

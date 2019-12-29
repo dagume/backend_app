@@ -249,6 +249,34 @@ class RolesController extends Controller
 //
         //$role3->givePermissionTo($permission26);
         //$role3->givePermissionTo($permission27);
+
+
+            //DOCUMENTOS REQUERIDOS
+
+        //$role2->required_documents()->attach(1);
+        //$role2->required_documents()->attach(5);
+//
+        //$role3->required_documents()->attach(1);
+        //$role3->required_documents()->attach(5);
+//
+        //$role4->required_documents()->attach(1);
+        //$role4->required_documents()->attach(2);
+        //$role4->required_documents()->attach(3);
+        //$role4->required_documents()->attach(5);
+//
+        //$role5->required_documents()->attach(1);
+        //$role5->required_documents()->attach(2);
+        //$role5->required_documents()->attach(5);
+//
+        //$role6->required_documents()->attach(1);
+//
+        //$role7->required_documents()->attach(5);
+//
+        //$role8->required_documents()->attach(1);
+        //$role8->required_documents()->attach(2);
+        //$role8->required_documents()->attach(3);
+
+
         echo('listo');
     }
 }

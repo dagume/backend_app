@@ -23,6 +23,7 @@ type Mutation
 #import quotation.graphql
 #import detail.graphql
 #import module.graphql
+#import required_document.graphql
 
 #Mensaje exitoso de creacion
 type MessageSuccess {
@@ -33,6 +34,16 @@ type Mutation {
     #upload drive
     uploadFile(
         name:String @rules(apply: ["required", "max:255"])
+        activity_id:Int @rules(apply: ["nullable"])
+        project_id:Int @rules(apply: ["nullable"])
+        contact_id:Int @rules(apply: ["nullable"])
+        accounting_movements_id: Int @rules(apply: ["nullable"])
+        member_id:Int @rules(apply: ["nullable"])
+        drive_id:String @rules(apply: ["required"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
+
+    uploadRequiredDocument(
+
         activity_id:Int @rules(apply: ["nullable"])
         project_id:Int @rules(apply: ["nullable"])
         contact_id:Int @rules(apply: ["nullable"])
