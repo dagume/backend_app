@@ -12,6 +12,7 @@ type Contact {#implements GlobalSearch{
     state:Int!
     locate:String
     city:String
+    regime:String
     address:String
     web_site:String
     password: String
@@ -56,6 +57,7 @@ extend type Mutation {
         state:Int = 1
         locate:String @rules(apply: ["max:255"])
         city:String @rules(apply: ["max:255"])
+        regime:String @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8", "nullable"])
@@ -72,6 +74,7 @@ extend type Mutation {
         state:Int @rules(apply: ["required"])
         locate:String @rules(apply: ["max:255"])
         city:String @rules(apply: ["max:255"])
+        regime:String @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
     ): Contact @update(model: "App\\User") @middleware(checks:["auth:api"])

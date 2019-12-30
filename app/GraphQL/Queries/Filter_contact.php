@@ -22,9 +22,13 @@ class Filter_contact
     {
         $contacts = new User;
         $query = trim($args['searchText']);
-            $contacts = DB::table('contacts')
+        $contacts = DB::table('contacts')
             ->where('name','ILIKE',$query)
-            ->orwhere('lastname','ILIKE',$query)->get();
-            return $contacts;
+            ->orwhere('lastname','ILIKE',$query)
+            ->orwhere('identification_number','ILIKE',$query)->get();
+
+        return $contacts;
+
+
     }
 }
