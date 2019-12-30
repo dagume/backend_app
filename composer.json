@@ -20,7 +20,8 @@
         "laraveles/spanish": "^1.2",
         "mll-lab/laravel-graphql-playground": "^1.1",
         "nao-pon/flysystem-google-drive": "~1.1",
-        "nuwave/lighthouse": "^3.7"
+        "nuwave/lighthouse": "^3.7",
+        "pusher/pusher-php-server": "^4.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

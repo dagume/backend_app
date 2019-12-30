@@ -178,6 +178,7 @@ return [
         Laraveles\Spanish\SpanishServiceProvider::class,
         App\Providers\GoogleDriveProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        \Nuwave\Lighthouse\Subscriptions\SubscriptionServiceProvider::class,
     ],
 
     /*

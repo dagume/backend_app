@@ -8,3 +8,13 @@ type Quotation{
     authorization:Boolean
     date: Date
 }
+
+type Subscription {
+    authorizationUpdated(authorization: Boolean): Quotation
+}
+extend type Mutation{
+    updateQuotation(
+        id: ID! @rules(apply: ["required"])
+        authorization: Boolean @rules(apply: ["required"])
+    ): Quotation @update(model: "App\\Quotation") @broadcast(subscription: "authorizationUpdated")#@middleware(checks:["auth:api"])
+}
