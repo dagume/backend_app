@@ -11,6 +11,7 @@ type Member{
 extend type Query{
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
+    members_provider(project_id:Int @where(operator: "=") role_id:Int @where(operator: "=")):[Member] @all(model: "App\\Member")  #@middleware(checks:["auth:api"])
 }
 extend type Mutation {
     #member
