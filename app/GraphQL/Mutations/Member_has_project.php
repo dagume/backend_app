@@ -20,16 +20,20 @@ class Member_has_project
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        DB::transaction(function () use($args){
+        $mem = DB::transaction(function () use($args){
             $member = new Member;
             $member->project_id     = $args['project_id'];
             $member->contact_id     = $args['contact_id'];
-            $member->role_id         = $args['role_id'];
+            $member->role_id        = $args['role_id'];
             $member->state          = $args['state'];
             $member->save();
+            //dd($member);
+            return $member;
         }, 3);
         return [
-            'message' => 'Miembro agregado exitosamente'
+                'member' => $mem,
+                'message' => 'Miembro agregado exitosamente'
         ];
+        
     }
 }

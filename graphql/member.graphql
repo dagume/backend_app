@@ -4,8 +4,6 @@ type Member{
     project:Project
     contact:Contact
     role:Role
-    hours_week:Int
-    hours_month:Int
     state:Int
 }
 extend type Query{

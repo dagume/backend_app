@@ -54,6 +54,7 @@ class CreateActivity
                 $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
         }, 3);
         return [
+            
             'message' => 'Actividad creada'
         ];
     }
