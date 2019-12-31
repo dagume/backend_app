@@ -16,7 +16,7 @@ class Quotation extends Model
         'order_id',
         'contact_id',
         'folder_id',
-        'authorization',
+        'AUTHORIZATION',
         'date'
     ];
 
