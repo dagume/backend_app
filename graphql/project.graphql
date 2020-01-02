@@ -33,7 +33,10 @@ enum associationProject {
     consorcio @enum(value: 0)
     APP @enum(value: 1)
 }
-
+type MessageSuccessProject {
+    project:Project
+    message: String
+}
 extend type Query{
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
@@ -63,7 +66,7 @@ extend type Mutation {
         consortium_name:String
         consortium_nit:Int
         folder_id: String
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(
         id: ID! @rules(apply: ["required"])

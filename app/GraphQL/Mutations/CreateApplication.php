@@ -40,11 +40,11 @@ class CreateApplication
     {
         //exportPdf();
         //dd($this->orderRepo->lastOrder()->id);
-        DB::transaction(function () use($args){
+        $ord = DB::transaction(function () use($args){
             $args['application_date']   = now();
             $args['state']              = 0; //el valor 0 es el estado de Application
             $args['sender_data']        = auth()->user()->id;
-            $this->orderRepo->create($args);
+            $order = $this->orderRepo->create($args);
 
             foreach ($args['updetails'] as $arg) {
                 $arg['order_id'] = $this->orderRepo->lastOrder()->id;
@@ -60,8 +60,10 @@ class CreateApplication
                 $quotation['contact_id'] = $ema;
                 $this->quotationRepo->create($quotation);
             }
+            return $order;
         }, 3);
         return [
+            'order' => $ord,
             'message' => 'Solicitud Enviada correctamente'
         ];
     }

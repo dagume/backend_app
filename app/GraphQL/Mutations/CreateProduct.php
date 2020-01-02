@@ -13,7 +13,7 @@ class CreateProduct
     public function __construct(ProductRepository $produRepo)
     {
         $this->productRepo = $produRepo;
-        
+
     }
     /**
      * Return a value for the field.
@@ -26,8 +26,12 @@ class CreateProduct
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $product = $this->productRepo->create($args); //guarda registro del nuevo Producto
+        $prod = DB::transaction(function () use($args){
+            $product = $this->productRepo->create($args); //guarda registro del nuevo Producto
+            return $product;
+        }, 3);
         return [
+            'product' => $prod,
             'message' => 'Producto creado exitosamente'
         ];
     }

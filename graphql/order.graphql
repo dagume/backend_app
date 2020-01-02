@@ -18,7 +18,11 @@ type Order{
     lon:Float
     order_documents:[Order_documents]
 }
-
+#Mensaje exitoso de creacion
+type MessageSuccessOrder {
+    order:Order
+    message: String
+}
 extend type Query{
     #Orders
     filter_name_order(name: String! @where(operator: "ilike")): [Order] @all(model: "App\\Order") @middleware(checks:["auth:api"])
@@ -43,7 +47,7 @@ extend type Mutation {
         lon: Float
         updetails:[UploadDetails]
         email_contacts:[Int]
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])

@@ -35,7 +35,7 @@ class CreateProject
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         //Transaccion para create
-        DB::transaction(function () use($args){
+        $proj = DB::transaction(function () use($args){
             //buscamos el id del projecto para asignarlo a su nombre en DRIVE
             $id = $this->projectRepo->lastProject()->id + 1;
             if ($args['type'] == 0) {
@@ -132,8 +132,10 @@ class CreateProject
             $doc_ref_account->drive_id = $account_folder->id;
             $doc_ref_account->save();
             }
+            return $project;
         }, 3);
         return [
+            'project' => $proj,
             'message' => 'Proyecto creado exitosamente'
         ];
     }
