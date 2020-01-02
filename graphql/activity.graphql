@@ -13,6 +13,7 @@ type Activity { #implements GlobalSearch{
     amount:Int
     is_added:Boolean
     drive_id:String
+    is_act:Boolean
 }
 #estados de actividad
 enum stateActivity{
@@ -53,6 +54,7 @@ extend type Mutation {
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean
+        is_act:Boolean
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
 
     #Editar actividad
@@ -66,5 +68,6 @@ extend type Mutation {
         state:String
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
+        is_act:Boolean
     ): Activity @update(model: "App\\Activity") @middleware(checks:["auth:api"])
 }
