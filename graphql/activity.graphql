@@ -27,6 +27,11 @@ enum priorityActivity{
     Media
     Baja
 }
+#Mensaje exitoso de creacion
+type MessageSuccessActivity {
+    activity:Activity
+    message: String
+}
 extend type Query{
     #Actividades
     activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api"])
@@ -48,7 +53,7 @@ extend type Mutation {
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
 
     #Editar actividad
     updateActivity(

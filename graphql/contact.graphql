@@ -35,6 +35,11 @@ enum contactIdType{
     pasaporte @enum(value: 3)
     extranjera @enum(value: 4)
 }
+#Mensaje exitoso de creacion
+type MessageSuccessContact {
+    contact:Contact
+    message: String
+}
 extend type Query{
     #Query Contacts
     filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")#@middleware(checks:["auth:api"])
@@ -61,7 +66,7 @@ extend type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8", "nullable"])
-    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
+    ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
 
     updateContact(
         id: ID! @rules(apply: ["required"])

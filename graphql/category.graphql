@@ -5,6 +5,11 @@ type Category {#implements GlobalSearch{
     description:String
     Products:[Product]
 }
+#Mensaje exitoso de creacion
+type MessageSuccessCategory {
+    category:Category
+    message: String
+}
 extend type Query{
     #Categories
     category(name: String! @eq id:ID @eq): Category @find(model: "App\\Category")@middleware(checks:["auth:api"])
@@ -16,7 +21,7 @@ extend type Mutation {
     createCategory(
         name: String @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-    ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateCategory@resolve") @middleware(checks:["auth:api"])
+    ):MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\CreateCategory@resolve") @middleware(checks:["auth:api"])
     updateCategory(
         id: ID! @rules(apply: ["required"])
         name: String @rules(apply: ["required", "max:255"])

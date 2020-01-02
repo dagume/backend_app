@@ -34,6 +34,6 @@ class Member_has_project
                 'member' => $mem,
                 'message' => 'Miembro agregado exitosamente'
         ];
-        
+
     }
 }

@@ -6,6 +6,11 @@ type Member{
     role:Role
     state:Int
 }
+#Mensaje exitoso de creacion
+type MessageSuccessMember {
+    member:Member
+    message: String
+}
 extend type Query{
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
@@ -18,7 +23,7 @@ extend type Mutation {
         contact_id: Int @rules(apply: ["integer","required"])
         role_id:     Int @rules(apply: ["integer","required"])
         state:  Int = 1
-    ):MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
+    ):MessageSuccessMember @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
 
     delete_member(id: ID!): Member @delete
 }

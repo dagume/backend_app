@@ -27,7 +27,6 @@ type Mutation
 
 #Mensaje exitoso de creacion
 type MessageSuccess {
-    member:Member
     message: String
 }
 

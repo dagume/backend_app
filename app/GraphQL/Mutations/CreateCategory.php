@@ -25,9 +25,13 @@ class CreateCategory
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $category = $this->categoryRepo->create($args); //guarda registro de la nueva categoria
-        return [
-            'message' => 'Categoria creada exitosamente'
-        ];
+        $cat = DB::transaction(function () use($args){
+            $category = $this->categoryRepo->create($args); //guarda registro de la nueva categoria
+            return $category;
+        }, 3);
+            return [
+                'category'=> $cat,
+                'message' => 'Categoria creada exitosamente'
+            ];
     }
 }
