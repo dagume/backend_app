@@ -12,7 +12,6 @@ type Activity { #implements GlobalSearch{
     notes: String
     amount:Int
     is_added:Boolean
-    is_folder:Boolean
     drive_id:String
 }
 #estados de actividad
@@ -39,7 +38,7 @@ extend type Mutation {
     createActivity(
         project_id: Int! @rules(apply: ["integer"])
         parent_activity_id: Int @rules(apply: ["integer","nullable"])
-        name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+        name: String @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["nullable"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
@@ -49,7 +48,6 @@ extend type Mutation {
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean
-        is_folder: Boolean
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
 
     #Editar actividad

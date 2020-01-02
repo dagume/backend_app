@@ -10,6 +10,7 @@ class Activity extends Model
 
     protected $primaryKey = 'id';
 
+    //Poner timestamp en TRUE ya esta en DB
     public $timestamps = false;
 
     protected $fillable = [
@@ -25,7 +26,6 @@ class Activity extends Model
         'notes',
         'amount',
         'is_added',
-        'is_folder',
         'drive_id'
     ];
 

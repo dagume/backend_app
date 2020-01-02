@@ -70,7 +70,6 @@ function exportPdf()
         $activity['completed'] = false;
         $activity['priority'] = 'Media';
         $activity['is_added'] = false;
-        $activity['is_folder'] = true;
         $activity['drive_id'] = $drive_id;
         return $activity;
     }
