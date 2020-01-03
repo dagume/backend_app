@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 use App\Document_reference;
+use App\Document_member;
 use DB;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;

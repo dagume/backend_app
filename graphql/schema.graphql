@@ -33,7 +33,7 @@ type MessageSuccess {
 type Mutation {
     #upload drive
     uploadFile(
-        name:String @rules(apply: ["required", "max:255"])
+        name:String @rules(apply: ["max:255"])
         activity_id:Int @rules(apply: ["nullable"])
         project_id:Int @rules(apply: ["nullable"])
         contact_id:Int @rules(apply: ["nullable"])
