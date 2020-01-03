@@ -597,6 +597,8 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         'App\\GraphQL\\Mutations\\SendApplication' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/SendApplication.php',
         'App\\GraphQL\\Mutations\\UploadFile' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/UploadFile.php',
         'App\\GraphQL\\Queries\\Filter_contact' => __DIR__ . '/../..' . '/app/GraphQL/Queries/Filter_contact.php',
+        'App\\GraphQL\\Queries\\Hash_quotation' => __DIR__ . '/../..' . '/app/GraphQL/Queries/Hash_quotation.php',
+        'App\\GraphQL\\Subscriptions\\AuthorizationUpdated' => __DIR__ . '/../..' . '/app/GraphQL/Subscriptions/AuthorizationUpdated.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',

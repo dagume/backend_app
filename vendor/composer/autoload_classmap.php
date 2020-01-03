@@ -25,6 +25,8 @@ return array(
     'App\\GraphQL\\Mutations\\SendApplication' => $baseDir . '/app/GraphQL/Mutations/SendApplication.php',
     'App\\GraphQL\\Mutations\\UploadFile' => $baseDir . '/app/GraphQL/Mutations/UploadFile.php',
     'App\\GraphQL\\Queries\\Filter_contact' => $baseDir . '/app/GraphQL/Queries/Filter_contact.php',
+    'App\\GraphQL\\Queries\\Hash_quotation' => $baseDir . '/app/GraphQL/Queries/Hash_quotation.php',
+    'App\\GraphQL\\Subscriptions\\AuthorizationUpdated' => $baseDir . '/app/GraphQL/Subscriptions/AuthorizationUpdated.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
     'App\\Http\\Controllers\\Auth\\RegisterController' => $baseDir . '/app/Http/Controllers/Auth/RegisterController.php',

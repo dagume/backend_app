@@ -15,6 +15,10 @@ use App\Repositories\DetailRepository;
 use DB;
 use Barryvdh\DomPDF\Facade as PDF;
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Hash;
+
 class CreateApplication
 {
     protected $orderRepo;
@@ -54,11 +58,23 @@ class CreateApplication
             //$pdf = PDF::loadView('solicitud', $data);
             //$pdf->download('itsolutionstuff.pdf');
             $emails = $args['email_contacts'];
-            foreach ($emails as $ema ) {
-                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema)));
+            foreach ($emails as $ema ) {             
                 $quotation['order_id'] = $this->orderRepo->lastOrder()->id;
                 $quotation['contact_id'] = $ema;
-                $this->quotationRepo->create($quotation);
+                $quo = $this->quotationRepo->create($quotation);
+                /////////////////////////////
+                $hashed = Hash::make('quotation', [
+                    'memory' => 1024,
+                    'time' => 2,
+                    'threads' => 2,
+                ]);
+                $quotation_id = Crypt::encryptString($quo->id.'_'.$hashed); //encryptamos el id con el hash 
+                
+                $affected_id = DB::table('quotations') //Actualizamos el id de la cotizacion, poniendo el hash encriptado
+                ->where('id', $quo->id)
+                ->update(['hash_id' => $quotation_id]);
+
+                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema), Quotation::find($quo->id)));
             }
             return $order;
         }, 3);

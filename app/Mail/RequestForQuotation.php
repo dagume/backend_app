@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\User;
+use App\Quotation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -18,10 +19,12 @@ class RequestForQuotation extends Mailable
      * @return void
      */
     public $contact;
+    public $quotation;
 
-    public function __construct(User $contact)
+    public function __construct(User $contact, Quotation $quotation)
     {
         $this->contact = $contact;
+        $this->quotation = $quotation;
     }
 
     /**

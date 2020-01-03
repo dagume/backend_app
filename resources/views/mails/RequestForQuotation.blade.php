@@ -10,6 +10,7 @@
     <ul>
         <li>Nombre: {{ $contact->name }}</li>
         <li>Teléfono: {{ $contact->phones }}</li>
+        <li>link: {{ $quotation->hash_id }}</li>
     </ul>
     <p>Adjunto el link de la solicitud de cotizacion:</p>
     <ul>

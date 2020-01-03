@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quotation extends Model
 {
+    public function __construct()
+    {
+        
+    }
     protected  $table= 'quotations';
 
     protected $primaryKey = 'id';
@@ -17,7 +21,8 @@ class Quotation extends Model
         'contact_id',
         'folder_id',
         'AUTHORIZATION',
-        'date'
+        'date',
+        'hash_id'
     ];
 
     public function order()

@@ -6,9 +6,12 @@ use App\Document_reference;
 use App\Module;
 use App\Project;
 use App\User;
+use App\Quotation;
 use Caffeinated\Shinobi\Models\Permission;
 use Caffeinated\Shinobi\Models\Role;
 use DB;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
@@ -31,6 +34,13 @@ class RolesController extends Controller
 
     public function index(Request $request)
     {
+        //decrypt 
+        $query = Quotation::findOrfail(19)->hash_id;        
+        $decrypted = Crypt::decryptString($query);               
+        $id_quo = explode( '_', $decrypted);
+        dd($id_quo[0]);
+
+        
         //$adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
         //$filesystem = new Filesystem($adapter);
         //// here we are uploading files from local storage
