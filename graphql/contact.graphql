@@ -2,14 +2,14 @@
 type Contact {#implements GlobalSearch{
     id:ID!
     parent_contact:Contact
-    type:contactType!
-    name:String!
+    type:contactType
+    name:String
     lastname:String
-    identification_type:contactIdType!
+    identification_type:contactIdType
     identification_number:Int
-    email:String!
-    phones:String!
-    state:Int!
+    email:String
+    phones:String
+    state:Int
     locate:String
     city:String
     regime:String
