@@ -36,6 +36,7 @@ type MessageSuccessActivity {
 extend type Query{
     #Actividades
     activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api"])
+    added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") @middleware(checks:["auth:api"])
     activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api"])
 
 }
@@ -70,4 +71,6 @@ extend type Mutation {
         date_end: Date @rules(apply: ["date"])
         is_act:Boolean
     ): Activity @update(model: "App\\Activity") @middleware(checks:["auth:api"])
+
+    delete_activity(id: ID!): Activity @delete
 }

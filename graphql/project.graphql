@@ -71,10 +71,16 @@ extend type Mutation {
     updateProject(
         id: ID! @rules(apply: ["required"])
         name: String @rules(apply: ["max:255"])
+        start_date: Date @rules(apply: ["nullable","date"])
+        end_date: Date @rules(apply: ["nullable","date"])
         description: String @rules(apply: ["nullable"])
+        contract_value: Int
+        state: String @rules(apply: ["in:ejecucion, suspendido"])
         place: String
         address: String
-        consortium_name: String
+        association: associationProject
+        consortium_name:String
+        consortium_nit:Int
     ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
     #Editar estado Proyecto
     updateStateProject(
