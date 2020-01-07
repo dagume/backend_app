@@ -60,7 +60,7 @@ extend type Mutation {
 
     #Editar actividad
     updateActivity(
-        id_activity: ID! @rules(apply: ["required"])
+        id: ID! @rules(apply: ["required"])
         name:String
         completed:Boolean
         description: String @rules(apply: ["nullable"])
