@@ -2,23 +2,12 @@
 
 namespace App\GraphQL\Queries;
 
-
-use App\Quotation;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
-use App\Repositories\QuotationRepository;
 use DB;
 
-class Hash_quotation
+class Member_roles
 {
-    protected $quotationRepo;
-
-    public function __construct(QuotationRepository $quoRepo)
-    {
-        $this->quotationRepo = $quoRepo;
-    }
     /**
      * Return a value for the field.
      *
@@ -29,10 +18,10 @@ class Hash_quotation
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {                   
-        $decrypted = Crypt::decryptString($args['hash']);               
-        $id_quo = explode( '_', $decrypted);
-        $quotation = $this->quotationRepo->find($id_quo[0]);
-        return $quotation;
+    {
+        $MemberRoles = DB::select('Select * from crosstab(\'SELECT c.name, r.name, r.name FROM contacts c INNER JOIN members m ON c.id = m.contact_id INNER JOIN roles r ON r.id = m.role_id where m.project_id = '.$args['project_id'].'\')
+        AS final_result(name Character varying, role1 Character(120), role2 Character(120), role3 Character(120), role4 Character(120), role5 Character(120), role6 Character(120), role7 Character(120), role8 Character(120))');
+        
+        return $MemberRoles; 
     }
 }

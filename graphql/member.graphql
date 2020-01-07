@@ -11,10 +11,22 @@ type MessageSuccessMember {
     member:Member
     message: String
 }
+type MemberRoles{
+    name:String
+    role1:String
+    role2:String
+    role3:String
+    role4:String
+    role5:String
+    role6:String
+    role7:String
+    role8:String
+}
 extend type Query{
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
-    members_provider(project_id:Int @where(operator: "=") role_id:Int @where(operator: "=")):[Member] @all(model: "App\\Member")  #@middleware(checks:["auth:api"])
+    members_provider(project_id:Int role_id:Int):[Member] @find(model: "App\\Member")#@middleware(checks:["auth:api"])
+    member_roles(project_id:Int!):[MemberRoles] @field(resolver: "App\\GraphQL\\Queries\\Member_roles@resolve")#@middleware(checks:["auth:api"])
 }
 extend type Mutation {
     #member
