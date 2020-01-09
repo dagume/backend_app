@@ -30,6 +30,7 @@ class CreateActivity
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        //dd($args);
         $act = DB::transaction(function () use($args){
             //verifica si la actividad es padre o hija para asi saber donde crear el folder
             if ($args['parent_activity_id'] == null) {

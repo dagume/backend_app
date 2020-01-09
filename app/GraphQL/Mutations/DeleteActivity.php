@@ -5,9 +5,18 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
+use App\Repositories\ActivityRepository;
+
 
 class DeleteActivity
 {
+
+    protected $activityRepo;
+
+    public function __construct(ActivityRepository $actRepo)
+    {
+        $this->activityRepo = $actRepo;
+    }
     /**
      * Return a value for the field.
      *
@@ -19,6 +28,11 @@ class DeleteActivity
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        dd();
+        $activity = $this->activityRepo->find($args['id']);
+        if ($activity->parent_activity_id == null) {
+            
+        }
         DB::select('select * from users where active = ?', [1]);
     }
 }
