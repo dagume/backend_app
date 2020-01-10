@@ -10,7 +10,7 @@ class Document_member extends Model
 
     protected $primaryKey = 'id';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'member_id',

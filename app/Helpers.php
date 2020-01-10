@@ -3,6 +3,48 @@ use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
 
+function delete($path)
+{
+    if ($file = $this->getFileObject($path)) {
+        $name = $file->getName();
+        list ($parentId, $id) = $this->splitPath($path);
+        if ($parents = $file->getParents()) {
+            $file = new Google_Service_Drive_DriveFile();
+            $opts = [];
+            $res = false;
+            if (count($parents) > 1) {
+                $opts['removeParents'] = $parentId;
+            } else {
+                if ($this->options['deleteAction'] === 'delete') {
+                    try {
+                        $this->service->files->delete($id);
+                    } catch (Google_Exception $e) {
+                        return false;
+                    }
+                    $res = true;
+                } else {
+                    $file->setTrashed(true);
+                }
+            }
+            if (!$res) {
+                try {
+                    $this->service->files->update($id, $file, $this->applyDefaultParams($opts, 'files.update'));
+                } catch (Google_Exception $e) {
+                    return false;
+                }
+            }
+            unset($this->cacheFileObjects[$id], $this->cacheHasDirs[$id], $this->cacheFileObjectsByName[$parentId . '/' . $name]);
+            return true;
+        }
+    }
+    return false;
+}
+
+function deleteDir($dirname)
+    {
+        return $this->delete($dirname);
+    }
+
 function  Create_Folder($name, $parent_folder)
 {
     $fileMetadata = new \Google_Service_Drive_DriveFile([
@@ -62,6 +104,7 @@ function exportPdf()
 
         return $pdf->save('prueba.pdf');
     }
+    //Para la creacion de actividades Default al momento de crear un proyecto
     function StoreActivity($project_id, $name, $drive_id)
     {
         $activity['project_id'] = $project_id;

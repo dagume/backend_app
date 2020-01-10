@@ -31,7 +31,7 @@ class DeleteActivity
         dd();
         $activity = $this->activityRepo->find($args['id']);
         if ($activity->parent_activity_id == null) {
-            
+                
         }
         DB::select('select * from users where active = ?', [1]);
     }
