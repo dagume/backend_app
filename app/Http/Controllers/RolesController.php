@@ -34,13 +34,13 @@ class RolesController extends Controller
 
     public function index(Request $request)
     {
-        //decrypt 
-        //$query = Quotation::findOrfail(19)->hash_id;        
-        //$decrypted = Crypt::decryptString($query);               
+        //decrypt
+        //$query = Quotation::findOrfail(19)->hash_id;
+        //$decrypted = Crypt::decryptString($query);
         //$id_quo = explode( '_', $decrypted);
         //dd($id_quo[0]);
 
-        
+
         //$adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
         //$filesystem = new Filesystem($adapter);
         //// here we are uploading files from local storage
@@ -97,13 +97,13 @@ class RolesController extends Controller
         //$doc_ref_contact->drive_id = $contact_folder->id;
         //$doc_ref_contact->save();
 //
-        $doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-        $doc_ref_2019->parent_document_id = DB::table('document_reference')->where('name', 'Proyectos')->first()->id;
-        $doc_ref_2019->name = '2020';
-        $doc_ref_2019->type = 1; // 0 = Tipo File, 1 = Tipo Folder
-        $year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
-        $doc_ref_2019->drive_id = $year_folder->id;
-        $doc_ref_2019->save();
+        //$doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        //$doc_ref_2019->parent_document_id = DB::table('document_reference')->where('name', 'Proyectos')->first()->id;
+        //$doc_ref_2019->name = '2020';
+        //$doc_ref_2019->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
+        //$doc_ref_2019->drive_id = $year_folder->id;
+        //$doc_ref_2019->save();
 
         //$document = new Document_reference;
         //$document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
