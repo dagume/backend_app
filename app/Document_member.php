@@ -14,6 +14,7 @@ class Document_member extends Model
 
     protected $fillable = [
         'member_id',
+        'doc_id',
         'date',
         'file_id'
     ];
@@ -21,5 +22,9 @@ class Document_member extends Model
     public function member()
     {
         return $this->belongsTo('App\Member');
+    }
+    public function document_rol()
+    {
+        return $this->belongsTo('App\Document_rol', 'doc_id','id');
     }
 }

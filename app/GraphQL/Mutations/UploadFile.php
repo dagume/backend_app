@@ -43,6 +43,7 @@ class UploadFile
         if ($args['member_id'] != null) {
             $doc_mem = new Document_member;
             $doc_mem->member_id = $args['member_id'];
+            $doc_mem->member_id = $args['doc_id'];
             $doc_mem->date = now();
             $doc_mem->file_id = $args['drive_id'];
             $doc_mem->save();
