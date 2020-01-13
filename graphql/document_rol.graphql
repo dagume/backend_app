@@ -1,0 +1,6 @@
+#Documentos requeridos
+type Document_rol {
+  id: ID!
+  role_id: Int
+  required_document_id: Int  
+}

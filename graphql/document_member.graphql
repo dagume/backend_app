@@ -1,8 +1,8 @@
 #Documentos requeridos
 type Document_member {
   id: ID!
-  member_id: Integer
-  doc_id: Integer
+  member: Member
+  document_rol: Document_rol
   date: Date
   file_id: String
 }

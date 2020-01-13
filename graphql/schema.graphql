@@ -25,6 +25,7 @@ type Mutation
 #import module.graphql
 #import required_document.graphql
 #import document_member.graphql
+#import document_rol.graphql
 
 #Mensaje exitoso de creacion
 type MessageSuccess {
@@ -40,17 +41,17 @@ type Mutation {
         contact_id:Int @rules(apply: ["nullable"])
         accounting_movements_id: Int @rules(apply: ["nullable"])
         member_id:Int @rules(apply: ["nullable"])
+        doc_id:Int @rules(apply: ["nullable"])
         drive_id:String @rules(apply: ["required"])
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
 
-    uploadRequiredDocument(
-
-        activity_id:Int @rules(apply: ["nullable"])
-        project_id:Int @rules(apply: ["nullable"])
-        contact_id:Int @rules(apply: ["nullable"])
-        accounting_movements_id: Int @rules(apply: ["nullable"])
-        drive_id:String @rules(apply: ["required"])
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
+    #uploadRequiredDocument(
+    #    activity_id:Int @rules(apply: ["nullable"])
+    #    project_id:Int @rules(apply: ["nullable"])
+    #    contact_id:Int @rules(apply: ["nullable"])
+    #    accounting_movements_id: Int @rules(apply: ["nullable"])
+    #    drive_id:String @rules(apply: ["required"])
+    #): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
 
 #Mensaje de creado de folder
 #type MessageSuccessFolder {
