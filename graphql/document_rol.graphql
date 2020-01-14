@@ -2,5 +2,6 @@
 type Document_rol {
   id: ID!
   role_id: Int
-  required_document_id: Int  
+  require_document: Required_documents  
+  documents_member: [Document_member]
 }

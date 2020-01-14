@@ -5,6 +5,7 @@ type Member{
     contact:Contact
     role:Role
     state:Int
+    documents_member: [Document_member]
 }
 #Mensaje exitoso de creacion
 type MessageSuccessMember {

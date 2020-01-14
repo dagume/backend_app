@@ -18,7 +18,6 @@ class Document_member extends Model
         'date',
         'file_id'
     ];
-
     public function member()
     {
         return $this->belongsTo('App\Member');

@@ -1,5 +1,6 @@
 #Documentos requeridos
 type Required_documents {
   id: ID!
-  name_required_documents: String
+  name_required_documents: String  
+  documents_rol:[Document_rol]
 }
