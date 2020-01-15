@@ -22,6 +22,32 @@ type Contact {#implements GlobalSearch{
     orders:[Order]
     quotations:[Quotation]
     accounts: [Account]
+    
+}
+type Document_contact{
+    id:ID!
+    parent_contact:Contact
+    type:contactType
+    name:String
+    lastname:String
+    identification_type:contactIdType
+    identification_number:Int
+    email:String
+    phones:String
+    state:Int
+    locate:String
+    city:String
+    regime:String
+    address:String
+    web_site:String
+    remember_token:String
+    folder_id:String
+
+    file_id:String
+    created_at:Date
+    updated_at:Date
+    role_name:String
+    name_required_documents:String
 }
 #tipos de contacto
 enum contactType{
@@ -44,7 +70,8 @@ extend type Query{
     #Query Contacts
     filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")#@middleware(checks:["auth:api"])
     #filter_name_contact(name: String!  @where(operator: "ilike")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])
-    contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") @middleware(checks:["auth:api"])
+    contact(name: String @eq id:ID @eq): [Contact] @find(model: "App\\User") @middleware(checks:["auth:api"])
+    require_doc_contact(contact_id: Int! @eq project_id:Int! @eq): [Document_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") @middleware(checks:["auth:api"])
     contacts: [Contact!]! @all(model: "App\\User")  @middleware(checks:["auth:api"])
     contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api"])
 }

@@ -6,6 +6,7 @@ use App\Document_reference;
 use App\Module;
 use App\Project;
 use App\User;
+use App\Document_member;
 use App\Quotation;
 use Caffeinated\Shinobi\Models\Permission;
 use Caffeinated\Shinobi\Models\Role;
@@ -34,6 +35,13 @@ class RolesController extends Controller
 
     public function index(Request $request)
     {
+        $doc_mem = new Document_member;
+        $doc_mem->member_id = 4;
+        $doc_mem->doc_id = 9;
+        $doc_mem->date = now();
+        $doc_mem->file_id = '1FOH_UgHUUxPihsQwpjPjO1vPR-Dt-Lwr';
+        $doc_mem->save();
+
         //decrypt
         //$query = Quotation::findOrfail(19)->hash_id;
         //$decrypted = Crypt::decryptString($query);
