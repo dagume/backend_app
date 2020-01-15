@@ -17,10 +17,6 @@ class Required_documents extends Model
         'name_required_documents'
     ];
 
-    public function documents_rol(){
-        return $this->hasMany('App\Document_rol', 'required_document_id', 'id');
-    }
-
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'documents_rol','role_id', 'required_document_id');

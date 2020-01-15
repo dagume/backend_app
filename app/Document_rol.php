@@ -21,8 +21,5 @@ class Document_rol extends Model
     {
         return $this->belongsTo('App\Required_documents', 'required_document_id','id');
     }
-    public function documents_member()
-    {
-        return $this->hasMany('App\Document_member','doc_id','id');
-    }
+    
 }

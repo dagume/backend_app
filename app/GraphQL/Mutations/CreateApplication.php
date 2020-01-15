@@ -45,37 +45,38 @@ class CreateApplication
         //exportPdf();
         //dd($this->orderRepo->lastOrder()->id);
         $ord = DB::transaction(function () use($args){
-            $args['application_date']   = now();
-            $args['state']              = 0; //el valor 0 es el estado de Application
-            $args['sender_data']        = auth()->user()->id;
-            $order = $this->orderRepo->create($args);
-
-            foreach ($args['updetails'] as $arg) {
-                $arg['order_id'] = $this->orderRepo->lastOrder()->id;
-                $this->detailRepo->create($arg);
-            }
-            //$data = ['title' => 'Solicitud de cotizacion'];
-            //$pdf = PDF::loadView('solicitud', $data);
-            //$pdf->download('itsolutionstuff.pdf');
+            //$args['application_date']   = now();
+            //$args['state']              = 0; //el valor 0 es el estado de Application
+            //$args['sender_data']        = auth()->user()->id;
+            //$order = $this->orderRepo->create($args);
+//
+            //foreach ($args['updetails'] as $arg) {
+            //    $arg['order_id'] = $this->orderRepo->lastOrder()->id;
+            //    $this->detailRepo->create($arg);
+            //}
+            $data = ['title' => 'Solicitud de cotizacion'];
+            $pdf = PDF::loadView('solicitud', $data);
+            $pdf->download('itsolutionstuff.pdf');
             $emails = $args['email_contacts'];
-            foreach ($emails as $ema ) {             
-                $quotation['order_id'] = $this->orderRepo->lastOrder()->id;
-                $quotation['contact_id'] = $ema;
-                $quo = $this->quotationRepo->create($quotation);
-                /////////////////////////////
-                $hashed = Hash::make('quotation', [
-                    'memory' => 1024,
-                    'time' => 2,
-                    'threads' => 2,
-                ]);
-                $quotation_id = Crypt::encryptString($quo->id.'_'.$hashed); //encryptamos el id con el hash 
-                
-                $affected_id = DB::table('quotations') //Actualizamos el id de la cotizacion, poniendo el hash encriptado
-                ->where('id', $quo->id)
-                ->update(['hash_id' => $quotation_id]);
-
-                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema), Quotation::find($quo->id)));
-            }
+            dd($pdf->save(public_path().'/mi_stored_file.pdf')->stream('download.pdf'));
+            //foreach ($emails as $ema ) {             
+            //    $quotation['order_id'] = $this->orderRepo->lastOrder()->id;
+            //    $quotation['contact_id'] = $ema;
+            //    $quo = $this->quotationRepo->create($quotation);
+            //    /////////////////////////////
+            //    $hashed = Hash::make('quotation', [
+            //        'memory' => 1024,
+            //        'time' => 2,
+            //        'threads' => 2,
+            //    ]);
+            //    $quotation_id = Crypt::encryptString($quo->id.'_'.$hashed); //encryptamos el id con el hash 
+            //    
+            //    $affected_id = DB::table('quotations') //Actualizamos el id de la cotizacion, poniendo el hash encriptado
+            //    ->where('id', $quo->id)
+            //    ->update(['hash_id' => $quotation_id]);
+//
+            //    Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema), Quotation::find($quo->id)));
+            //}
             return $order;
         }, 3);
         return [
