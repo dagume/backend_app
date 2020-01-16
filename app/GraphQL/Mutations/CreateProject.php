@@ -131,6 +131,17 @@ class CreateProject
             $doc_ref_account->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_account->drive_id = $account_folder->id;
             $doc_ref_account->save();
+
+            //Hacemos conexion con el drive y creamos el folder de Contabilidad. Metodos en Helper.php
+            $order_folder = Conection_Drive()->files->create(Create_Folder('Ordenes', $project_folder->id), ['fields' => 'id']);
+            $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+            $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
+            $doc_ref_account->name ='Ordenes';
+            $doc_ref_account->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_account->project_id = $this->projectRepo->lastProject()->id;
+            $doc_ref_account->module_id = 2; //id 2 pertenece al modulo Project
+            $doc_ref_account->drive_id = $order_folder->id;
+            $doc_ref_account->save();
             }
             return $project;
         }, 3);
