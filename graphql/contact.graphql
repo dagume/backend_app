@@ -25,7 +25,7 @@ type Contact {#implements GlobalSearch{
     
 }
 type Document_contact{
-    id:ID!
+    id:ID
     parent_contact:Contact
     type:contactType
     name:String

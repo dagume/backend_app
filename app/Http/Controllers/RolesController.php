@@ -28,42 +28,40 @@ class RolesController extends Controller
 
     private $cacheFileObjects = [];
     protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
-
     public function __construct()
     {}
 
 
     public function index(Request $request)
     {
-        $doc_mem = new Document_member;
-        $doc_mem->member_id = 4;
-        $doc_mem->doc_id = 9;
-        $doc_mem->date = now();
-        $doc_mem->file_id = '1FOH_UgHUUxPihsQwpjPjO1vPR-Dt-Lwr';
-        $doc_mem->save();
-
+        //$doc_mem = new Document_member;
+        //$doc_mem->member_id = 4;
+        //$doc_mem->doc_id = 9;
+        //$doc_mem->date = now();
+        //$doc_mem->file_id = '1FOH_UgHUUxPihsQwpjPjO1vPR-Dt-Lwr';
+        //$doc_mem->save();
+//
         //decrypt
         //$query = Quotation::findOrfail(19)->hash_id;
         //$decrypted = Crypt::decryptString($query);
         //$id_quo = explode( '_', $decrypted);
         //dd($id_quo[0]);
-
-
-        //$adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
-        //$filesystem = new Filesystem($adapter);
-        //// here we are uploading files from local storage
-        //// we first get all the files
-        //$files = Storage::files();
-        //// loop over the found files
-        //foreach ($files as $file) {
-        //    // read the file content
-        //    $read = Storage::get($file);
-        //    dd($read);
-        //    // save to google drive
-        //    $archivo = $filesystem->write($file, $read);
-        //    $prueba = $filesystem->getMetadata($file);
-        //    dd($prueba['path']);
-        //}
+        
+        $adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
+        $filesystem = new Filesystem($adapter);
+        // here we are uploading files from local storage
+        // we first get all the files
+        $files = Storage::files();
+        // loop over the found files
+        foreach ($files as $file) {
+            // read the file content
+            $read = Storage::get($file);
+            //dd($read);
+            // save to google drive
+            $archivo = $filesystem->write($file, $read);
+            $prueba = $filesystem->getMetadata($file);
+            dd($prueba['path']);
+        }
 
 
 
