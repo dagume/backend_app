@@ -35,6 +35,7 @@ extend type Query{
 input UploadDetails {
     product_id:Int
     quantity:Float
+    mea_id:Int
 }
 extend type Mutation {
     #EnviarSolicitudCotizacon

@@ -15,6 +15,7 @@ class Detail extends Model
     protected $fillable = [
         'product_id',
         'order_id',
+        'mea_id',
         'quantity',
         'value',        
         'delivered_amount',
@@ -28,5 +29,9 @@ class Detail extends Model
     public function order()
     {
         return $this->belongsTo('App\Order');
+    }
+    public function measure()
+    {
+        return $this->belongsTo('App\Measure','mea_id','id');
     }
 }

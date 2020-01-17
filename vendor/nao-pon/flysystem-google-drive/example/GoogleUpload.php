@@ -31,8 +31,7 @@ class GoogleUpload
         // & thats why u could have duplicated folders under the same name
         Cache::rememberForever('folder_id', function () {
             return $this->create_folder();
-        });
-
+        });        
         $this->folder_id = Cache::get('folder_id');
     }
 

@@ -1,0 +1,9 @@
+type Measure{
+    id: ID!
+    name: String
+}
+
+extend type Query{
+    #unidades de medida
+    measures: [Measure!]! @all(model: "App\\Measure")@middleware(checks:["auth:api"])
+}

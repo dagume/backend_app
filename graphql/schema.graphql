@@ -26,6 +26,7 @@ type Mutation
 #import required_document.graphql
 #import document_member.graphql
 #import document_rol.graphql
+#import measure.graphql
 
 #Mensaje exitoso de creacion
 type MessageSuccess {

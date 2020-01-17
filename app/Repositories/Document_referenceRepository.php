@@ -36,5 +36,11 @@ class Document_referenceRepository extends BaseRepository
         $folderYear = DB::select('SELECT id, drive_id FROM document_reference WHERE name = ? ', [date("Y")]);
         return $folderYear[0];
     }
+    public function getFolderOrders($project_id)
+    {
+        //Buscamos el folder de ordenes dentro de un proyecto
+        $folderOrder = DB::select('SELECT id, drive_id FROM document_reference WHERE project_id = ? AND name = ?', [$project_id , 'Ordenes']);
+        return $folderOrder[0];
+    }
 
 }
