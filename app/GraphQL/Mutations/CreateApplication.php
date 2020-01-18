@@ -58,7 +58,7 @@ class CreateApplication
             $doc_ref_order = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_order->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_order->name = $args['name'];
-            $doc_ref_order->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_order->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_order->project_id = $args['project_id'];
             $doc_ref_order->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_order->drive_id = $order_folder->id;

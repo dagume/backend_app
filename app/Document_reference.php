@@ -15,7 +15,7 @@ class Document_reference extends Model
     protected $fillable = [
         'parent_document_id',
         'name',
-        'type',
+        'is_folder',
         'activity_id',
         'project_id',
         'contact_id',

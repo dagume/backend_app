@@ -26,8 +26,8 @@ use Barryvdh\DomPDF\Facade as PDF;
 class RolesController extends Controller
 {
 
-    private $cacheFileObjects = [];
-    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
+    //private $cacheFileObjects = [];
+    //protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
     public function __construct()
     {}
 
@@ -47,21 +47,21 @@ class RolesController extends Controller
         //$id_quo = explode( '_', $decrypted);
         //dd($id_quo[0]);
         
-        $adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
-        $filesystem = new Filesystem($adapter);
-        // here we are uploading files from local storage
-        // we first get all the files
-        $files = Storage::files();
-        // loop over the found files
-        foreach ($files as $file) {
-            // read the file content
-            $read = Storage::get($file);
-            //dd($read);
-            // save to google drive
-            $archivo = $filesystem->write($file, $read);
-            $prueba = $filesystem->getMetadata($file);
-            dd($prueba['path']);
-        }
+        //$adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
+        //$filesystem = new Filesystem($adapter);
+        //// here we are uploading files from local storage
+        //// we first get all the files
+        //$files = Storage::files();
+        //// loop over the found files
+        //foreach ($files as $file) {
+        //    // read the file content
+        //    $read = Storage::get($file);
+        //    //dd($read);
+        //    // save to google drive
+        //    $archivo = $filesystem->write($file, $read);
+        //    $prueba = $filesystem->getMetadata($file);
+        //    dd($prueba['path']);
+        //}
 
 
 
@@ -81,24 +81,27 @@ class RolesController extends Controller
         //$module3 = new Module;
         //$module3->name = 'Cuenta';
         //$module3->save();
+        //$module4 = new Module;
+        //$module4->name = 'Orden';
+        //$module4->save();
 //
         //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_project->name = 'Proyectos';
-        //$doc_ref_project->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$doc_ref_project->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
         //$project_folder = Conection_Drive()->files->create(Create_Folder('Proyectos', $this->folder_id), ['fields' => 'id']);
         //$doc_ref_project->drive_id = $project_folder->id;
         //$doc_ref_project->save();
 //
         //$doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_account->name = 'Cuentas';
-        //$doc_ref_account->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
         //$account_folder = Conection_Drive()->files->create(Create_Folder('Cuentas', $this->folder_id), ['fields' => 'id']);
         //$doc_ref_account->drive_id = $account_folder->id;
         //$doc_ref_account->save();
 //
         //$doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_contact->name = 'Contactos';
-        //$doc_ref_contact->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$doc_ref_contact->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
         //$contact_folder = Conection_Drive()->files->create(Create_Folder('Contactos', $this->folder_id), ['fields' => 'id']);
         //$doc_ref_contact->drive_id = $contact_folder->id;
         //$doc_ref_contact->save();
@@ -106,7 +109,7 @@ class RolesController extends Controller
         //$doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_2019->parent_document_id = DB::table('document_reference')->where('name', 'Proyectos')->first()->id;
         //$doc_ref_2019->name = '2020';
-        //$doc_ref_2019->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+        //$doc_ref_2019->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
         //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
         //$doc_ref_2019->drive_id = $year_folder->id;
         //$doc_ref_2019->save();

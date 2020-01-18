@@ -55,9 +55,11 @@ class DatabaseSeeder extends Seeder
         ]);
         }
 */
-        $this->call(RoleTableSeeder::class);
-        $this->call(PermissionsTableSeeder::class);
-        $this->call(Required_documentsTableSeeder::class);
+        //$this->call(RoleTableSeeder::class);
+        //$this->call(PermissionsTableSeeder::class);
+        //$this->call(Required_documentsTableSeeder::class);
+
+        
         //$this->call(UsersTableSeeder::class);
     }
 }

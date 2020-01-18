@@ -54,7 +54,7 @@ class CreateProject
             $doc_ref_project = new Document_reference;  // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_project->parent_document_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
             $doc_ref_project->name = $args['name'];
-            $doc_ref_project->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_project->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_project->project_id = $this->projectRepo->lastProject()->id;
             $doc_ref_project->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_project->drive_id = $project_folder->id;
@@ -65,7 +65,7 @@ class CreateProject
             $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_activity->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_activity->name ='Actividades';
-            $doc_ref_activity->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
             $doc_ref_activity->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_activity->drive_id = $activity_folder->id;
@@ -80,7 +80,7 @@ class CreateProject
                 $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
                 $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($this->projectRepo->lastProject()->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
                 $doc_ref_activity->name ='Acta Consorcial';
-                $doc_ref_activity->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $doc_ref_activity->activity_id =  $this->activityRepo->lastActivity()->id;
                 $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
                 $doc_ref_activity->module_id = 1; //id 1 pertenece al modulo Activity
@@ -97,7 +97,7 @@ class CreateProject
                 $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
                 $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($this->projectRepo->lastProject()->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
                 $doc_ref_activity->name ='Propuesta';
-                $doc_ref_activity->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $doc_ref_activity->activity_id =  $this->activityRepo->lastActivity()->id;
                 $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
                 $doc_ref_activity->module_id = 1; //id 1 pertenece al modulo Activity
@@ -113,7 +113,7 @@ class CreateProject
                 $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
                 $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($this->projectRepo->lastProject()->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
                 $doc_ref_activity->name ='Certificado Sena y Comfaboy';
-                $doc_ref_activity->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $doc_ref_activity->activity_id =  $this->activityRepo->lastActivity()->id;
                 $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
                 $doc_ref_activity->module_id = 1; //id 1 pertenece al modulo Activity
@@ -126,7 +126,7 @@ class CreateProject
             $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_account->name ='Contabilidad';
-            $doc_ref_account->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_account->project_id = $this->projectRepo->lastProject()->id;
             $doc_ref_account->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_account->drive_id = $account_folder->id;
@@ -137,7 +137,7 @@ class CreateProject
             $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_account->name ='Ordenes';
-            $doc_ref_account->type = 1; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_account->project_id = $this->projectRepo->lastProject()->id;
             $doc_ref_account->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_account->drive_id = $order_folder->id;
