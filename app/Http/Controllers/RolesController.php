@@ -47,21 +47,21 @@ class RolesController extends Controller
         //$id_quo = explode( '_', $decrypted);
         //dd($id_quo[0]);
         
-        //$adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
-        //$filesystem = new Filesystem($adapter);
-        //// here we are uploading files from local storage
-        //// we first get all the files
-        //$files = Storage::files();
-        //// loop over the found files
-        //foreach ($files as $file) {
-        //    // read the file content
-        //    $read = Storage::get($file);
-        //    //dd($read);
-        //    // save to google drive
-        //    $archivo = $filesystem->write($file, $read);
-        //    $prueba = $filesystem->getMetadata($file);
-        //    dd($prueba['path']);
-        //}
+        $adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
+        $filesystem = new Filesystem($adapter);
+        // here we are uploading files from local storage
+        // we first get all the files
+        $files = Storage::files();
+        // loop over the found files
+        foreach ($files as $file) {
+            // read the file content
+            $read = Storage::get($file);
+            //dd($read);
+            // save to google drive
+            $archivo = $filesystem->write($file, $read);
+            $prueba = $filesystem->getMetadata($file);
+            dd($prueba['path']);
+        }
 
 
 

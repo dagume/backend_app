@@ -18,6 +18,6 @@ class Module extends Model
 
     public function document_references()
     {
-        return $this->hasMany('App\Document_reference', 'parent_document_id');
+        return $this->hasMany('App\Document_reference', 'module_id');
     }
 }

@@ -24,7 +24,7 @@ class UploadFile
         if ($args['activity_id'] != null && $args['project_id'] != null) {
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
-            $doc_ref_file->type = 0; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_file->activity_id = $args['activity_id'];
             $doc_ref_file->project_id = $args['project_id'];
             $doc_ref_file->module_id = 1; //id 1 pertenece al modulo activity
@@ -34,7 +34,7 @@ class UploadFile
         if ($args['contact_id'] != null) {
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('contact_id', $args['contact_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
-            $doc_ref_file->type = 0; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_file->contact_id = $args['contact_id'];
             $doc_ref_file->module_id = 3; //id 3 pertenece al modulo Contact
             $doc_ref_file->drive_id = $args['drive_id'];
@@ -51,7 +51,7 @@ class UploadFile
         //if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
         //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;
         //    $doc_ref_file->name = $args['name'];
-        //    $doc_ref_file->type = 0; // 0 = Tipo File, 1 = Tipo Folder
+        //    $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
         //    $doc_ref_file->contact_id = $args['contact_id'];
         //    $doc_ref_file->module_id = 3; //id 3 pertenece al modulo Contact
         //    $doc_ref_file->drive_id = $args['drive_id'];

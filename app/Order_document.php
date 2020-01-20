@@ -10,18 +10,22 @@ class Order_document extends Model
 
     protected $primaryKey = 'id';
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'order_id',
-        'document_id',
         'document_type',
-        'code'        
+        'code',   
+        'date'     
     ];
     
     public function order()
     {
         return $this->belongsTo('App\Order');
     }
-    
+
+    public function document_references()
+    {
+        return $this->hasMany('App\Document_reference', 'order_document_id');
+    }
 }

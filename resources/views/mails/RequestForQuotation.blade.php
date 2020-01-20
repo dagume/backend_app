@@ -10,11 +10,11 @@
     <ul>
         <li>Nombre: {{ $contact->name }}</li>
         <li>Teléfono: {{ $contact->phones }}</li>
-        <li>link: http://3.18.104.218:3000/suppliers/{{ $quotation->hash_id }}</li>
+        <li>link: http://3.18.104.218:3000/suppliers/</li>
     </ul>
     <p>Adjunto el link de la solicitud de cotizacion:</p>
     <ul>
-        <li>Link: https://drive.google.com/open?id=1hUQnrzqm0R9iaOvcAhzdhP7HTaXPP0MK</li>
+        <li>Link: https://drive.google.com/open?id={{ $document_reference->drive_id}}</li>
     </ul>
 </body>
 </html>
