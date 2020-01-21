@@ -35,6 +35,7 @@ class RolesController extends Controller
 
     public function index(Request $request)
     {       
+        phpinfo();
         //$measure = new Measure;
         //$measure->name = 'Metro';
         //$measure->save();
