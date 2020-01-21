@@ -88,7 +88,7 @@ class CreateApplication
 
             $user = DB::select('select * from contacts where id = ?', [4]);
             $data = [
-                'title' => 'prueba1',
+                'title' => 'prueba5',
                 'heading' => 'Hello from Ide@Soft',
                 'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                     Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,

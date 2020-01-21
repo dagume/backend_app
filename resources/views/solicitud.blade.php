@@ -2,22 +2,21 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
+        html, body {
             font-family: 'Lato', sans-serif;
-            overflow-y: scroll;
             font-size: 12px;
+            height: 100vh;
+            margin: 0;
         }
 
         .PDF {
             background-color: white;
-            width: 595px;
-            height: 842px;
-            background-image: url(https://res.cloudinary.com/dqcyu2ism/image/upload/v1568132792/DOCUMENTOS_zlqusj.jpg);
-            background-size: cover;
-            border: lightgray 2px solid;
+            height: 100vh;
         }
 
         .ProductsTable, .ProductsTable > th, .ProductsTable > td, .ProductsTable > tr {
@@ -26,6 +25,7 @@
 
         table {
             border-collapse: collapse;
+            background-color: aqua;
         }
 
         .PDF table {
@@ -35,7 +35,7 @@
         }
 
         .PDFHeader {
-           /* background-color: rgba(50, 168, 145, 0.2); */
+            background-color: rgba(50, 168, 145, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -44,7 +44,7 @@
         }
 
         .PDFBody {
-           /* background-color: rgba(152, 50, 168, 0.2); */
+            background-color: rgba(152, 50, 168, 0.2);
             height: 60%;
             display: flex;
             flex-direction: column;
@@ -52,7 +52,7 @@
         }
 
         .PDFFooter {
-           /* background-color: rgba(149, 201, 34, 0.3); */
+           background-color: rgba(149, 201, 34, 0.3); 
             height: 28%;
             padding: 0 50px;
         }
