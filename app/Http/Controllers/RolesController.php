@@ -8,6 +8,7 @@ use App\Project;
 use App\User;
 use App\Document_member;
 use App\Quotation;
+use App\Measure;
 use Caffeinated\Shinobi\Models\Permission;
 use Caffeinated\Shinobi\Models\Role;
 use DB;
@@ -33,7 +34,35 @@ class RolesController extends Controller
 
 
     public function index(Request $request)
-    {
+    {       
+        //$measure = new Measure;
+        //$measure->name = 'Metro';
+        //$measure->save();
+//
+        //$measure1 = new Measure;
+        //$measure1->name = 'Tonelada';
+        //$measure1->save();
+//
+        //$measure2 = new Measure;
+        //$measure2->name = 'Unidad';
+        //$measure2->save();
+//
+        //$measure3 = new Measure;
+        //$measure3->name = 'Gramo';
+        //$measure3->save();
+//
+        //$measure4 = new Measure;
+        //$measure4->name = 'Kilogramo';
+        //$measure4->save();
+//
+        //$measure5 = new Measure;
+        //$measure5->name = 'Mililitro';
+        //$measure5->save();
+//
+        //$measure6 = new Measure;
+        //$measure6->name = 'Litro';
+        //$measure6->save();
+
         //$doc_mem = new Document_member;
         //$doc_mem->member_id = 4;
         //$doc_mem->doc_id = 9;
@@ -47,21 +76,21 @@ class RolesController extends Controller
         //$id_quo = explode( '_', $decrypted);
         //dd($id_quo[0]);
         
-        $adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
-        $filesystem = new Filesystem($adapter);
-        // here we are uploading files from local storage
-        // we first get all the files
-        $files = Storage::files();
-        // loop over the found files
-        foreach ($files as $file) {
-            // read the file content
-            $read = Storage::get($file);
-            //dd($read);
-            // save to google drive
-            $archivo = $filesystem->write($file, $read);
-            $prueba = $filesystem->getMetadata($file);
-            dd($prueba['path']);
-        }
+        //$adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
+        //$filesystem = new Filesystem($adapter);
+        //// here we are uploading files from local storage
+        //// we first get all the files
+        //$files = Storage::files();
+        //// loop over the found files
+        //foreach ($files as $file) {
+        //    // read the file content
+        //    $read = Storage::get($file);
+        //    //dd($read);
+        //    // save to google drive
+        //    $archivo = $filesystem->write($file, $read);
+        //    $prueba = $filesystem->getMetadata($file);
+        //    dd($prueba['path']);
+        //}
 
 
 
@@ -84,6 +113,7 @@ class RolesController extends Controller
         //$module4 = new Module;
         //$module4->name = 'Orden';
         //$module4->save();
+        
 //
         //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_project->name = 'Proyectos';

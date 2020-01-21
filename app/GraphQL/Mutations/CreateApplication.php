@@ -63,7 +63,7 @@ class CreateApplication
             $order = $this->orderRepo->create($args);
 
             foreach ($args['updetails'] as $arg) {
-                $arg['order_id'] = $order->id;
+                $arg['order_id'] = $order->id;                
                 $this->detailRepo->create($arg);
             }
 
@@ -81,7 +81,7 @@ class CreateApplication
 
             $order_doc['order_id'] = $arg['order_id'];
             $order_doc['document_type'] = 0; // 0 = application_quote
-            $order_doc['code'] = 'SC_'.$args['project_id'].'_'.now();
+            $order_doc['code'] = 'SC_'.$order->id.'_'.date("d").date("m").date("y");
             $order_doc['date'] = now();
             $order_document = $this->order_docRepo->create($order_doc);
             /////////////
@@ -131,21 +131,21 @@ class CreateApplication
 
             $emails = $args['email_contacts'];
             foreach ($emails as $ema ) {             
-                $quotation['order_id'] = $order->id;
-                $quotation['contact_id'] = $ema;
-                $quo = $this->quotationRepo->create($quotation);
+                $quotation = new Quotation;
+                $quotation->order_id = $order->id;
+                $quotation->contact_id = $ema;                
+                $quotation->save();                
+                //$quo = $this->quotationRepo->create($quotation);
                 /////////////////////////////
                 $hashed = Hash::make('quotation', [
                     'memory' => 1024,
                     'time' => 2,
                     'threads' => 2,
                 ]);
-                $quotation_id = Crypt::encryptString($quo->id.'_'.$hashed); //encryptamos el id con el hash 
+                $quotation_hash = Crypt::encryptString($quotation->id.'_'.$hashed); //encryptamos el id con el hash 
                 
-                $affected_id = DB::table('quotations') //Actualizamos el id de la cotizacion, poniendo el hash encriptado
-                ->where('id', $quo->id)
-                ->update(['hash_id' => $quotation_id]);
-
+                $this->quotationRepo->updateQuotation($quotation->id, $quotation_hash); //Actualizamos el id de la cotizacion, poniendo el hash encriptado
+                
                 Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema), Document_reference::find($doc_ref_file->id)));
             }
             return $order;
