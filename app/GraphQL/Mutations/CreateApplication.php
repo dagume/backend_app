@@ -54,20 +54,19 @@ class CreateApplication
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //exportPdf();
-        //dd($this->orderRepo->lastOrder()->id);
-        $ord = DB::transaction(function () use($args){
+        
+        $ord = DB::transaction(function () use($args){  //se crea la transacion
             $args['application_date']   = now();
             $args['state']              = 0; //el valor 0 es el estado de Application
             $args['sender_data']        = auth()->user()->id;
-            $order = $this->orderRepo->create($args);
+            $order = $this->orderRepo->create($args);   //creamos la nueva orden
 
             foreach ($args['updetails'] as $arg) {
                 $arg['order_id'] = $order->id;                
-                $this->detailRepo->create($arg);
+                $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
             }
 
-            //Hacemos conexion con el drive y creamos el folder de Contabilidad. Metodos en Helper.php
+            //Hacemos conexion con el drive y creamos el folder de la orden. Metodos en Helper.php
             $order_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderOrders($args['project_id'])->drive_id), ['fields' => 'id']);
             $doc_ref_order = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
             $doc_ref_order->parent_document_id = $this->documentRepo->getFolderOrders($args['project_id'])->id;
@@ -76,76 +75,65 @@ class CreateApplication
             $doc_ref_order->project_id = $args['project_id'];
             $doc_ref_order->module_id = 5; //id 5 pertenece al modulo Order
             $doc_ref_order->drive_id = $order_folder->id;
-            $doc_ref_order->save();
-
+            $doc_ref_order->save();     //guardamos el registro del folder raiz de la orden 
 
             $order_doc['order_id'] = $arg['order_id'];
             $order_doc['document_type'] = 0; // 0 = application_quote
-            $order_doc['code'] = 'SC_'.$order->id.'_'.date("d").date("m").date("y");
+            $order_doc['code'] = 'SC_'.$order->id.'_'.date("d").date("m").date("y"); 
             $order_doc['date'] = now();
-            $order_document = $this->order_docRepo->create($order_doc);
-            /////////////
-
-            $user = DB::select('select * from contacts where id = ?', [4]);
-            $data = [
-                'title' => 'prueba5',
-                'heading' => 'Hello from Ide@Soft',
-                'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
-                'user' => $user[0]
-            ];                
+            $order_document = $this->order_docRepo->create($order_doc); //guardamos el registro del order_doc para saber si es Solicitud, orden o factura
             
-            //Creacion del PDF
-            $pdf = PDF::loadView('solicitud', $data);
-            //$pdf->download('itsolutionstuff.pdf');
-            //$pdf->save(storage_path('pdf').'/'.$order_doc['code'].'.pdf');            
-            $pdf->save(storage_path('pdf').'/solicitud.pdf');            
-            //Cargar pdf en el drive
-            $adapter    = new GoogleDriveAdapter(Conection_Drive(), $order_folder->id);
-            $filesystem = new Filesystem($adapter);
-            // here we are uploading files from local storage
-            // we first get all the files
-            $files = Storage::files();
-            // loop over the found files
-            foreach ($files as $file) {
-                // read the file content
-                $read = Storage::get($file);               
-                // save to google drive
-                $archivo = $filesystem->write($file, $read);
-                // get data File in drive
-                $prueba = $filesystem->getMetadata($file);
-                Storage::delete('solicitud.pdf');
-                //dd($prueba['path']);
-            }
-            $doc_ref_file = new Document_reference;
-            $doc_ref_file->parent_document_id = $this->documentRepo->getFolderOrderCurrent($args['project_id'],$args['name'])->id;
-            $doc_ref_file->name = $order_doc['code'];
-            $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
-            $doc_ref_file->project_id = $args['project_id'];
-            $doc_ref_file->module_id = 5; //id 5 pertenece al modulo order
-            $doc_ref_file->order_document_id = $order_document->id; 
-            $doc_ref_file->drive_id = $prueba['path'];
-            $doc_ref_file->save();
+            $emails = $args['email_contacts']; //Array con ID de posibles proveedores
+            foreach ($emails as $ema ) { 
 
-            $emails = $args['email_contacts'];
-            foreach ($emails as $ema ) {             
+                $user = DB::select('select * from contacts where id = ?', [1]);
+                $data = [
+                    'title' => 'prueba5',
+                    'heading' => 'Hello from Ide@Soft',
+                    'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+                    'user' => $user[0]
+                ];     
+                
+                $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF            
+                $pdf->save(storage_path('pdf').'/'.$order_doc['code'].'.pdf');            
+                //$pdf->save(storage_path('pdf').'/solicitud.pdf');        
+                $adapter    = new GoogleDriveAdapter(Conection_Drive(), $order_folder->id); //Cargar pdf en el drive
+                $filesystem = new Filesystem($adapter);             
+                $files = Storage::files();  // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
+                foreach ($files as $file) { // recorremos cada uno de los file encontrados
+                    $read = Storage::get($file);                    // leemos el contenido del PDF
+                    $archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
+                    $file_id = $filesystem->getMetadata($file);     // get data de file en Drive
+                    Storage::delete('solicitud.pdf');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                }
+
+                $doc_ref_file = new Document_reference;
+                $doc_ref_file->parent_document_id = $this->documentRepo->getFolderOrderCurrent($args['project_id'],$args['name'])->id;
+                $doc_ref_file->name = $order_doc['code'];
+                $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
+                $doc_ref_file->project_id = $args['project_id'];
+                $doc_ref_file->module_id = 5; //id 5 pertenece al modulo order
+                $doc_ref_file->order_document_id = $order_document->id; 
+                $doc_ref_file->drive_id = $file_id['path'];
+                $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
+                 
                 $quotation = new Quotation;
                 $quotation->order_id = $order->id;
                 $quotation->contact_id = $ema;                
-                $quotation->save();                
-                //$quo = $this->quotationRepo->create($quotation);
-                /////////////////////////////
+                $quotation->save();     //guardamos la cotizacion solicitada            
+                
                 $hashed = Hash::make('quotation', [
                     'memory' => 1024,
                     'time' => 2,
                     'threads' => 2,
-                ]);
+                ]);     //generamos hash
                 $quotation_hash = Crypt::encryptString($quotation->id.'_'.$hashed); //encryptamos el id con el hash 
                 
                 $this->quotationRepo->updateQuotation($quotation->id, $quotation_hash); //Actualizamos el id de la cotizacion, poniendo el hash encriptado
-                
+                //Envio de correo a cada uno de los contactos
                 Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema), Document_reference::find($doc_ref_file->id)));
             }
             return $order;
