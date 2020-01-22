@@ -9,6 +9,5 @@ type Puc{
 extend type Query{
     #Query Puc
     pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
-    pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
-    
+    pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"        
 }

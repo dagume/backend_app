@@ -50,6 +50,13 @@ extend type Mutation {
         email_contacts:[Int]
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
+    #sendApplicationMail(
+    #    order_id:Int
+    #    email_contacts:[Int]
+    #)MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\SendApplicationMail@resolve") @middleware(checks:["auth:api"])
+
+
+    
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])
     #    id_members: Int! @rules(apply: ["required","integer"])
