@@ -21,6 +21,8 @@ class Document_reference extends Model
         'contact_id',
         'accounting_movements_id',
         'module_id',
+        'order_document_id',
+        'order_id',
         'drive_id'
     ];
     //falta relacion accounting_movements

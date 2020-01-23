@@ -15,17 +15,14 @@ use App\Repositories\QuotationRepository;
 use App\Repositories\DetailRepository;
 use App\Repositories\Document_referenceRepository;
 use App\Repositories\Order_documentRepository;
-use DB;
+use App\Repositories\ContactRepository;
 use Barryvdh\DomPDF\Facade as PDF;
-
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
-use Illuminate\Support\Facades\Cache;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+use DB;
 
 class CreateApplication
 {
@@ -34,14 +31,16 @@ class CreateApplication
     protected $detailRepo;
     protected $documentRepo;
     protected $order_docRepo;
+    protected $contactRepo;
 
-    public function __construct(OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, Document_referenceRepository $docRepo, Order_documentRepository $ordocRepo)
+    public function __construct(OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, Document_referenceRepository $docRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo)
     {
         $this->quotationRepo = $quoRepo;
         $this->orderRepo = $ordRepo;
         $this->detailRepo = $detRepo;
         $this->documentRepo = $docRepo;
         $this->order_docRepo = $ordocRepo;
+        $this->contactRepo = $conRepo;
     }
     /**
      * Return a value for the field.
@@ -74,6 +73,7 @@ class CreateApplication
             $doc_ref_order->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
             $doc_ref_order->project_id = $args['project_id'];
             $doc_ref_order->module_id = 5; //id 5 pertenece al modulo Order
+            $doc_ref_order->order_id = $order->id; 
             $doc_ref_order->drive_id = $order_folder->id;
             $doc_ref_order->save();     //guardamos el registro del folder raiz de la orden 
 
@@ -97,8 +97,9 @@ class CreateApplication
                     'user' => $user[0]
                 ];     
                 
-                $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF            
-                $pdf->save(storage_path('pdf').'/'.$order_doc['code'].'.pdf');            
+                $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF  
+                $pdf_name = $order_doc['code'].$this->contactRepo->find($ema)->name;          
+                $pdf->save(storage_path('pdf').'/'.$pdf_name.'.pdf');            
                 //$pdf->save(storage_path('pdf').'/solicitud.pdf');        
                 $adapter    = new GoogleDriveAdapter(Conection_Drive(), $order_folder->id); //Cargar pdf en el drive
                 $filesystem = new Filesystem($adapter);             
@@ -107,12 +108,12 @@ class CreateApplication
                     $read = Storage::get($file);                    // leemos el contenido del PDF
                     $archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
                     $file_id = $filesystem->getMetadata($file);     // get data de file en Drive
-                    Storage::delete('solicitud.pdf');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                    Storage::delete($pdf_name.'.pdf');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
                 }
 
                 $doc_ref_file = new Document_reference;
-                $doc_ref_file->parent_document_id = $this->documentRepo->getFolderOrderCurrent($args['project_id'],$args['name'])->id;
-                $doc_ref_file->name = $order_doc['code'];
+                $doc_ref_file->parent_document_id = $this->documentRepo->getFolderOrderCurrent($order->id)->id;
+                $doc_ref_file->name = $pdf_name.'.pdf';
                 $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
                 $doc_ref_file->project_id = $args['project_id'];
                 $doc_ref_file->module_id = 5; //id 5 pertenece al modulo order

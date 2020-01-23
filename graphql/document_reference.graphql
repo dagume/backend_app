@@ -5,11 +5,13 @@ type Document_reference{
     parent_document: Document_reference
     document_references: Document_reference
     name: String
-    type: Boolean
+    is_folder: Boolean
     activity: Activity
     project: Project
     contact: Contact
     accounting_movements_id: Int
     module: Module
+    order_document_id:Int
+    order_id:Int
     drive_id: String
 }

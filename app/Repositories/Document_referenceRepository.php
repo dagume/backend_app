@@ -42,10 +42,10 @@ class Document_referenceRepository extends BaseRepository
         $folderOrder = DB::select('SELECT id, drive_id FROM document_reference WHERE project_id = ? AND name = ?', [$project_id , 'Ordenes']);
         return $folderOrder[0];
     }
-    public function getFolderOrderCurrent($project_id, $name)
+    public function getFolderOrderCurrent($order_id)
     {
         //Buscamos el folder de la orden actual
-        $folderOrder = DB::select('SELECT id, drive_id FROM document_reference WHERE project_id = ? AND name = ?', [$project_id , $name]);
+        $folderOrder = DB::select('SELECT * FROM document_reference WHERE order_id = ? ', [$order_id]);
         return $folderOrder[0];
     }
 
