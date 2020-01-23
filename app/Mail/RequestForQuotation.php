@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\User;
 use App\Document_reference;
+use App\Quotation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -20,11 +21,13 @@ class RequestForQuotation extends Mailable
      */
     public $contact;
     public $document_reference;
+    public $quotation;
 
-    public function __construct(User $contact, Document_reference $document_reference)
+    public function __construct(User $contact, Document_reference $document_reference, Quotation $quotation)
     {
         $this->contact = $contact;
         $this->document_reference = $document_reference;
+        $this->quotation = $quotation;
     }
 
     /**
