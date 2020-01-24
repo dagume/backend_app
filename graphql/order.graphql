@@ -5,8 +5,7 @@ type Order{
     project:Project
     contact:Contact
     details:[Detail]
-    name:String!
-    code:String
+    name:String!    
     application_date: Date!
     state: Int!
     description:String
@@ -27,6 +26,7 @@ extend type Query{
     #Orders
     filter_name_order(name: String! @where(operator: "ilike")): [Order] @all(model: "App\\Order") @middleware(checks:["auth:api"])
     order(id: ID! @eq): Order @find(model: "App\\Order")@middleware(checks:["auth:api"])
+    project_orders(project_id: Int! @eq): [Order] @all(model: "App\\Order")@middleware(checks:["auth:api"])
     state_orders(state: Int! @eq): [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
     orders: [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")@middleware(checks:["auth:api"])
