@@ -46,7 +46,7 @@ extend type Mutation {
         lat: Float
         lon: Float
         updetails:[UploadDetails]
-        email_contacts:[Int]
+        #email_contacts:[Int]
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
     sendApplicationMail(
