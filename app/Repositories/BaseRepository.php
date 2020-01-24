@@ -21,8 +21,9 @@ abstract class BaseRepository
         return $this->getModel()->create($data);
     }
 
-    public function update($object, $data)
+    public function update($id, $data)
     {
+        $object = $this->getModel()->find($id);
         $object->fill($data);
         $object->save();
         return $object;

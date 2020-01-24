@@ -10,12 +10,20 @@ type Detail{
     subtotal:Int
 }
 
+#Mensaje exitoso de creacion
+type MessageSuccessDetail {    
+    message: String
+}
+
+input DetailsOrder{
+    id:ID!
+    quantity: Int! @rules(apply: ["required", "integer"])
+    value:Int! @rules(apply: ["required", "integer"])    
+}
+
 extend type Mutation {
     #detail
-    createDetailForApplication(
-        product_id: Int! @rules(apply: ["required","integer"])
-        order_id: Int! @rules(apply: ["required","integer"])
-        mea_id: Int! @rules(apply: ["required", "integer"])
-        quantity: Int! @rules(apply: ["required", "integer"])
-    ): Detail @create(model: "App\\Detail")
+    updateDetailForOrder(
+        detailsOrder:[DetailsOrder]
+    ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailForOrder@resolve") @middleware(checks:["auth:api"])
 }

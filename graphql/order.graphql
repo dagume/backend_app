@@ -29,7 +29,6 @@ extend type Query{
     state_orders(project_id: Int! @eq state: Int! @eq): [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
     orders: [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")@middleware(checks:["auth:api"])
-
 }
 input UploadDetails {
     product_id:Int
