@@ -5,16 +5,18 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\DetailRepository;
-use App\Detail;
+use App\Repositories\OrderRepository;
 use DB;
 
 class UpdateDetailForOrder
 {
     protected $detailRepo;
+    protected $orderRepo;
 
-    public function __construct(DetailRepository $detRepo)
+    public function __construct(DetailRepository $detRepo, OrderRepository $ordRepo)
     {
         $this->detailRepo = $detRepo;
+        $this->orderRepo = $ordRepo;
     }
 
     /**
@@ -27,14 +29,20 @@ class UpdateDetailForOrder
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
-        //dd($args);
+    {                
+        //dd($args['detailsOrder']);
         $det = DB::transaction(function () use($args){  //se crea la transacion
+            $order_subtotal = 0;            
             foreach ($args['detailsOrder'] as $arg) {               
-                //dd($detail);
-                $arg['subtotal'] = 15000;                         
-                $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
+                $arg['subtotal'] = $arg['quantity'] * $arg['value'];                   
+                $updated_details = $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
+                $order_subtotal += $arg['subtotal'];
             }
+            $iva = round($order_subtotal * 0.19, 2);
+            //dd($iva);
+            $order['subtotal'] = $order_subtotal;
+            $order['total'] = $order_subtotal + $iva;
+            $updated_order = $this->orderRepo->update($updated_details->order_id, $order);                    
         }, 3);
         return [            
             'message' => 'Orden de Compra enviada.'
