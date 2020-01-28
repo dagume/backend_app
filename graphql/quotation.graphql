@@ -5,12 +5,12 @@ type Quotation{
     order:Order
     contact:Contact
     folder_id:String
-    AUTHORIZATION:Boolean
+    authorized:Boolean
     date: Date
     hash_id:String
 }
 type Subscription {
-    authorizationUpdated(authorization: Boolean): Quotation
+    authorizationUpdated(authorized: Boolean): Quotation
 }
 
 extend type Query{
@@ -22,6 +22,6 @@ extend type Query{
 extend type Mutation{
     updateQuotation(
         id: ID! @rules(apply: ["required"])
-        AUTHORIZATION: Boolean @rules(apply: ["required"])
+        authorized: Boolean @rules(apply: ["required"])
     ): Quotation @update(model: "App\\Quotation") @broadcast(subscription: "authorizationUpdated")#@middleware(checks:["auth:api"])
 }

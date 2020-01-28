@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Quotation extends Model
 {
     public function __construct()
-    {
-        
-    }
+    {}
     protected  $table= 'quotations';
 
     protected $primaryKey = 'id';
@@ -20,7 +18,7 @@ class Quotation extends Model
         'order_id',
         'contact_id',
         'folder_id',
-        'AUTHORIZATION',
+        'authorized',
         'date',
         'hash_id'
     ];

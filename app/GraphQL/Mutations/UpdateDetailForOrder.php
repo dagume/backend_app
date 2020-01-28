@@ -6,17 +6,20 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\DetailRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\QuotationRepository;
 use DB;
 
 class UpdateDetailForOrder
 {
     protected $detailRepo;
     protected $orderRepo;
+    protected $quotationRepo;
 
-    public function __construct(DetailRepository $detRepo, OrderRepository $ordRepo)
+    public function __construct(DetailRepository $detRepo, OrderRepository $ordRepo, QuotationRepository $quoRepo)
     {
         $this->detailRepo = $detRepo;
         $this->orderRepo = $ordRepo;
+        $this->quotationRepo = $quoRepo;
     }
 
     /**
@@ -30,7 +33,6 @@ class UpdateDetailForOrder
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {                
-        //dd($args['detailsOrder']);
         $det = DB::transaction(function () use($args){  //se crea la transacion
             $order_subtotal = 0;            
             foreach ($args['detailsOrder'] as $arg) {               
@@ -39,10 +41,11 @@ class UpdateDetailForOrder
                 $order_subtotal += $arg['subtotal'];
             }
             $iva = round($order_subtotal * 0.19, 2);
-            //dd($iva);
             $order['subtotal'] = $order_subtotal;
             $order['total'] = $order_subtotal + $iva;
             $updated_order = $this->orderRepo->update($updated_details->order_id, $order);                    
+
+            //$this->quotationRepo->find
         }, 3);
         return [            
             'message' => 'Orden de Compra enviada.'
