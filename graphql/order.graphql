@@ -37,7 +37,7 @@ input UploadDetails {
 }
 extend type Mutation {
     #CrearSolicitudCotizacon
-    createApplication(
+    saveApplication(
         project_id:Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
@@ -49,7 +49,7 @@ extend type Mutation {
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
     
     #GuardarYEnviarSolicitudCotizacon
-    application_quotation(
+    createApplication(
         project_id:Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
