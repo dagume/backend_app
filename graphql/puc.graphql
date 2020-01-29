@@ -6,8 +6,17 @@ type Puc{
     description: String
 }
 
+type PucLevels{
+    firstlevel_id:Int
+    firstlevel_name:String
+    secondlevel_id:Int
+    secondlevel_name:String
+    thirdlevel_id:Int
+    thirdlevel_name:String
+}
 extend type Query{
     #Query Puc
+    pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
     pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
     pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"        
 }
