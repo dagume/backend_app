@@ -122,6 +122,7 @@ class Application_quotation
                 $quotation = new Quotation;
                 $quotation->order_id = $order->id;
                 $quotation->contact_id = $ema;                
+                $quotation->authorized = false;                
                 $quotation->save();     //guardamos la cotizacion solicitada            
                 
                 $hashed = Hash::make('quotation', [

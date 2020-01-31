@@ -21,7 +21,7 @@ class Contact
     {
         $contact = DB::select('select *
         from  
-            (select con.*, doc_mem.created_at, doc_mem.updated_at, doc_mem.doc_id, doc_mem.file_id
+            (select con.folder_id, doc_mem.created_at, doc_mem.updated_at, doc_mem.doc_id, doc_mem.file_id
                 from documents_member as doc_mem 
                 inner join members as mem
                 on   mem.id = doc_mem.member_id

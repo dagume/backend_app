@@ -79,31 +79,31 @@ function Conection_Drive()
     return $service;
 }
 
-function exportPdf()
-    {
-        $adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
-        $filesystem = new Filesystem($adapter);
-        $data = [
-                'title' => 'First PDF for Medium',
-                'heading' => 'Hello from 99Points.info',
-                'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.'
-                  ];
-        $pdf1 = PDF::loadView('solicitud', $data);
-        //$pdf = $pdf1->save('prueba1.pdf');
-        $pdf = $pdf1->loadFile($pdf1);
-        //dd($pdf);
-        //foreach ($files as $file) {
-            //// read the file content
-            //$read = Storage::get($file);
-            //// save to google drive
-            $archivo = $filesystem->write($pdf, $data);
-            $prueba = $filesystem->getMetadata($pdf);
-            dd($prueba['path']);
-        //}
-
-
-        return $pdf->save('prueba.pdf');
-    }
+//function exportPdf()
+//    {
+//        $adapter    = new GoogleDriveAdapter(Conection_Drive(), Cache::get('folder_id'));
+//        $filesystem = new Filesystem($adapter);
+//        $data = [
+//                'title' => 'First PDF for Medium',
+//                'heading' => 'Hello from 99Points.info',
+//                'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.'
+//                  ];
+//        $pdf1 = PDF::loadView('solicitud', $data);
+//        //$pdf = $pdf1->save('prueba1.pdf');
+//        $pdf = $pdf1->loadFile($pdf1);
+//        //dd($pdf);
+//        //foreach ($files as $file) {
+//            //// read the file content
+//            //$read = Storage::get($file);
+//            //// save to google drive
+//            $archivo = $filesystem->write($pdf, $data);
+//            $prueba = $filesystem->getMetadata($pdf);
+//            dd($prueba['path']);
+//        //}
+//
+//
+//        return $pdf->save('prueba.pdf');
+//    }
     //Para la creacion de actividades Default al momento de crear un proyecto
     function StoreActivity($project_id, $name, $drive_id)
     {

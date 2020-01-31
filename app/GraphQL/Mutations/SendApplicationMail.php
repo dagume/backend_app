@@ -94,6 +94,7 @@ class SendApplicationMail
                 $quotation = new Quotation;
                 $quotation->order_id = $args['order_id'];
                 $quotation->contact_id = $ema;                
+                $quotation->authorized = false;                
                 $quotation->save();     //guardamos la cotizacion solicitada            
                 
                 $hashed = Hash::make('quotation', [

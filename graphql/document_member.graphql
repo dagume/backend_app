@@ -7,9 +7,7 @@ type Document_member {
   file_id: String
 }
 
-extend type Query{
-  require_doc_contact(contact_id: Int! @eq project_id:Int! @eq): [Document_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") @middleware(checks:["auth:api"])
-    
+#extend type Query{      
     #Query documentos requeridos
 
     #filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
@@ -19,4 +17,4 @@ extend type Query{
     #projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
     #projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
     #projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
-}
+#}
