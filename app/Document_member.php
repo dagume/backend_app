@@ -18,10 +18,12 @@ class Document_member extends Model
         'date',
         'file_id'
     ];
+
     public function member()
     {
         return $this->belongsTo('App\Member');
     }
+
     public function document_rol()
     {
         return $this->belongsTo('App\Document_rol', 'doc_id','id');

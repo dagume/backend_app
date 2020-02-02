@@ -5,6 +5,7 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query
+
 type Mutation
 #import login.graphql
 #import role.graphql
@@ -46,7 +47,7 @@ type Mutation {
         doc_id:Int @rules(apply: ["nullable"])
         drive_id:String @rules(apply: ["required"])
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
-
+}
     #uploadRequiredDocument(
     #    activity_id:Int @rules(apply: ["nullable"])
     #    project_id:Int @rules(apply: ["nullable"])
@@ -60,7 +61,7 @@ type Mutation {
 #    folder: String
 #}
 #createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
-}
+
 
 
 #interface GlobalSearch
