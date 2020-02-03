@@ -21,7 +21,7 @@ type Contact {#implements GlobalSearch{
     members:[Member]
     orders:[Order]
     quotations:[Quotation]
-    accounts: [Account]
+    #accounts: [Account]
     
 }
 type Document_contact{

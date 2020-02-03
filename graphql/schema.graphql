@@ -18,7 +18,6 @@ type Mutation
 #import member.graphql
 #import category.graphql
 #import order.graphql
-#import account.graphql
 #import document_reference.graphql
 #import order_documents.graphql
 #import quotation.graphql

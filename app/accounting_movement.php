@@ -43,5 +43,5 @@ class accounting_movement extends Model
     {
         return $this->belongsTo('App\Member', 'destination_id');
     }
-    
+    ////////CREAR TYPE EN GRAPHQL
 }

@@ -19,7 +19,7 @@ type Project {#implements GlobalSearch{
     id_folder: String
     members: [Member]
     activities:[Activity]
-    accounts: [Account]
+    #accounts: [Account]
     orders: [Order]
 }
 
