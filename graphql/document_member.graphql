@@ -2,8 +2,7 @@
 type Document_member {
   id: ID!
   member: Member
-  document_rol: Document_rol
-  date: Date
+  document_rol: Document_rol  
   file_id: String
 }
 

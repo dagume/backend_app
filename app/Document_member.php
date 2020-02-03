@@ -15,7 +15,6 @@ class Document_member extends Model
     protected $fillable = [
         'member_id',
         'doc_id',
-        'date',
         'file_id'
     ];
 
