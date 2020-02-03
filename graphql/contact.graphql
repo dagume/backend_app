@@ -21,7 +21,6 @@ type Contact {#implements GlobalSearch{
     members:[Member]
     orders:[Order]
     quotations:[Quotation]
-    #accounts: [Account]
     
 }
 type Document_contact{
@@ -59,7 +58,7 @@ extend type Query{
     contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api"])
 }
 extend type Mutation {
-    ######################Contacts
+    #Contacts
     createContact(
         parent_contact_id: Int @rules(apply: ["nullable"])
         type: contactType @rules(apply: ["required", "integer"])

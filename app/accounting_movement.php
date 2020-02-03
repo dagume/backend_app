@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class accounting_movement extends Model
+class Accounting_movement extends Model
 {
     protected  $table= 'accounting_movements';
 
@@ -13,17 +13,18 @@ class accounting_movement extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'puc_id',
-        'project_id',
-        'destination_id',
-        'origin_id',
+        'puc_id', //
+        'project_id', //
+        'destination_id', //
+        'origin_id', //
         'registration_date',
-        'movement_date',
-        'payment_method',
-        'value',
+        'movement_date', //
+        'payment_method', //
+        'value', //
         'state_movement',
         'sender_id',
-        'code'
+        'code', //
+        'exist_code'
     ];
 
 
@@ -43,5 +44,4 @@ class accounting_movement extends Model
     {
         return $this->belongsTo('App\Member', 'destination_id');
     }
-    ////////CREAR TYPE EN GRAPHQL
 }

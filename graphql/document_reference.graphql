@@ -1,4 +1,3 @@
-
 #Document_reference
 type Document_reference{
     id: ID!

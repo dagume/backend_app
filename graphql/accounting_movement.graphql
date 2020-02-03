@@ -1,0 +1,38 @@
+#Categorias
+type Accounting_movement {
+    id:ID!
+    puc:Puc
+    project:Project
+    destination:Member
+    origin:Member
+    registration_date:Date
+    movement_date:Date
+    payment_method:String
+    value:Int
+    state_movement:String
+    sender_id:Int
+    code:String
+    exist_code:Boolean    
+}
+#Mensaje exitoso de creacion
+#type MessageSuccessAccountMovement {
+#    accounting_movement:Accounting_movement
+#    message: String
+#}
+extend type Query{
+    #movimientos entre cuentas
+    account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
+}
+extend type Mutation {
+    #movimientos entre cuentas
+    create_movement(
+        puc_id: Int @rules(apply: ["required","integer"])
+        project_id: Int @rules(apply: ["required","integer"])
+        destination_id: Int @rules(apply: ["required","integer"])
+        origin_id: Int @rules(apply: ["required","integer"])
+        movement_date:Date @rules(apply: ["date"])
+        payment_method:String @rules(apply: ["required", "max:255"])
+        value:Int @rules(apply: ["required","integer"])
+        code:String @rules(apply: ["required", "max:255"])        
+    ):Accounting_movement @create(model: "App\\Accounting_movement") @middleware(checks:["auth:api"])
+}
