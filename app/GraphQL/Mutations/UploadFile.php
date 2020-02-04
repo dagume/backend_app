@@ -60,8 +60,8 @@ class UploadFile
             //$doc_mem->save();
             $request = $this->memberRepo->find($args['member_id']); //buscamos el contact_id y project_id 
             $roles_id = $this->memberRepo->roles_contact($request->contact_id, $request->project_id);
-            ///////////ARREGLANDO=======
-            //dd(substr($role_id, 0));
+            $pluck = $roles_id->pluck('role_id');
+            dd($pluck->all());
             $doc_req = $this->document_rolRepo->docs_role($roles_id);
             
         }

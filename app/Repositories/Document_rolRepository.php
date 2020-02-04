@@ -15,7 +15,7 @@ class Document_rolRepository extends BaseRepository
     public function docs_role($role_id)
     {        
         //traemos los documentos requeridos de cada role
-        $req_doc = DB::select('SELECT * FROM documents_rol where role_id in (?)',[$role_id]);
+        $req_doc = DB::select('SELECT * FROM documents_rol where role_id = ?',[$role_id]);
         return $req_doc;
     }
      
