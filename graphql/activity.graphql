@@ -35,9 +35,9 @@ type MessageSuccessActivity {
 }
 extend type Query{
     #Actividades
-    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api"])
-    added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") @middleware(checks:["auth:api"])
-    activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api"])
+    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
 }
 extend type Mutation {
@@ -56,7 +56,7 @@ extend type Mutation {
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean
         is_act:Boolean
-    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
 
     #Editar actividad
     updateActivity(
@@ -70,7 +70,7 @@ extend type Mutation {
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
         is_act:Boolean
-    ): Activity @update(model: "App\\Activity") @middleware(checks:["auth:api"])
+    ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
     delete_activity(id: ID!): Activity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
 }

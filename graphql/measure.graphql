@@ -5,5 +5,5 @@ type Measure{
 
 extend type Query{
     #unidades de medida
-    measures: [Measure!]! @all(model: "App\\Measure")@middleware(checks:["auth:api"])
+    measures: [Measure!]! @all(model: "App\\Measure") #@middleware(checks:["auth:api"])
 }

@@ -24,11 +24,11 @@ type MessageSuccessOrder {
 }
 extend type Query{
     #Orders
-    filter_name_order(name: String! @where(operator: "ilike")): [Order] @all(model: "App\\Order") @middleware(checks:["auth:api"])
-    order(id: ID! @eq): Order @find(model: "App\\Order")@middleware(checks:["auth:api"])
-    state_orders(project_id: Int! @eq state: Int! @eq): [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
-    orders: [Order!]! @all(model: "App\\Order")@middleware(checks:["auth:api"])
-    orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")@middleware(checks:["auth:api"])
+    filter_name_order(name: String! @where(operator: "ilike")): [Order] @all(model: "App\\Order") #@middleware(checks:["auth:api"])
+    order(id: ID! @eq): Order @find(model: "App\\Order") #@middleware(checks:["auth:api"])
+    state_orders(project_id: Int! @eq state: Int! @eq): [Order!]! @all(model: "App\\Order") #@middleware(checks:["auth:api"])
+    orders: [Order!]! @all(model: "App\\Order") #@middleware(checks:["auth:api"])
+    orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order") #@middleware(checks:["auth:api"])
 }
 input UploadDetails {
     product_id:Int
@@ -46,7 +46,7 @@ extend type Mutation {
         lon: Float
         updetails:[UploadDetails]
         #email_contacts:[Int]
-    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
     
     #GuardarYEnviarSolicitudCotizacon
     createApplication(
@@ -58,13 +58,13 @@ extend type Mutation {
         lon: Float
         updetails:[UploadDetails]
         email_contacts:[Int]
-    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\Application_quotation@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\Application_quotation@resolve") #@middleware(checks:["auth:api"])
 
     #Enviar Correos de solicitud
     sendApplicationMail(
         order_id:Int
         email_contacts:[Int]
-    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\SendApplicationMail@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\SendApplicationMail@resolve") #@middleware(checks:["auth:api"])
 
    
     #updateOrder(

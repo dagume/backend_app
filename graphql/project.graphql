@@ -38,13 +38,13 @@ type MessageSuccessProject {
 }
 extend type Query{
     #Query proyectos
-    filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
-    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 }
 
 extend type Mutation {
@@ -65,7 +65,7 @@ extend type Mutation {
         consortium_name:String
         consortium_nit:Int
         folder_id: String
-    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(
         id: ID! @rules(apply: ["required"])
@@ -80,10 +80,10 @@ extend type Mutation {
         association: associationProject
         consortium_name:String
         consortium_nit:Int
-    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
+    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
     #Editar estado Proyecto
     updateStateProject(
         id: ID! @rules(apply: ["required"])
         state: String @rules(apply: ["required", "in:ejecucion, suspendido"])
-    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
+    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
 }

@@ -11,10 +11,10 @@ type MessageSuccessProduct {
 }
 extend type Query{
     #Products
-    filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") @middleware(checks:["auth:api"])
-    product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product")@middleware(checks:["auth:api"])
-    products: [Product!]! @all(model: "App\\Product")@middleware(checks:["auth:api"])
-    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")@middleware(checks:["auth:api"])
+    filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
+    product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") #@middleware(checks:["auth:api"])
+    products: [Product!]! @all(model: "App\\Product") #@middleware(checks:["auth:api"])
+    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product") #@middleware(checks:["auth:api"])
 }
 extend type Mutation {
     #Product
@@ -22,7 +22,8 @@ extend type Mutation {
         category_id: Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-    ):MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") @middleware(checks:["auth:api"])
+    ):MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") #@middleware(checks:["auth:api"])
+    
     updateProduct(
         id: ID! @rules(apply: ["required"])
         category_id: Int! @rules(apply: ["required"])

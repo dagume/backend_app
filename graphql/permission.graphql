@@ -8,9 +8,9 @@ type Permission {
 
 extend type Query{
     #Query permissions
-    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") @middleware(checks:["auth:api"])
-    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") @middleware(checks:["auth:api"])
-    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") @middleware(checks:["auth:api"])
+    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
 
 }
 

@@ -11,8 +11,8 @@ type Role {
 
 extend type Query{
     #Query roles
-    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
-    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
-    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") @middleware(checks:["auth:api"])
+    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
 }
 

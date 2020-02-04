@@ -4,11 +4,23 @@ namespace App\GraphQL\Mutations;
 use App\Document_reference;
 use App\Document_member;
 use DB;
+use App\Repositories\MemberRepository;
+use App\Repositories\Document_rolRepository;
+
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class UploadFile
 {
+    protected $memberRepo;
+    protected $document_rolRepo;
+
+    public function __construct(MemberRepository $memRepo, Document_rolRepository $doc_rolRepo)
+    {        
+        $this->memberRepo = $memRepo;        
+        $this->document_rolRepo = $doc_rolRepo;        
+    }
+    
     /**
      * Return a value for the field.
      *
@@ -45,7 +57,13 @@ class UploadFile
             $doc_mem->member_id = $args['member_id'];
             $doc_mem->doc_id = $args['doc_id'];            
             $doc_mem->file_id = $args['drive_id'];
-            $doc_mem->save();
+            //$doc_mem->save();
+            $request = $this->memberRepo->find($args['member_id']); //buscamos el contact_id y project_id 
+            $roles_id = $this->memberRepo->roles_contact($request->contact_id, $request->project_id);
+            ///////////ARREGLANDO=======
+            //dd(substr($role_id, 0));
+            $doc_req = $this->document_rolRepo->docs_role($roles_id);
+            
         }
         //if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
         //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;

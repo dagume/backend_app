@@ -25,7 +25,7 @@ type MemberRoles{
 }
 extend type Query{
     #Members
-    members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api"])
+    members: [Member] @paginate(type: "paginator" model: "App\\Member") #@middleware(checks:["auth:api"])
     members_provider(project_id:Int @where(operator: "=") role_id:Int @where(operator: "=")):[Member] @all(model: "App\\Member")#@middleware(checks:["auth:api"])
     member_roles(project_id:Int!):[MemberRoles] @field(resolver: "App\\GraphQL\\Queries\\Member_roles@resolve")#@middleware(checks:["auth:api"])
 }
