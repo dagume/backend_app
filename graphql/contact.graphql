@@ -49,6 +49,7 @@ type MessageSuccessContact {
     message: String
 }
 extend type Query{
+    #Query documentos requerido por contacto
     require_doc_contact(contact_id: Int! @eq project_id:Int! @eq): [Document_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") #@middleware(checks:["auth:api"])
     #Query Contacts
     filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")#@middleware(checks:["auth:api"])
@@ -68,7 +69,6 @@ extend type Mutation {
         identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
         email: String @rules(apply: ["required", "max:255","unique:contacts,email"])
         phones:String @rules(apply: ["max:30"])
-        state:Int = 1
         locate:String @rules(apply: ["max:255"])
         city:String @rules(apply: ["max:255"])
         regime:String @rules(apply: ["max:50", "nullable"])

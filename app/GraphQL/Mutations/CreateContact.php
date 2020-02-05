@@ -36,6 +36,7 @@ class CreateContact
             //crea el folder para el nuevo contacto en GOOGLE DRIVE
             $contact_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderContact()->drive_id),['fields' => 'id']);
             $args['folder_id'] = $contact_folder->id; //enviamos el folder_id al $args
+            $args['state'] = 1; //1 = Estado activo del contacto
             $contact = $this->contactRepo->create($args); //guarda registro del nuevo contacto
 
             $args['parent_document_id'] = $this->documentRepo->getFolderContact()->id;

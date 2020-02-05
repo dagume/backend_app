@@ -20,13 +20,21 @@ class Filter_contact
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        global $query;
         $contacts = new User;
         $query = trim($args['searchText']);
         $contacts = DB::table('contacts')
-            ->where('name','ILIKE',$query)
-            ->orwhere('lastname','ILIKE',$query)
-            ->orwhere('identification_number','ILIKE',$query)->get();
-
+            ->where('state','=', 1)            
+            ->where(function ($que) {
+                global $query;
+                $que->where(function ($que1) {
+                    global $query;
+                    $que1->where('lastname','ILIKE',$query)
+                ->orwhere('identification_number','ILIKE',$query);
+                })
+                ->orwhere('name','ILIKE',$query);
+            })                     
+            ->get();
         return $contacts;
 
 
