@@ -8,6 +8,7 @@ type Document_reference{
     activity: Activity
     project: Project
     contact: Contact
+    document_contact: Document_contact
     accounting_movements_id: Int
     module: Module
     order_document_id:Int

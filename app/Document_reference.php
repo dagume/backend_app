@@ -51,4 +51,8 @@ class Document_reference extends Model
     {
         return $this->belongsTo('App\User' ,'contact_id');
     }
+    public function document_contact()
+    {
+        return $this->belongsTo('App\Document_contact' ,'doc_id');
+    }
 }

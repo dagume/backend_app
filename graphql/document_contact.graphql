@@ -1,9 +1,8 @@
 #Documentos requeridos
-type Document_member {
+type Document_contact {
   id: ID!
-  member: Member
+  contact: Contact
   document_rol: Document_rol  
-  file_id: String
 }
 
 #extend type Query{      

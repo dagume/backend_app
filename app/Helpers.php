@@ -109,7 +109,7 @@ function Conection_Drive()
     {
         $activity['project_id'] = $project_id;
         $activity['name'] = $name;
-        $activity['state'] = 'Proceso';
+        $activity['state'] = 1;
         $activity['completed'] = false;
         $activity['priority'] = 'Media';
         $activity['is_added'] = false;

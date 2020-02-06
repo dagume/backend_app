@@ -28,14 +28,14 @@ class RolesController extends Controller
 {
 
     //private $cacheFileObjects = [];
-    //protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
+    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
     public function __construct()
     {}
 
 
     public function index(Request $request)
     {       
-        phpinfo();
+        //phpinfo();
         //$measure = new Measure;
         //$measure->name = 'Metro';
         //$measure->save();
@@ -250,7 +250,7 @@ class RolesController extends Controller
         //$role3->givePermissionTo($permission7);
         //$role4->givePermissionTo($permission7);
         //$role5->givePermissionTo($permission7);
-//
+
         //$role3->givePermissionTo($permission8);
         //$role3->givePermissionTo($permission9);
         //$role3->givePermissionTo($permission10);
@@ -302,7 +302,6 @@ class RolesController extends Controller
 
 
             //DOCUMENTOS REQUERIDOS
-
         //$role2->required_documents()->attach(1);
         //$role2->required_documents()->attach(5);
 //
@@ -325,7 +324,6 @@ class RolesController extends Controller
         //$role8->required_documents()->attach(1);
         //$role8->required_documents()->attach(2);
         //$role8->required_documents()->attach(3);
-
 
         echo('listo');
     }

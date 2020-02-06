@@ -25,7 +25,7 @@ type Mutation
 #import detail.graphql
 #import module.graphql
 #import required_document.graphql
-#import document_member.graphql
+#import document_contact.graphql
 #import document_rol.graphql
 #import measure.graphql
 #import puc.graphql
