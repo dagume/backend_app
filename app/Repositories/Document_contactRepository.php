@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Document_member;
+use App\Document_contact;
 use App\Repositories\BaseRepository;
 use DB;
 
-class Document_memberRepository extends BaseRepository
+class Document_contactRepository extends BaseRepository
 {
     public function getModel()
     {
-        return new Document_member;
+        return new Document_contact;
     }    
 }

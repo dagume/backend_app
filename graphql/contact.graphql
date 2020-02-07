@@ -2,6 +2,7 @@
 type Contact {#implements GlobalSearch{
     id:ID!
     parent_contact:Contact
+    role:Role
     type:contactType
     name:String
     lastname:String
@@ -15,22 +16,23 @@ type Contact {#implements GlobalSearch{
     regime:String
     address:String
     web_site:String
-    password: String
-    remember_token:String
+    password: String    
     folder_id:String
+    
     members:[Member]
     orders:[Order]
     quotations:[Quotation]
-    
+    documents_contact:[Document_contact]
+        
 }
-type Document_contact{
-    created_at:Date
-    updated_at:Date
-    file_id:String
-    role_name:String
-    documento_id:Int
-    name_required_documents:String
-}
+#type Document_contact{
+#    created_at:Date
+#    updated_at:Date
+#    file_id:String
+#    role_name:String
+#    documento_id:Int
+#    name_required_documents:String
+#}
 #tipos de contacto
 enum contactType{
     persona @enum(value: 1)
@@ -43,6 +45,7 @@ enum contactIdType{
     pasaporte @enum(value: 3)
     extranjera @enum(value: 4)
 }
+
 #Mensaje exitoso de creacion
 type MessageSuccessContact {
     contact:Contact
@@ -50,7 +53,7 @@ type MessageSuccessContact {
 }
 extend type Query{
     #Query documentos requerido por contacto
-    require_doc_contact(contact_id: Int! @eq project_id:Int! @eq): [Document_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") #@middleware(checks:["auth:api"])
+    #require_doc_contact(contact_id: Int! @eq project_id:Int! @eq): [Document_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") #@middleware(checks:["auth:api"])
     #Query Contacts
     filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")#@middleware(checks:["auth:api"])
     #filter_name_contact(name: String!  @where(operator: "ilike")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])

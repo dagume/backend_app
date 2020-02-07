@@ -20,6 +20,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'parent_contact_id',
+        'rol_id',
         'type',
         'name',
         'lastname',
@@ -39,16 +40,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    public function accounts(){
-        return $this->hasMany('App\Account', 'contact_id', 'id');
-    }
+   
     public function parent_contact()
     {
         return $this->BelongsTo(User::class, 'parent_contact_id');
     }
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Role::class, 'members', 'contact_id', 'role_id')->withTimestamps();
+        return $this->BelongsTo(Role::class, 'rol_id', 'id');
     }
     public function members()
     {
@@ -61,5 +60,9 @@ class User extends Authenticatable
     public function quotations()
     {
         return $this->hasMany('App\Quotation', 'contact_id', 'id');
+    }    
+    public function documents_contact()
+    {
+        return $this->hasMany('App\Document_contact');
     }
 }

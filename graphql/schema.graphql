@@ -41,11 +41,10 @@ type Mutation {
         name:String @rules(apply: ["max:255"])
         activity_id:Int @rules(apply: ["nullable"])
         project_id:Int @rules(apply: ["nullable"])
-        contact_id:Int @rules(apply: ["nullable"])
-        accounting_movements_id: Int @rules(apply: ["nullable"])
-        member_id:Int @rules(apply: ["nullable"])
+        con_id:Int @rules(apply: ["nullable"])        
         doc_id:Int @rules(apply: ["nullable"])
         drive_id:String @rules(apply: ["required"])
+        accounting_movements_id: Int @rules(apply: ["nullable"])
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
 }
     #uploadRequiredDocument(

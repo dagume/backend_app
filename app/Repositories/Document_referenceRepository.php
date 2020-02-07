@@ -48,5 +48,11 @@ class Document_referenceRepository extends BaseRepository
         $folderOrder = DB::select('SELECT * FROM document_reference WHERE order_id = ? ', [$order_id]);
         return $folderOrder[0];
     }
+    public function getContactFolder($contact_id)
+    {
+        //Buscamos el folder de un contacto en especifico
+        $folderContact = DB::select('SELECT * FROM document_reference WHERE contact_id = ? ', [$contact_id]);
+        return $folderContact[0];
+    }
 
 }

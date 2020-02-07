@@ -2,25 +2,31 @@
 
 namespace App\GraphQL\Mutations;
 use App\Document_reference;
-use App\Document_member;
+use App\Document_contact;
 use DB;
 use App\Repositories\MemberRepository;
+use App\Repositories\Document_referenceRepository;
+use App\Repositories\Document_contactRepository;
+use App\Repositories\ContactRepository;
 use App\Repositories\Document_rolRepository;
-use App\Repositories\Document_memberRepository;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class UploadFile
 {
     protected $memberRepo;
+    protected $document_referenceRepo;
+    protected $document_contactRepo;
+    protected $contactRepo;
     protected $document_rolRepo;
-    protected $document_memberRepo;
 
-    public function __construct(MemberRepository $memRepo, Document_rolRepository $doc_rolRepo, Document_memberRepository $doc_memRepo)
+    public function __construct(MemberRepository $memRepo, Document_referenceRepository $doc_refRepo, Document_contactRepository $doc_conRepo, ContactRepository $conRepo, Document_rolRepository $doc_rolRepo)
     {        
         $this->memberRepo = $memRepo;        
+        $this->document_referenceRepo = $doc_refRepo;        
+        $this->document_contactRepo = $doc_conRepo;        
+        $this->contactRepo = $conRepo;        
         $this->document_rolRepo = $doc_rolRepo;        
-        $this->document_memberRepo = $doc_memRepo;        
     }    
     /**
      * Return a value for the field.
@@ -34,7 +40,7 @@ class UploadFile
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $doc_ref_file = new Document_reference;
-        if ($args['activity_id'] != null && $args['project_id'] != null) {
+        if ($args['activity_id'] != null) {
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
             $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
@@ -44,33 +50,38 @@ class UploadFile
             $doc_ref_file->drive_id = $args['drive_id'];
             $doc_ref_file->save();
         }
-        //if ($args['contact_id'] != null) {
-        //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('contact_id', $args['contact_id'])->first()->id;
-        //    $doc_ref_file->name = $args['name'];
-        //    $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
-        //    $doc_ref_file->contact_id = $args['contact_id'];
-        //    $doc_ref_file->module_id = 3; //id 3 pertenece al modulo Contact
-        //    $doc_ref_file->drive_id = $args['drive_id'];
-        //    $doc_ref_file->save();
-        //}
-        if ($args['member_id'] != null) {
-            $args['file_id'] = $args['drive_id'];                       // le asignamos el mismos drive_id al file_id que es el que usa doc_member           
-            $request = $this->memberRepo->find($args['member_id']);     //buscamos el contact_id
-            $mem_rol_id = $this->memberRepo->mem_rol_contact($request->contact_id);         // Buscamos todos los roles_id y members_id que tiene el contacto             
-            $roles_id = array_column($mem_rol_id, 'role_id');           //Ordenamos ids de rol en un array
-            $pluck = implode( ',' , $roles_id );                        //ordenamos los ids en un String separado por ','            
-            $doc_req = $this->document_rolRepo->docs_role($pluck);      // traemos todos los DOC requeridos para en contacto
-            $id_doc = $this->document_rolRepo->find($args['doc_id'])->required_document_id;     // id del documento que se esta subiendo
-            $members_id = array_column($mem_rol_id, 'id');              //Ordenamos ids de rol en un array
-            foreach ($doc_req as $doc) {                                //recorremos los documentos requeridos del contacto
-                foreach ($mem_rol_id as $mr_id) {                       //recorremos los roles y mimebros del contacto
-                    if ($doc->required_document_id == $id_doc && $mr_id->role_id == $doc->role_id) { 
-                        $args['member_id'] = $mr_id->id;                        
-                        $args['doc_id'] = $doc->id;
-                        $this->document_memberRepo->create($args);      //Guardamos el registro del Document_member            
-                    }
-                }
-            }
+        if ($args['con_id'] != null) {              
+            ////////////Crear una transaccion
+            $document_contact = $this->document_contactRepo->create($args);     // le asignamos el mismos drive_id al file_id que es el que usa doc_member           
+            //dd($this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents);
+            $doc_ref['parent_document_id'] = $this->document_referenceRepo->getContactFolder($args['con_id'])->id;
+            $doc_ref['name'] = $this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents;
+            $doc_ref['is_folder'] = false;
+            $doc_ref['module_id'] = 3; // 3 = modulo de contacto
+            $doc_ref['doc_contact_id'] = $document_contact->id; // id del  document_contact recien agregado
+            $doc_ref['contact_id'] = $args['con_id']; // id del contacto
+            $doc_ref['drive_id'] = $args['drive_id']; 
+            
+            $this->document_referenceRepo->create($doc_ref);
+
+            
+            
+            //$mem_rol_id = $this->memberRepo->mem_rol_contact($args['contact_id']);         // Buscamos todos los roles_id y members_id que tiene el contacto             
+
+            //$roles_id = array_column($mem_rol_id, 'role_id');           //Ordenamos ids de rol en un array
+            //$pluck = implode( ',' , $roles_id );                        //ordenamos los ids en un String separado por ','            
+            //$doc_req = $this->document_referenceRepo->docs_role($pluck);      // traemos todos los DOC requeridos para en contacto
+            //$id_doc = $this->document_referenceRepo->find($args['doc_id'])->required_document_id;     // id del documento que se esta subiendo
+            //$members_id = array_column($mem_rol_id, 'id');              //Ordenamos ids de rol en un array
+            //foreach ($doc_req as $doc) {                                //recorremos los documentos requeridos del contacto
+            //    foreach ($mem_rol_id as $mr_id) {                       //recorremos los roles y mimebros del contacto
+            //        if ($doc->required_document_id == $id_doc && $mr_id->role_id == $doc->role_id) { 
+                                               
+                        //$args['doc_id'] = $doc->id;
+                        //$this->document_contactRepo->create($args);      //Guardamos el registro del Document_member            
+            //        }
+            //    }
+            //}
         }
         //if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
         //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;

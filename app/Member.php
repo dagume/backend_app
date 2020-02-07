@@ -32,8 +32,5 @@ class Member extends Model
     {
         return $this->belongsTo(Role::class);
     }
-    public function documents_member()
-    {
-        return $this->hasMany('App\Document_member');
-    }
+    
 }

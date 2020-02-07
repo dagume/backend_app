@@ -10,7 +10,7 @@ type Project {#implements GlobalSearch{
     contract_value: Int
     expenses: Int
     process: Int
-    state: String
+    state: state_project
     place:String
     address:String
     type:typeProject
@@ -31,6 +31,13 @@ enum typeProject {
 enum associationProject {
     consorcio @enum(value: 0)
     APP @enum(value: 1)
+}
+enum state_project {
+    Seleccion @enum(value: 1)
+    Contratado @enum(value: 2)
+    Finalizado @enum(value: 3)
+    Suspendido @enum(value: 4)
+    Archivado @enum(value: 5)
 }
 type MessageSuccessProject {
     project:Project
@@ -57,7 +64,7 @@ extend type Mutation {
         end_date: Date @rules(apply: ["nullable","date"])
         description: String @rules(apply: ["nullable"])
         contract_value: Int
-        state: String = 1
+        state: state_project
         place: String @rules(apply: ["nullable"])
         address: String
         type: typeProject @rules(apply: ["nullable"])
@@ -74,7 +81,7 @@ extend type Mutation {
         end_date: Date @rules(apply: ["nullable","date"])
         description: String @rules(apply: ["nullable"])
         contract_value: Int
-        state: String 
+        state: state_project 
         place: String
         address: String
         association: associationProject
@@ -84,6 +91,6 @@ extend type Mutation {
     #Editar estado Proyecto
     updateStateProject(
         id: ID! @rules(apply: ["required"])
-        state: String @rules(apply: ["required", "in:ejecucion, suspendido"])
+        state: state_project @rules(apply: ["required"])
     ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
 }
