@@ -16,14 +16,14 @@ type Contact {#implements GlobalSearch{
     regime:String
     address:String
     web_site:String
-    password: String    
+    password: String
     folder_id:String
-    
+
     members:[Member]
     orders:[Order]
     quotations:[Quotation]
     documents_contact:[Document_contact]
-        
+
 }
 #type Document_contact{
 #    created_at:Date

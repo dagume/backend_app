@@ -43,3 +43,17 @@ class Contact
         return $contact;
     }
 }
+
+//select doc_upload.folder_id, doc_upload.created_at, doc_upload.updated_at, doc_upload.drive_id, req_doc.name_required_documents from(select con.folder_id, doc_con.created_at, doc_con.updated_at, doc_con.doc_id, doc_ref.drive_id
+//                from documents_contact as doc_con
+//                inner join contacts as con
+//                on   con.id = doc_con.con_id
+//				inner join document_reference as doc_ref
+//				on   doc_ref.doc_id = doc_con.id
+//                where doc_con.con_id = 3 and doc_ref.contact_id =3) as doc_upload
+//right join (select doc_rol.id, req_doc.name_required_documents from documents_rol as doc_rol
+//	inner join required_documents as req_doc
+//	on doc_rol.required_document_id = req_doc.id where doc_rol.role_id in (select role_id from members where contact_id =3 and project_id = 7))
+//	as req_doc
+//	on req_doc.id = doc_upload.doc_id
+//
