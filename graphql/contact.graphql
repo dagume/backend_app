@@ -79,7 +79,7 @@ extend type Mutation {
         regime:String @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
-        password: String @bcrypt @rules(apply: ["min:8", "nullable"])
+        #password: String @bcrypt @rules(apply: ["min:8", "nullable"])
     ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
 
     updateContact(

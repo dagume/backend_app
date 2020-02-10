@@ -9,6 +9,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
 use App\Repositories\ContactRepository;
 use App\Repositories\Document_referenceRepository;
+use Illuminate\Support\Facades\Hash;
 
 class CreateContact
 {
@@ -37,6 +38,7 @@ class CreateContact
             $contact_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderContact()->drive_id),['fields' => 'id']);
             $args['folder_id'] = $contact_folder->id; //enviamos el folder_id al $args
             $args['state'] = 1; //1 = Estado activo del contacto
+            $args['password'] = Hash::make($args['identification_number']); //La password sera por defecto su numero de identidad
             $contact = $this->contactRepo->create($args); //guarda registro del nuevo contacto
 
             $args['parent_document_id'] = $this->documentRepo->getFolderContact()->id;
