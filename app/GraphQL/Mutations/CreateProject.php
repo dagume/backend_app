@@ -34,6 +34,7 @@ class CreateProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        
         //Transaccion para create
         $proj = DB::transaction(function () use($args){
             //buscamos el id del projecto para asignarlo a su nombre en DRIVE
@@ -48,6 +49,8 @@ class CreateProject
             $project_folder = Conection_Drive()->files->create(Create_Folder($folder_name, $this->documentRepo->getFolderActYear()->drive_id), ['fields' => 'id']);
             $args['folder_id'] = $project_folder->id; //Id del folder que se creo en drive
             }
+            $someJSON = json_encode($args['place']);
+            $args['place'] = $someJSON;
             $project = $this->projectRepo->create($args); //guarda registro del nuevo proyecto
 
             if ($args['parent_project_id'] != null) {   //Si es proyecto padre no se le crea estructura de carpetas

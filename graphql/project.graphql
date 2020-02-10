@@ -43,6 +43,13 @@ type MessageSuccessProject {
     project:Project
     message: String
 }
+
+input placeProject{
+    longitud:String @rules(apply: ["required"])
+    latitud: String @rules(apply: ["required"])
+        
+}
+
 extend type Query{
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
@@ -52,6 +59,8 @@ extend type Query{
     projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    #Lista proyectos por estado
+    state_projects(state: state_project @where(operator: "=")): [Project]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
 }
 
 extend type Mutation {
@@ -65,7 +74,7 @@ extend type Mutation {
         description: String @rules(apply: ["nullable"])
         contract_value: Int
         state: state_project
-        place: String @rules(apply: ["nullable"])
+        place: [placeProject]
         address: String
         type: typeProject @rules(apply: ["nullable"])
         association: associationProject
@@ -82,7 +91,7 @@ extend type Mutation {
         description: String @rules(apply: ["nullable"])
         contract_value: Int
         state: state_project 
-        place: String
+        place: [placeProject]
         address: String
         association: associationProject
         consortium_name:String
