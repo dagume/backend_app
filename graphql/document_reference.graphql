@@ -12,6 +12,7 @@ type Document_reference{
     accounting_movements_id: Int
     module: Module
     order_document_id:Int
+    document_contact:Document_contact
     order_id:Int
     drive_id: String
 }

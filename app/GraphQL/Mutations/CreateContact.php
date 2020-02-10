@@ -41,7 +41,7 @@ class CreateContact
 
             $args['parent_document_id'] = $this->documentRepo->getFolderContact()->id;
             $args['is_folder'] = 1; // 0 = Tipo File, 1 = Tipo Folder
-            $args['contact_id'] = $this->contactRepo->lastContact()->id;
+            $args['contact_id'] = $contact->id;
             $args['module_id'] = 3; //id 3 pertenece al modulo Contact
             $args['drive_id'] = $contact_folder->id;
             $document = $this->documentRepo->create($args);

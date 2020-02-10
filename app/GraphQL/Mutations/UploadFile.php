@@ -58,7 +58,7 @@ class UploadFile
             $doc_ref['name'] = $this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents;
             $doc_ref['is_folder'] = false;
             $doc_ref['module_id'] = 3; // 3 = modulo de contacto
-            $doc_ref['doc_id'] = $document_contact->id; // id del  document_contact recien agregado
+            $doc_ref['doc_id'] = $document_contact->id; // doc_id del  document_contact recien agregado
             $doc_ref['contact_id'] = $args['con_id']; // id del contacto
             $doc_ref['drive_id'] = $args['drive_id'];
 

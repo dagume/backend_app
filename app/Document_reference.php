@@ -22,6 +22,7 @@ class Document_reference extends Model
         'accounting_movements_id',
         'module_id',
         'order_document_id',
+        'doc_id',
         'order_id',
         'drive_id'
     ];
