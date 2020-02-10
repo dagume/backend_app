@@ -66,6 +66,7 @@ extend type Mutation {
     #Contacts
     createContact(
         parent_contact_id: Int @rules(apply: ["nullable"])
+        #Agregar el de asignar role y revisar mutation
         type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])

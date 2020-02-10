@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use Caffeinated\Shinobi\Models\Role;
 use App\Document_reference;
 use App\Project;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -10,17 +11,23 @@ use DB;
 use App\Repositories\ProjectRepository;
 use App\Repositories\Document_referenceRepository;
 use App\Repositories\ActivityRepository;
+use App\Repositories\ContactRepository;
+use App\Repositories\MemberRepository;
 
 class CreateProject
 {
     protected $projectRepo;
     protected $documentRepo;
     protected $activityRepo;
+    protected $contactRepo;
+    protected $memberRepo;
 
-    public function __construct(ProjectRepository $proRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo){
+    public function __construct(ProjectRepository $proRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo, ContactRepository $conRepo, MemberRepository $memRepo){
         $this->projectRepo = $proRepo;
         $this->documentRepo = $docRepo;
         $this->activityRepo = $actRepo;
+        $this->contactRepo = $conRepo;
+        $this->memberRepo = $memRepo;
     }
 
     /**
@@ -34,7 +41,7 @@ class CreateProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        
+        //dd(DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id);
         //Transaccion para create
         $proj = DB::transaction(function () use($args){
             //buscamos el id del projecto para asignarlo a su nombre en DRIVE
@@ -52,6 +59,16 @@ class CreateProject
             $someJSON = json_encode($args['place']);
             $args['place'] = $someJSON;
             $project = $this->projectRepo->create($args); //guarda registro del nuevo proyecto
+
+            //Creamos el contacto del proyecto para agregarlo como integrante y asi poderlo usar 
+            //como una cuenta que recibe y trasnfiere dinero
+            $con['name'] = $project->id.'_'.$project->name;
+            $con['state'] = 0;
+            $contact = $this->contactRepo->create($con);
+            $member['project_id'] = $project->id;
+            $member['contact_id'] = $contact->id;
+            $member['role_id'] = DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id;
+            $this->memberRepo->create($member);
 
             if ($args['parent_project_id'] != null) {   //Si es proyecto padre no se le crea estructura de carpetas
             $doc_ref_project = new Document_reference;  // aqui vamos a guardar la estructura de las carpetas creadas

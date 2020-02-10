@@ -52,5 +52,10 @@ class RoleTableSeeder extends Seeder
         'slug'          => 'proveedor',
         'special'       => 'no-access',
         ]);
+        Role::create([
+        'name'          => 'Proyecto',
+        'slug'          => 'Proyecto',
+        'special'       => 'no-access',
+        ]);
     }
 }
