@@ -13,7 +13,7 @@ type Contact {#implements GlobalSearch{
     state:Int
     locate:String
     city:String
-    regime:String
+    regime:contactRegime
     address:String
     web_site:String
     password: String
@@ -32,6 +32,12 @@ type Doc_contact{
     updated_at:Date
     drive_id:String
     name_required_documents:String
+}
+
+#regimen del contacto
+enum contactRegime{
+    Simplificado
+    Contributivo
 }
 
 #tipos de contacto
@@ -76,7 +82,7 @@ extend type Mutation {
         phones:String @rules(apply: ["max:30"])
         locate:String @rules(apply: ["max:255"])
         city:String @rules(apply: ["max:255"])
-        regime:String @rules(apply: ["max:50", "nullable"])
+        regime:contactRegime @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         #password: String @bcrypt @rules(apply: ["min:8", "nullable"])
@@ -93,7 +99,7 @@ extend type Mutation {
         state:Int @rules(apply: ["required"])
         locate:String @rules(apply: ["max:255"])
         city:String @rules(apply: ["max:255"])
-        regime:String @rules(apply: ["max:50", "nullable"])
+        regime:contactRegime @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
     ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
