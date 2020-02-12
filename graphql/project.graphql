@@ -16,6 +16,7 @@ type Project {#implements GlobalSearch{
     type:typeProject
     association:associationProject
     consortium_name:String
+    consortium_nit:Int
     id_folder: String
     members: [Member]
     activities:[Activity]
