@@ -5,7 +5,7 @@ type Order{
     project:Project
     contact:Contact
     details:[Detail]
-    name:String!    
+    name:String!
     application_date: Date!
     state: Int!
     description:String
@@ -47,7 +47,7 @@ extend type Mutation {
         updetails:[UploadDetails]
         #email_contacts:[Int]
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
-    
+
     #GuardarYEnviarSolicitudCotizacon
     createApplication(
         project_id:Int! @rules(apply: ["required","integer"])
@@ -58,7 +58,7 @@ extend type Mutation {
         lon: Float
         updetails:[UploadDetails]
         email_contacts:[Int]
-    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\Application_quotation@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\Application_quotation@resolve") @middleware(checks:["auth:api"])
 
     #Enviar Correos de solicitud
     sendApplicationMail(
@@ -66,7 +66,7 @@ extend type Mutation {
         email_contacts:[Int]
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\SendApplicationMail@resolve") #@middleware(checks:["auth:api"])
 
-   
+
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])
     #    id_members: Int! @rules(apply: ["required","integer"])

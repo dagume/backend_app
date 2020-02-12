@@ -84,7 +84,7 @@
             <table>
                 <tbody>
                     <tr>
-                        <td>Código: </td>
+                    <td>Código:  {{$code}}</td>
                     </tr>
                     <tr>
                         <td>Página 1 de 1</td>
@@ -97,8 +97,8 @@
             <br/>
             <div id="receiver">
                 <p>SEÑOR(A)</p>
-                <b>{{$user->name}} {{$user->lastname}}</b><br/>
-                <b>CC. {{$user->identification_number}}</b>
+                <b>{{$provider->name}} {{$provider->lastname}}</b><br/>
+                <b>CC. {{$provider->identification_number}}</b>
             </div>
             <div id="order">
                 <br/>
@@ -113,18 +113,14 @@
                             <th>UNIDAD</th>
                             <th>CANTIDAD</th>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Martillo</td>
-                            <td>Unidad</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Arena</td>
-                            <td>Kilogramo</td>
-                            <td>20</td>
-                        </tr>
+                        @foreach ($details as $det)
+                            <tr>
+                                <td>{{ $det->product_id }}</td>
+                                <td>{{ $det->product_name }}</td>
+                                <td>{{ $det->measure_name }}</td>
+                                <td>{{ $det->quantity }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -134,8 +130,8 @@
                 <br/><br/>
                 <p>Cordialmente,</p>
                 <br/><br/>
-                <p>Leonardo Fonseca</p>
-                <p>leitoninja34@gmail.com</p>
+                <p>{{$sender->name}} {{$sender->lastname}}</p>
+                <p>{{$sender->email}}</p>
         </div>
     </main>
 </body>

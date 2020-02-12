@@ -52,7 +52,6 @@ class Application_quotation
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-
         $ord = DB::transaction(function () use($args){  //se crea la transacion
             $args['application_date']   = now();
             $args['state']              = 0; //el valor 0 es el estado de Application
@@ -86,9 +85,10 @@ class Application_quotation
             foreach ($emails as $ema ) {
                 $data = [
                     'title' => 'Solicitud de Cotización',
-                    'user' => $this->contactRepo->find($ema),
-                    'order' => $order,
-                    'details' => $details
+                    'code' => $order_doc['code'],
+                    'provider' => $this->contactRepo->find($ema),
+                    'sender' => $this->contactRepo->find($order->sender_data),
+                    'details' => $this->detailRepo->getDataPDF($order->id)
                 ];
 
                 $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
