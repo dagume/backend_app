@@ -34,7 +34,22 @@ class RolesController extends Controller
 
 
     public function index(Request $request)
-    {       
+    {
+        $user = DB::select('select * from contacts where id = ?', [5]);
+                $data = [
+                    'title' => 'prueba5',
+                    'heading' => 'Hello from Ide@Soft',
+                    'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+                    'user' => $user[0]
+                ];
+
+                $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
+                //$pdf_name = $order_doc['code'].$this->contactRepo->find($ema)->name;
+                return $pdf->stream();
+                //$pdf->save(storage_path('pdf').'/'.$pdf_name.'.pdf');
         //phpinfo();
         //$measure = new Measure;
         //$measure->name = 'Metro';
@@ -76,7 +91,7 @@ class RolesController extends Controller
         //$decrypted = Crypt::decryptString($query);
         //$id_quo = explode( '_', $decrypted);
         //dd($id_quo[0]);
-        
+
         //$adapter    = new GoogleDriveAdapter(Conection_Drive(), '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u');
         //$filesystem = new Filesystem($adapter);
         //// here we are uploading files from local storage
@@ -114,7 +129,7 @@ class RolesController extends Controller
         //$module4 = new Module;
         //$module4->name = 'Orden';
         //$module4->save();
-        
+
 //
         //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
         //$doc_ref_project->name = 'Proyectos';
@@ -325,6 +340,6 @@ class RolesController extends Controller
         //$role8->required_documents()->attach(2);
         //$role8->required_documents()->attach(3);
 
-        echo('listo');
+        //echo('listo');
     }
 }
