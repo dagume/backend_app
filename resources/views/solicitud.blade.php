@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es_CO">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,7 +80,7 @@
     </div>
     <main>
         <div class='page-header'>
-            <h4>Solicitud de Cotización</h4>
+            <h4>{{$title}}</h4>
             <table>
                 <tbody>
                     <tr>
@@ -93,16 +93,16 @@
             </table>
         </div>
         <div id="page-content">
-            <p>Tunja, 11 de febrero de 2020</p>
+            <p>Tunja, {{date("d")}} de {{strftime("%B")}} de {{date("Y")}}</p>
             <br/>
             <div id="receiver">
                 <p>SEÑOR(A)</p>
-                <b>Daniel Guecha</b><br/>
-                <b>CC. 2133454558</b>
+                <b>{{$user->name}} {{$user->lastname}}</b><br/>
+                <b>CC. {{$user->identification_number}}</b>
             </div>
             <div id="order">
                 <br/>
-                <p>Referencia: Solicitud de cotización</p>
+                <p>Referencia: {{$title}}</p>
                 <br/>
                 <p>Muy cordialmente me dirijo a ustedes para realizar la siguiente solicitud de cotización</p>
                 <table id="order-table">

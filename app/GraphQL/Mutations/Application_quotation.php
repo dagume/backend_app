@@ -61,7 +61,7 @@ class Application_quotation
 
             foreach ($args['updetails'] as $arg) {
                 $arg['order_id'] = $order->id;
-                $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
+                $details[] = $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
             }
 
             //Hacemos conexion con el drive y creamos el folder de la orden. Metodos en Helper.php
@@ -84,19 +84,14 @@ class Application_quotation
 
             $emails = $args['email_contacts']; //Array con ID de posibles proveedores
             foreach ($emails as $ema ) {
-
-                $user = DB::select('select * from contacts where id = ?', [1]);
                 $data = [
-                    'title' => 'prueba5',
-                    'heading' => 'Hello from Ide@Soft',
-                    'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
-                    'user' => $user[0]
+                    'title' => 'Solicitud de Cotización',
+                    'user' => $this->contactRepo->find($ema),
+                    'order' => $order,
+                    'details' => $details
                 ];
 
-                $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF
+                $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
                 $pdf_name = $order_doc['code'].$this->contactRepo->find($ema)->name;
                 $pdf->save(storage_path('pdf').'/'.$pdf_name.'.pdf');
                 $adapter = new GoogleDriveAdapter(Conection_Drive(), $order_folder->id); //Cargar pdf en el drive
