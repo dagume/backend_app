@@ -1,131 +1,142 @@
-
 <!DOCTYPE html>
-<html>
-
-
+<html lang="es_CO">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
     <style>
-        html, body {
-            font-family: 'Lato', sans-serif;
-            font-size: 12px;
-            height: 100vh;
+        html {
             margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+            'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+            'Segoe UI Emoji', 'Segoe UI Symbol';
+        }
+        body{
+            margin-top: 0.5 cm;
+            margin-bottom: 1 cm;
+            margin-left: 1.5 cm;
+            margin-right: 1.5 cm;
+            padding: 0;
+        }
+        #watermark {
+            position: fixed;
+            bottom: 0;
+            left:0;
+            width: 21 cm;
+            height: 29.7 cm;
+            z-index: -1000;
+        }
+        .page-header{
+            height: 90px;
+        }
+        .page-header > h4 {
+            float: left;
+        }
+        .page-header > table {
+            float: right;
         }
 
-        .PDF {
-            background-color: white;
-            height: 100vh;
+        #page-content {
+            padding-top: 40px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
-
-        .ProductsTable, .ProductsTable > th, .ProductsTable > td, .ProductsTable > tr {
-            border: 1px solid gray;
+        #receiver > p,b {
+            margin-bottom: 0;
         }
-
-        table {
-            border-collapse: collapse;
-            background-color: aqua;
+        #order {
+            padding: 20px 0;
         }
-
-        .PDF table {
-            min-width: 150px;
+        #order > table {
+            width: 100%;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.5);
         }
-
-        .PDFHeader {
-            background-color: rgba(50, 168, 145, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px 0 50px;
-            height: 12%;
+        #order-table, #body-order-table >td {
+            border: gray 1px solid;
+            border-collapse: collapse;
+            padding: 8px;
         }
-
-        .PDFBody {
-            background-color: rgba(152, 50, 168, 0.2);
-            height: 60%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 50px 0 50px;
+        th {
+            border: gray 1px solid;
+            padding: 8px;
         }
-
-        .PDFFooter {
-           background-color: rgba(149, 201, 34, 0.3); 
-            height: 28%;
-            padding: 0 50px;
+        #page-footer {
+            padding-top: 80px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
-
-        .PDFFooter>p {
-            margin: 0;
+        #page-footer > p {
+            margin-bottom: 0;
+            margin-top: 0;
         }
     </style>
+
 </head>
-
 <body>
-    <div class='PDF'>
-        <div class='PDFHeader'>
-            <h5>Solicitud de cotización</h5>
-            <table>
-                <tr>
-                    <td>Código: RG1</td>
-                </tr>
-                <tr>
-                    <td>Página 1 de 1</td>
-                </tr>
-            </table>
-        </div>
-        <div class='PDFBody'>
-            <p>Tunja, 06 de septiembre</p>
-            <br />
-            <p>SEÑORES:</p> <!-- Si el proveedor es una persona debe poner: SEÑOR(A); si es empresa, dejar SEÑORES -->
-            <b>MEXICHEM COLOMBIA S.A.S</b> <!-- Cambia según el destinatario  -->
-            <b>NIT: 860.005.050-1</b>
-            <br /><br />
-            <p>Referencia: Solicitud de cotización</p>
-            <p>Muy cordialmente me dirijo a ustedes para realizar la siguiente solicitud de cotización</p>
-            <table class='ProductsTable'>
-                <tr>
-                    <th>ITEM</th>
-                    <th>PRODUCTO</th>
-                    <th>UNIDAD</th>
-                    <th>CANTIDAD</th>
-                </tr>
-               @foreach ($user as $use)
-              <tr>
-                <td>{{$title}}</td>
-                <td>{{$title}}</td>
-                <td>{{$title}}</td>
-                <td>{{$title}}</td>
-              </tr>
-               @endforeach
-                <!--
-                        Aquí van los datos de la tabla
-                        {
-                        products.map(p =>
-                            <tr>
-                                <td>{p.id}</td>
-                                <td>{p.name}</td>
-                                <td>{p.measure}</td>
-                                <td>{p.amount}</td>
-                            </tr>
-                            )
-                        }
-                    -->
-            </table>
-        </div>
-        <div class='PDFFooter'>
-            <p>Quedamos atentos a cualquier inquietud</p>
-            <br />
-            <p>cordialmente,</p>
-            <br />
-            <p>Juan Carlos Molina</p> <!-- Cambian los datos del remitente (usuario logeado) -->
-            <p>Cel: 314-278-9672</p>
-            <p>juancamolina@gmail.com</p>
-        </div>
+    <div id="watermark">
+        <img src="https://res.cloudinary.com/dqcyu2ism/image/upload/v1568132792/DOCUMENTOS_zlqusj.jpg" height="100%" widht="100%"/>
     </div>
+    <main>
+        <div class='page-header'>
+            <h4>{{$title}}</h4>
+            <table>
+                <tbody>
+                    <tr>
+                    <td>Código:  {{$code}}</td>
+                    </tr>
+                    <tr>
+                        <td>Página 1 de 1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="page-content">
+            <p>Tunja, {{date("d")}} de {{strftime("%B")}} de {{date("Y")}}</p>
+            <br/>
+            <div id="receiver">
+                <p>SEÑOR(A)</p>
+                <b>{{$provider->name}} {{$provider->lastname}}</b><br/>
+                <b>CC. {{$provider->identification_number}}</b>
+            </div>
+            <div id="order">
+                <br/>
+                <p>Referencia: {{$title}}</p>
+                <br/>
+                <p>Muy cordialmente me dirijo a ustedes para realizar la siguiente solicitud de cotización</p>
+                <table id="order-table">
+                    <tbody id="body-order-table">
+                        <tr>
+                            <th>ITEM</th>
+                            <th>PRODUCTO</th>
+                            <th>UNIDAD</th>
+                            <th>CANTIDAD</th>
+                            <th>PRECIO UNITARIO</th>
+                            <th>COSTO TOTAL</th>
+                        </tr>
+                        @foreach ($details as $det)
+                            <tr>
+                                <td>{{ $det->product_id }}</td>
+                                <td>{{ $det->product_name }}</td>
+                                <td>{{ $det->measure_name }}</td>
+                                <td>{{ $det->quantity }}</td>
+                                <td>{{ $det->quantity }}</td>
+                                <td>{{ $det->quantity }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="page-footer">
+                <p>Quedamos atentos a cualquier inquietud</p>
+                <br/><br/>
+                <p>Cordialmente,</p>
+                <br/><br/>
+                <p>{{$sender->name}} {{$sender->lastname}}</p>
+                <p>{{$sender->email}}</p>
+        </div>
+    </main>
 </body>
-
 </html>
-
