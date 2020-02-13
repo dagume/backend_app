@@ -25,5 +25,5 @@ extend type Mutation {
     #detail
     updateDetailForOrder(
         detailsOrder:[DetailsOrder]
-    ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailForOrder@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailForOrder@resolve") @middleware(checks:["auth:api"])
 }

@@ -95,10 +95,25 @@
         <div id="page-content">
             <p>Tunja, {{date("d")}} de {{strftime("%B")}} de {{date("Y")}}</p>
             <br/>
-            <div id="receiver">
-                <p>SEÑOR(A)</p>
+            <div id="receiver"> 
+
+                @if($provider->type === 1)
+                    <p>SEÑOR(A)</p>
+                @else
+                    <p>SEÑORES</p>
+                @endif 
+
                 <b>{{$provider->name}} {{$provider->lastname}}</b><br/>
-                <b>CC. {{$provider->identification_number}}</b>
+
+                @if ($provider->identification_type == 1)
+                    <b>CC. {{$provider->identification_number}}</b>
+                @elseif ($provider->identification_type == 2)
+                    <b>NIT. {{$provider->identification_number}}</b>
+                @elseif ($provider->identification_type == 3)
+                    <b>PAS. {{$provider->identification_number}}</b>
+                @else
+                    <b>CE. {{$provider->identification_number}}</b>
+                @endif
             </div>
             <div id="order">
                 <br/>
@@ -113,9 +128,9 @@
                             <th>UNIDAD</th>
                             <th>CANTIDAD</th>
                         </tr>
-                        @foreach ($details as $det)
+                        @foreach ($details as $key => $det)
                             <tr>
-                                <td>{{ $det->product_id }}</td>
+                                <td>{{ $key + 1 }}</td>
                                 <td>{{ $det->product_name }}</td>
                                 <td>{{ $det->measure_name }}</td>
                                 <td>{{ $det->quantity }}</td>

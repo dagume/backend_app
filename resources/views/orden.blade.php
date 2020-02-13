@@ -96,15 +96,33 @@
             <p>Tunja, {{date("d")}} de {{strftime("%B")}} de {{date("Y")}}</p>
             <br/>
             <div id="receiver">
-                <p>SEÑOR(A)</p>
+
+                @if($provider->type === 1)
+                    <p>SEÑOR(A)</p>
+                @else
+                    <p>SEÑORES</p>
+                @endif
+                
                 <b>{{$provider->name}} {{$provider->lastname}}</b><br/>
-                <b>CC. {{$provider->identification_number}}</b>
+                
+                @if ($provider->identification_type == 1)
+                    <b>CC. {{$provider->identification_number}}</b>
+                @elseif ($provider->identification_type == 2)
+                    <b>NIT. {{$provider->identification_number}}</b>
+                @elseif ($provider->identification_type == 3)
+                    <b>PAS. {{$provider->identification_number}}</b>
+                @else
+                    <b>CE. {{$provider->identification_number}}</b>
+                @endif
+
+
+
             </div>
             <div id="order">
                 <br/>
                 <p>Referencia: {{$title}}</p>
                 <br/>
-                <p>Muy cordialmente me dirijo a ustedes para realizar la siguiente solicitud de cotización</p>
+                <p>Muy cordialmente me dirijo a ustedes para realizar la siguiente Orden de compra</p>
                 <table id="order-table">
                     <tbody id="body-order-table">
                         <tr>
@@ -115,16 +133,40 @@
                             <th>PRECIO UNITARIO</th>
                             <th>COSTO TOTAL</th>
                         </tr>
-                        @foreach ($details as $det)
+                        @foreach ($details as  $key => $det)
                             <tr>
-                                <td>{{ $det->product_id }}</td>
+                                <td>{{ $key + 1 }}</td>
                                 <td>{{ $det->product_name }}</td>
                                 <td>{{ $det->measure_name }}</td>
                                 <td>{{ $det->quantity }}</td>
-                                <td>{{ $det->quantity }}</td>
-                                <td>{{ $det->quantity }}</td>
+                                <td>{{ $det->value_product }}</td>
+                                <td>{{ $det->subtotal_product }}</td>
                             </tr>
                         @endforeach
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>SUBTOTAL</td>
+                                <td>{{ $details[0]->subtotal_order }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>IVA **%</td>
+                                <td>******</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>TOTAL</td>
+                                <td>{{ $details[0]->total_order }}</td>
+                            </tr>
                     </tbody>
                 </table>
             </div>
