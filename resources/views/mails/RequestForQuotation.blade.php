@@ -6,15 +6,17 @@
     <title>Solicitud de cotizacion</title>
 </head>
 <body>
-    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+    <p>Muy cordialmente me dirijo a ustedes para realizar la siguiente solicitud de cotización</p>
     <ul>
-        <li>Nombre: {{ $contact->name }}</li>
-        <li>Teléfono: {{ $contact->phones }}</li>
-    <li>link: http://3.18.104.218:3000/suppliers/{{$quotation->hash_id}}</li>
+        <a href="https://drive.google.com/open?id={{$document_reference->drive_id}}">Descargar solicitud de cotizacion</a>
     </ul>
-    <p>Adjunto el link de la solicitud de cotizacion:</p>
+    <p>Favor enviar su cotizacion en el siguente link:</p>
     <ul>
-        <li>Link: https://drive.google.com/open?id={{ $document_reference->drive_id}}</li>
+        <a href="http://3.18.104.218:3000/suppliers/{{$quotation->hash_id}}">Cargar Cotizacion, aquí</a>
     </ul>
+    <br>
+    <p>Gracias,</p>
+    
+    <p>APP CONTROL INGENIERIA</p>
 </body>
 </html>
