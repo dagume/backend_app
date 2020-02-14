@@ -55,13 +55,13 @@ extend type Query{
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    #projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
+    #projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    #projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos por estado
-    state_projects(state: state_project @where(operator: "=")): [Project]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 }
 
 extend type Mutation {

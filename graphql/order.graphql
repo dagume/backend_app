@@ -5,9 +5,9 @@ type Order{
     project:Project
     contact:Contact
     details:[Detail]
-    name:String!
-    application_date: Date!
-    state: Int!
+    name:String
+    application_date: Date
+    state: Int
     description:String
     delivery_site:String
     subtotal:Int
@@ -44,7 +44,7 @@ extend type Mutation {
         delivery_site: String @rules(apply: ["max:255"])
         lat: Float
         lon: Float
-        updetails:[UploadDetails]
+        updetails:[UploadDetails!]
         #email_contacts:[Int]
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
 
@@ -56,7 +56,7 @@ extend type Mutation {
         delivery_site: String @rules(apply: ["max:255"])
         lat: Float
         lon: Float
-        updetails:[UploadDetails]
+        updetails:[UploadDetails!]
         email_contacts:[Int]
     ): MessageSuccessOrder @field(resolver: "App\\GraphQL\\Mutations\\Application_quotation@resolve") @middleware(checks:["auth:api"])
 
