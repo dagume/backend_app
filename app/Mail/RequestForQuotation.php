@@ -5,6 +5,7 @@ namespace App\Mail;
 use App\User;
 use App\Document_reference;
 use App\Quotation;
+use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -19,15 +20,15 @@ class RequestForQuotation extends Mailable
      *
      * @return void
      */
-    public $contact;
     public $document_reference;
     public $quotation;
+    public $order;
 
-    public function __construct(User $contact, Document_reference $document_reference, Quotation $quotation)
+    public function __construct( Document_reference $document_reference, Quotation $quotation, Order $order)
     {
-        $this->contact = $contact;
         $this->document_reference = $document_reference;
         $this->quotation = $quotation;
+        $this->order = $order;
     }
 
     /**
@@ -37,8 +38,16 @@ class RequestForQuotation extends Mailable
      */
     public function build()
     {
-        return $this->from('provisionalapp09@gmail.com', 'APP Control Ingenieria')
+        if ( $this->order->state == 0) 
+        {
+            return $this->from('provisionalapp09@gmail.com', 'APP Control Ingenieria')
                     ->subject('Solicitud de cotizacion')
                     ->view('mails.RequestForQuotation');
+        }
+        return $this->from('provisionalapp09@gmail.com', 'APP Control Ingenieria')
+                    ->subject('Orden de compra')
+                    ->view('mails.BuyOrder');
+       
+        
     }
 }

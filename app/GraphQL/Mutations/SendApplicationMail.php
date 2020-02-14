@@ -110,7 +110,8 @@ class SendApplicationMail
 
                 $this->quotationRepo->updateQuotation($quotation->id, $quotation_hash); //Actualizamos el id de la cotizacion, poniendo el hash encriptado
                 //Envio de correo a cada uno de los contactos
-                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find($ema), Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id)));
+                Mail::to(User::find($ema)->email)
+                ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), $order));
 
             }
         }, 3);

@@ -5,6 +5,7 @@ use App\User;
 use App\Mail\RequestForQuotation;
 use App\Quotation;
 use App\Document_reference;
+use App\Order;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\DetailRepository;
@@ -117,7 +118,7 @@ class UpdateDetailForOrder
                     $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
 
                     Mail::to(User::find($updated_order->contact_id)->email)
-                        ->send(new RequestForQuotation(User::find($updated_order->contact_id), Document_reference::find($doc_ref_file->id), Quotation::find(4)));
+                        ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quo->id), Order::find($updated_order->id)));
                 }
 
             }
