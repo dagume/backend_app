@@ -17,10 +17,10 @@ type Activity { #implements GlobalSearch{
 }
 #estados de actividad
 enum stateActivity{
-    Archivado
-    Completado
-    Proceso
-    Atrasado
+    Archivado @enum(value: 1)
+    Completado @enum(value: 2)
+    Proceso @enum(value: 3)
+    Atrasado @enum(value: 4)
 }
 #estados de actividad
 enum priorityActivity{
@@ -38,7 +38,8 @@ extend type Query{
     activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
     added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
     activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
-
+    todayActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\TodayActivities@resolve")
+    weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
 }
 extend type Mutation {
      #Crear actividad

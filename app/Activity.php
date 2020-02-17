@@ -10,8 +10,7 @@ class Activity extends Model
 
     protected $primaryKey = 'id';
 
-    //Poner timestamp en TRUE ya esta en DB
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'project_id',

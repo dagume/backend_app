@@ -46,7 +46,7 @@ class CreateActivity
                 $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
                 $doc_reference = new Document_reference;
                 $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
-                $args['is_folder']               = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $args['activity_id']        = $this->activityRepo->lastActivity()->id + 1;
                 $args['module_id']          = 1; //id 1 pertenece al modulo Activity
                 $args['drive_id']           = $activity_folder->id;

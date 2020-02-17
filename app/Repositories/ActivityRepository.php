@@ -19,6 +19,11 @@ class ActivityRepository extends BaseRepository
         return $reference[0];
     }
      
+    public function todayActivity($date){
+        //Traemos las actividades que vencen hoy
+        $reference = DB::select('select * from activities where date_end = ?',[$date]);
+        return $reference;
+    }
     //public function getFolderContact()
     //{
     //    //trae la referencia del folder raiz de Contactos
