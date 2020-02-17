@@ -55,10 +55,10 @@ class SendApplicationMail
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-//dd($this->order_docRepo->getOrderDoc($args['order_id'], 0)->code);
-        $ord = DB::transaction(function () use($args){  //se crea la transacion
+        $orde = DB::transaction(function () use($args){  //se crea la transacion
             $order = $this->orderRepo->find($args['order_id']);
-            //dd($order_doc->code);
+            $ord['state'] = 0;  //el valor 0 es el estado de application
+            $this->orderRepo->update($order->id, $ord);
             $emails = $args['email_contacts']; //Array con ID de posibles proveedores
             foreach ($emails as $ema ) {
                 $data = [
@@ -112,11 +112,12 @@ class SendApplicationMail
                 //Envio de correo a cada uno de los contactos
                 Mail::to(User::find($ema)->email)
                 ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), $order));
-
+                
+                return $order;
             }
         }, 3);
         return [
-            'order' => null,
+            'order' => $orde,
             'message' => 'Solicitud Enviada correctamente'
         ];
     }

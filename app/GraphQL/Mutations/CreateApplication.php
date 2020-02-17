@@ -46,7 +46,7 @@ class CreateApplication
 
         $ord = DB::transaction(function () use($args){  //se crea la transacion
             $args['application_date']   = now();
-            $args['state']              = 0; //el valor 0 es el estado de Application
+            $args['state']              = 5; //el valor 5 es el estado de draft(Borrador)
             $args['sender_data']        = auth()->user()->id;
             $order = $this->orderRepo->create($args);   //creamos la nueva orden
 

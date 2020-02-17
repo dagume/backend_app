@@ -53,7 +53,7 @@ class UploadFile
             $doc_ref_file->drive_id = $args['drive_id'];
             $doc_ref_file->save();
         }
-        if ($args['con_id'] != null) { //Para subir documento requerido
+        if ($args['con_id'] != null && $args['order_id'] == null) { //Para subir documento requerido
             ////////////Crear una transaccion
             $document_contact = $this->document_contactRepo->create($args);     // le asignamos el mismos drive_id al file_id que es el que usa doc_member
             //dd($this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents);
