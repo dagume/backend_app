@@ -3,7 +3,24 @@ type Measure{
     name: String
 }
 
+type MessageSuccessMeasure {
+    measure:Measure
+    message: String
+}
+
 extend type Query{
     #unidades de medida
     measures: [Measure!]! @all(model: "App\\Measure") #@middleware(checks:["auth:api"])
+}
+
+extend type Mutation {
+    #unidad de medida
+    createMeasure(
+        name: String @rules(apply: ["required", "max:255"])
+    ):MessageSuccessMeasure @field(resolver: "App\\GraphQL\\Mutations\\CreateMeasure@resolve") #@middleware(checks:["auth:api"])
+
+    updateMeasure(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255"])
+    ): Measure @update(model: "App\\Measure")
 }
