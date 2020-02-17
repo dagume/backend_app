@@ -86,7 +86,7 @@ extend type Mutation {
     #Editar Proyecto
     updateProject(
         id: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["max:255"])
+        name: String @rules(apply: ["max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
         end_date: Date @rules(apply: ["nullable","date"])
         description: String @rules(apply: ["nullable"])

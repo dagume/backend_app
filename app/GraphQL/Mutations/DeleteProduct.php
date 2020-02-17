@@ -4,16 +4,10 @@ namespace App\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Repositories\MeasureRepository;
+use App\Product;
 
-class CreateMeasure
+class DeleteProduct
 {
-    protected $measureRepo;
-
-    public function __construct(MeasureRepository $meaRepo)
-    {        
-        $this->measureRepo = $meaRepo;
-    }
     /**
      * Return a value for the field.
      *
@@ -25,10 +19,21 @@ class CreateMeasure
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-       $measure = $this->$measureRepo->create($args);
-       return [
-           'measure' => $measure,
-           'message' => 'Unidad creada con exito'
-       ]; 
+        try
+		{
+			$product = Product::find($args['id']);
+			$product->delete();
+		}
+        catch (\Illuminate\Database\QueryException $e)
+        {
+			return [
+                'product' => null,
+                'message' => 'Este producto no se puede eliminar'
+            ];
+        }
+        return [
+            'product' => $product,
+            'message' => 'Producto eliminado exitosamente'
+        ];
     }
 }
