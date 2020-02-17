@@ -83,7 +83,7 @@ class UpdateDetailForOrder
                     //    'sender' => $this->contactRepo->find($order->sender_data),
                     //    'details' => $this->detailRepo->getDataPDF($order->id)
                     //];
-                    
+
                     $data = [
                         'title' => 'Orden de compra',
                         'code' => $order_doc['code'],

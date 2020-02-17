@@ -22,7 +22,7 @@ extend type Query{
     #Query cotizacion
     hash_quotation(hash: String!): Quotation @field(resolver: "App\\GraphQL\\Queries\\Hash_quotation@resolve") #@middleware(checks:["auth:api"])
     quotations: [Quotation!]! @all(model: "App\\Quotation") #@middleware(checks:["auth:api"])  #, "can:project.list"
-    
+    quotationsOrder(order_id: Int! @eq): [Quotation!]! @all(model: "App\\Quotation") #@middleware(checks:["auth:api"])
 }
 extend type Mutation{
     updateQuotation(

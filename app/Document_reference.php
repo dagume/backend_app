@@ -27,14 +27,9 @@ class Document_reference extends Model
         'drive_id'
     ];
     //falta relacion accounting_movements
-
     public function parent_document()
     {
-        return $this->belongsTo('App\Document_reference');
-    }
-    public function document_references()
-    {
-        return $this->hasMany('App\Document_reference', 'parent_document_id');
+        return $this->belongsTo('App\Document_reference', 'parent_document_id', 'id');
     }
     public function module()
     {
@@ -55,5 +50,9 @@ class Document_reference extends Model
     public function document_contact()
     {
         return $this->belongsTo('App\Document_contact' ,'doc_id');
+    }
+    public function order_document()
+    {
+        return $this->belongsTo('App\Order_document');
     }
 }

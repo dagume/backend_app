@@ -2,7 +2,6 @@
 type Document_reference{
     id: ID!
     parent_document: Document_reference
-    document_references: Document_reference
     name: String
     is_folder: Boolean
     activity: Activity
@@ -11,7 +10,7 @@ type Document_reference{
     document_contact: Document_contact
     accounting_movements_id: Int
     module: Module
-    order_document_id:Int
+    order_document:Order_documents
     document_contact:Document_contact
     order_id:Int
     drive_id: String
