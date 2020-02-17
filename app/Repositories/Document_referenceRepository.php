@@ -54,5 +54,4 @@ class Document_referenceRepository extends BaseRepository
         $folderContact = DB::select('SELECT * FROM document_reference WHERE contact_id = ? ', [$contact_id]);
         return $folderContact[0];
     }
-
 }

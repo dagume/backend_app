@@ -17,10 +17,11 @@ class Quotation extends Model
     protected $fillable = [
         'order_id',
         'contact_id',
-        'folder_id',
+        'file_id',
         'authorized',
         'date',
-        'hash_id'
+        'hash_id',
+        'file_date'
     ];
 
     public function order()

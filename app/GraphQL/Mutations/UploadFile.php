@@ -9,6 +9,7 @@ use App\Repositories\Document_referenceRepository;
 use App\Repositories\Document_contactRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\Document_rolRepository;
+use App\Repositories\QuotationRepository;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -19,6 +20,7 @@ class UploadFile
     protected $document_contactRepo;
     protected $contactRepo;
     protected $document_rolRepo;
+    protected $quotationRepo;
 
     public function __construct(MemberRepository $memRepo, Document_referenceRepository $doc_refRepo, Document_contactRepository $doc_conRepo, ContactRepository $conRepo, Document_rolRepository $doc_rolRepo)
     {
@@ -27,6 +29,7 @@ class UploadFile
         $this->document_contactRepo = $doc_conRepo;
         $this->contactRepo = $conRepo;
         $this->document_rolRepo = $doc_rolRepo;
+        $this->quotationRepo = $quoRepo;
     }
     /**
      * Return a value for the field.
@@ -40,7 +43,7 @@ class UploadFile
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $doc_ref_file = new Document_reference;
-        if ($args['activity_id'] != null) {
+        if ($args['activity_id'] != null) { //Para subir documento de actividad
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
             $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
@@ -50,7 +53,7 @@ class UploadFile
             $doc_ref_file->drive_id = $args['drive_id'];
             $doc_ref_file->save();
         }
-        if ($args['con_id'] != null) {
+        if ($args['con_id'] != null) { //Para subir documento requerido
             ////////////Crear una transaccion
             $document_contact = $this->document_contactRepo->create($args);     // le asignamos el mismos drive_id al file_id que es el que usa doc_member
             //dd($this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents);
@@ -61,10 +64,24 @@ class UploadFile
             $doc_ref['doc_id'] = $document_contact->id; // doc_id del  document_contact recien agregado
             $doc_ref['contact_id'] = $args['con_id']; // id del contacto
             $doc_ref['drive_id'] = $args['drive_id'];
-
             $this->document_referenceRepo->create($doc_ref);
+        }
+        if ($args['order_id'] != null && $args['con_id'] != null) {
+            //Consultamos a cotizacion actualizar
+            $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
+            $quo['file_id'] = $args['drive_id'];
+            $quo['file_date'] = now();
+            $this->quotationRepo->update($quotation->id, $quo);//actualizamos la cotizacion con su nuevo archivo cargado
 
-
+            ////Consultamos el registro del la orden donde guardaremos la cotizacion
+            //$document_reference = $this->document_referenceRepo->getFolderOrderCurrent($args['order_id']);
+            //$doc_ref['parent_document_id'] = $document_reference->id;
+            //$contact = $this->contactRepo->find($args['con_id']); //consultamos en contacto para asignarle un nombre
+            ////se le asigna un nombre
+            //$doc_ref['name'] = 'COT_'.$args['order_id'].'_'.date("d").date("m").date("y").$contact->name;
+            //$doc_ref['is_folder'] = false;
+            //$doc_ref['module_id'] = 5; // 5 = modulo de orden
+        }
 
             //$mem_rol_id = $this->memberRepo->mem_rol_contact($args['contact_id']);         // Buscamos todos los roles_id y members_id que tiene el contacto
 
@@ -82,7 +99,7 @@ class UploadFile
             //        }
             //    }
             //}
-        }
+
         //if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
         //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;
         //    $doc_ref_file->name = $args['name'];

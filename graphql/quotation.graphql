@@ -4,11 +4,14 @@ type Quotation{
     id:ID!
     order:Order
     contact:Contact
-    folder_id:String
+    file_id:String
+
     authorized:Boolean
     date: Date
     hash_id:String
+    file_date:Date
 }
+
 type Subscription {
     authorizationUpdated(authorized: Boolean): Quotation
 }
