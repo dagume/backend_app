@@ -22,7 +22,7 @@ class UploadFile
     protected $document_rolRepo;
     protected $quotationRepo;
 
-    public function __construct(MemberRepository $memRepo, Document_referenceRepository $doc_refRepo, Document_contactRepository $doc_conRepo, ContactRepository $conRepo, Document_rolRepository $doc_rolRepo)
+    public function __construct(MemberRepository $memRepo, Document_referenceRepository $doc_refRepo, Document_contactRepository $doc_conRepo, ContactRepository $conRepo, Document_rolRepository $doc_rolRepo, QuotationRepository $quoRepo)
     {
         $this->memberRepo = $memRepo;
         $this->document_referenceRepo = $doc_refRepo;
