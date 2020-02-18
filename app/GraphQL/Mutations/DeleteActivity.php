@@ -35,10 +35,10 @@ class DeleteActivity
         try
 		{
             $act = DB::transaction(function () use($args){
-                $activity = $this->activityRepo->find($agrs['id']); //consultamos la data de la actividad
-                $this->activityRepo->delete($activity); // Eliminamos actividad en DB
+                $activity = $this->activityRepo->find($args['id']); //consultamos la data de la actividad
                 //Consultamos el registro del documento en el drive
                 $doc_ref = $this->document_referenceRepo->getFolderSubActivity($activity->project_id, $activity->id); 
+                $this->activityRepo->delete($activity); // Eliminamos actividad en DB
                 //Eliminamos carpeta raiz de dicha actividad(Se elimina todo lo que este dentro de esa carpeta)
                 $activity_folder = Conection_Drive()->files->delete($doc_ref->drive_id);  
                 return $activity;
