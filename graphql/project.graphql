@@ -81,7 +81,6 @@ extend type Mutation {
         association: associationProject
         consortium_name:String
         consortium_nit:Int
-        folder_id: String
     ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(

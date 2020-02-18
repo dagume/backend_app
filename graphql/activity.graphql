@@ -75,5 +75,5 @@ extend type Mutation {
         is_act:Boolean
     ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
-    delete_activity(id: ID!): Activity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
+    delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
 }

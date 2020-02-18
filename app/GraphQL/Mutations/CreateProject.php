@@ -75,7 +75,7 @@ class CreateProject
             $doc_ref_project->parent_document_id = DB::table('document_reference')->where('name', date("Y"))->first()->id;
             $doc_ref_project->name = $args['name'];
             $doc_ref_project->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-            $doc_ref_project->project_id = $this->projectRepo->lastProject()->id;
+            $doc_ref_project->project_id = $project->id;
             $doc_ref_project->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_project->drive_id = $project_folder->id;
             $doc_ref_project->save();
@@ -86,7 +86,7 @@ class CreateProject
             $doc_ref_activity->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_activity->name ='Actividades';
             $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-            $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
+            $doc_ref_activity->project_id = $project->id;
             $doc_ref_activity->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_activity->drive_id = $activity_folder->id;
             $doc_ref_activity->save();
@@ -95,14 +95,14 @@ class CreateProject
                 //Hacemos conexion con el drive y creamos el folder de Actividad. Metodos en Helper.php
                 $consortium_folder = Conection_Drive()->files->create(Create_Folder('Acta Consorcial', $activity_folder->id), ['fields' => 'id']);
                 //guarda registro de la nueva actividad
-                $this->activityRepo->create(StoreActivity($this->projectRepo->lastProject()->id, 'Acta Consorcial',$consortium_folder->id));
+                $activity = $this->activityRepo->create(StoreActivity($project->id, 'Acta Consorcial',$consortium_folder->id));
 
                 $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-                $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($this->projectRepo->lastProject()->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
+                $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($project->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
                 $doc_ref_activity->name ='Acta Consorcial';
                 $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-                $doc_ref_activity->activity_id =  $this->activityRepo->lastActivity()->id;
-                $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
+                $doc_ref_activity->activity_id =  $activity->id;
+                $doc_ref_activity->project_id = $project->id;
                 $doc_ref_activity->module_id = 1; //id 1 pertenece al modulo Activity
                 $doc_ref_activity->drive_id = $consortium_folder->id;
                 $doc_ref_activity->save();
@@ -112,14 +112,14 @@ class CreateProject
                 //Hacemos conexion con el drive y creamos el folder de Actividad. Metodos en Helper.php
                 $proposal_folder = Conection_Drive()->files->create(Create_Folder('Propuesta', $activity_folder->id), ['fields' => 'id']);
                 //guarda registro de la nueva actividad
-                $this->activityRepo->create(StoreActivity($this->projectRepo->lastProject()->id, 'Propuesta',$proposal_folder->id)); //guarda registro de la nueva actividad
+                $activity = $this->activityRepo->create(StoreActivity($project->id, 'Propuesta',$proposal_folder->id)); //guarda registro de la nueva actividad
 
                 $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-                $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($this->projectRepo->lastProject()->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
+                $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($project->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
                 $doc_ref_activity->name ='Propuesta';
                 $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-                $doc_ref_activity->activity_id =  $this->activityRepo->lastActivity()->id;
-                $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
+                $doc_ref_activity->activity_id =  $activity->id;
+                $doc_ref_activity->project_id = $project->id;
                 $doc_ref_activity->module_id = 1; //id 1 pertenece al modulo Activity
                 $doc_ref_activity->drive_id = $proposal_folder->id;
                 $doc_ref_activity->save();
@@ -128,14 +128,14 @@ class CreateProject
                 //Hacemos conexion con el drive y creamos el folder de Actividad. Metodos en Helper.php
                 $build_folder = Conection_Drive()->files->create(Create_Folder('Certificado Sena y Comfaboy', $activity_folder->id), ['fields' => 'id']);
                 //guarda registro de la nueva actividad
-                $this->activityRepo->create(StoreActivity($this->projectRepo->lastProject()->id, 'Certificado Sena y Comfaboy',$build_folder->id)); //guarda registro de la nueva actividad
+                $activity = $this->activityRepo->create(StoreActivity($project->id, 'Certificado Sena y Comfaboy',$build_folder->id)); //guarda registro de la nueva actividad
 
                 $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-                $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($this->projectRepo->lastProject()->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
+                $doc_ref_activity->parent_document_id = $this->documentRepo->getFolderParentActivity($project->id)->id;    //Buscamos el folder donde vamos a guardar la actividad
                 $doc_ref_activity->name ='Certificado Sena y Comfaboy';
                 $doc_ref_activity->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-                $doc_ref_activity->activity_id =  $this->activityRepo->lastActivity()->id;
-                $doc_ref_activity->project_id = $this->projectRepo->lastProject()->id;
+                $doc_ref_activity->activity_id =  $activity->id;
+                $doc_ref_activity->project_id = $project->id;
                 $doc_ref_activity->module_id = 1; //id 1 pertenece al modulo Activity
                 $doc_ref_activity->drive_id = $build_folder->id;
                 $doc_ref_activity->save();
@@ -147,7 +147,7 @@ class CreateProject
             $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_account->name ='Contabilidad';
             $doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-            $doc_ref_account->project_id = $this->projectRepo->lastProject()->id;
+            $doc_ref_account->project_id = $project->id;
             $doc_ref_account->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_account->drive_id = $account_folder->id;
             $doc_ref_account->save();
@@ -158,7 +158,7 @@ class CreateProject
             $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
             $doc_ref_account->name ='Ordenes';
             $doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-            $doc_ref_account->project_id = $this->projectRepo->lastProject()->id;
+            $doc_ref_account->project_id = $project->id;
             $doc_ref_account->module_id = 2; //id 2 pertenece al modulo Project
             $doc_ref_account->drive_id = $order_folder->id;
             $doc_ref_account->save();

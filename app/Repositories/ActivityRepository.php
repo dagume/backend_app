@@ -12,13 +12,6 @@ class ActivityRepository extends BaseRepository
     {
         return new Activity;
     }
-    public function lastActivity()
-    {        
-        //Trae la ultima actividad registrada
-        $reference = DB::select('SELECT id FROM activities ORDER BY id DESC LIMIT 1'); //Activity::max('id')
-        return $reference[0];
-    }
-     
     public function todayActivity($date){
         //Traemos las actividades que vencen hoy
         $reference = DB::select('select * from activities where date_end = ?',[$date]);

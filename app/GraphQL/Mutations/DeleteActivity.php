@@ -2,20 +2,24 @@
 
 namespace App\GraphQL\Mutations;
 
+use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
 use App\Repositories\ActivityRepository;
+use App\Repositories\Document_referenceRepository;
 
 
 class DeleteActivity
 {
 
     protected $activityRepo;
+    protected $document_referenceRepo;
 
-    public function __construct(ActivityRepository $actRepo)
+    public function __construct(ActivityRepository $actRepo, Document_referenceRepository $doc_refRepo)
     {
         $this->activityRepo = $actRepo;
+        $this->document_referenceRepo = $doc_refRepo;
     }
     /**
      * Return a value for the field.
@@ -28,11 +32,29 @@ class DeleteActivity
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        dd();
-        $activity = $this->activityRepo->find($args['id']);
-        if ($activity->parent_activity_id == null) {
-                
-        }
-        DB::select('select * from users where active = ?', [1]);
+        try
+		{
+            $act = DB::transaction(function () use($args){
+                $activity = $this->activityRepo->find($agrs['id']); //consultamos la data de la actividad
+                $this->activityRepo->delete($activity); // Eliminamos actividad en DB
+                //Consultamos el registro del documento en el drive
+                $doc_ref = $this->document_referenceRepo->getFolderSubActivity($activity->project_id, $activity->id); 
+                //Eliminamos carpeta raiz de dicha actividad(Se elimina todo lo que este dentro de esa carpeta)
+                $activity_folder = Conection_Drive()->files->delete($doc_ref->drive_id);  
+                return $activity;
+            }, 3);    
+		}
+        catch (Exception $e)
+        {
+			return [
+                'activity' => null,
+                'message' => 'No se puede eliminar la actividad, intente más tarde'
+            ];
+        }    
+        return [
+            'activity' => $act,
+            'message' => 'Actividad eliminada exitosamente'
+        ];
     }
 }
+        
