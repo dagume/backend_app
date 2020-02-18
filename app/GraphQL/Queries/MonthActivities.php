@@ -6,7 +6,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
 
-class WeekActivities
+class MonthActivities
 {
     /**
      * Return a value for the field.
@@ -19,16 +19,11 @@ class WeekActivities
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $week=date("W");
-        $day_week = date("w");
-
-        if ($day_week == 0){
-            $day_week = 7;
-        }
-        $first_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")-$day_week+1, date("Y"))).'\'';
-        $last_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+(7 - $day_week), date("Y"))).'\'';
+        $month_start = strtotime('first day of this month', time());
+        $first_day = date("Y-m-d", $month_start);
+        $month_end = strtotime('last day of this month', time());
+        $last_day = date("Y-m-d", $month_end);
         $activities = DB::select('select * from activities where date_end between ? and ?',[$first_day, $last_day]);
-        //dd($ultimo_dia);
         return $activities;
     }
 }

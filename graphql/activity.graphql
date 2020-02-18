@@ -28,6 +28,7 @@ enum priorityActivity{
     Media
     Baja
 }
+
 #Mensaje exitoso de creacion
 type MessageSuccessActivity {
     activity:Activity
@@ -40,6 +41,7 @@ extend type Query{
     activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
     todayActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\TodayActivities@resolve")
     weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
+    monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve")
 }
 extend type Mutation {
      #Crear actividad
