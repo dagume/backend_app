@@ -1,4 +1,5 @@
 #Actividades
+
 type Activity { #implements GlobalSearch{
     id:ID!
     activities:[Activity]
