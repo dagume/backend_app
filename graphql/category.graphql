@@ -28,6 +28,6 @@ extend type Mutation {
         description: String @rules(apply: ["max:255"])
     ): Category @update(model: "App\\Category")
 
-    deleteCategory(id: ID!): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\deleteCategory@resolve")
+    deleteCategory(id: ID!): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\DeleteCategory@resolve")
 
 }
