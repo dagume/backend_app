@@ -61,8 +61,8 @@ extend type Mutation {
         priority:priorityActivity
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
-        is_added: Boolean
-        is_act:Boolean
+        is_added: Boolean @rules(apply: ["required"])
+        is_act:Boolean @rules(apply: ["required"])
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
 
     #Editar actividad

@@ -38,7 +38,7 @@ class CreateActivity
                 //hace conexion con el drive y crea el folder. Metodos en Helper.php
                 $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
                 $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
-                $args['is_folder']               = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $args['activity_id']        = $activity->id;
                 $args['module_id']          = 1; //id 1 pertenece al modulo Activity
                 $args['drive_id']           = $activity_folder->id;
