@@ -62,6 +62,9 @@ extend type Query{
     projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos por estado
     state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    #Lista proyectos por fecha de inicio
+    projects_descending_order: [Project] @field(resolver: "App\\GraphQL\\Queries\\ProjectsDescendingOrder@resolve")
+
 }
 
 extend type Mutation {

@@ -1,5 +1,4 @@
 #Actividades
-
 type Activity { #implements GlobalSearch{
     id:ID!
     activities:[Activity]
@@ -16,6 +15,7 @@ type Activity { #implements GlobalSearch{
     drive_id:String
     is_act:Boolean
 }
+
 #estados de actividad
 enum stateActivity{
     Archivado @enum(value: 1)
@@ -23,6 +23,7 @@ enum stateActivity{
     Proceso @enum(value: 3)
     Atrasado @enum(value: 4)
 }
+
 #estados de actividad
 enum priorityActivity{
     Alta
@@ -35,6 +36,7 @@ type MessageSuccessActivity {
     activity:Activity
     message: String
 }
+
 extend type Query{
     #Actividades
     activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
@@ -44,6 +46,7 @@ extend type Query{
     weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
     monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve")
 }
+
 extend type Mutation {
      #Crear actividad
     createActivity(
@@ -77,4 +80,5 @@ extend type Mutation {
     ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
     delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
+
 }
