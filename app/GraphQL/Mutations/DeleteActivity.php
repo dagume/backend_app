@@ -8,18 +8,20 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
 use App\Repositories\ActivityRepository;
 use App\Repositories\Document_referenceRepository;
-
+use App\GraphQL\Mutations\CreateActivity;
 
 class DeleteActivity
 {
 
     protected $activityRepo;
     protected $document_referenceRepo;
+    protected $progress;
 
-    public function __construct(ActivityRepository $actRepo, Document_referenceRepository $doc_refRepo)
+    public function __construct(ActivityRepository $actRepo, Document_referenceRepository $doc_refRepo, CreateActivity $actProg)
     {
         $this->activityRepo = $actRepo;
         $this->document_referenceRepo = $doc_refRepo;
+        $this->progress = $actProg;
     }
     /**
      * Return a value for the field.
@@ -39,6 +41,10 @@ class DeleteActivity
                 //Consultamos el registro del documento en el drive
                 $doc_ref = $this->document_referenceRepo->getFolderSubActivity($activity->project_id, $activity->id); 
                 $this->activityRepo->delete($activity); // Eliminamos actividad en DB
+                
+////////////////////////REvisar esta linea (Es la que actualiza el avance del proyecto segun actas)
+                $this->progress->Progress($activity->is_act, $activity->project_id);
+                                
                 //Eliminamos carpeta raiz de dicha actividad(Se elimina todo lo que este dentro de esa carpeta)
                 $activity_folder = Conection_Drive()->files->delete($doc_ref->drive_id);  
                 return $activity;

@@ -50,21 +50,19 @@ extend type Query{
 extend type Mutation {
      #Crear actividad
     createActivity(
-        project_id: Int! @rules(apply: ["integer"])
-        parent_activity_id: Int @rules(apply: ["integer","nullable"])
+        project_id: Int @rules(apply: ["integer", "required"])
+        parent_activity_id: Int @rules(apply: ["integer", "nullable"])
         name: String @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["nullable"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
-        state: stateActivity
-        completed:Boolean
+        state: stateActivity @rules(apply: ["required"])
+        completed:Boolean @rules(apply: ["required"])
         priority:priorityActivity
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean @rules(apply: ["required"])
         is_act:Boolean @rules(apply: ["required"])
-        
-
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
 
     #Editar actividad
@@ -76,6 +74,7 @@ extend type Mutation {
         priority:String
         notes:String
         state:String
+        amount: Int @rules(apply: ["nullable", "integer"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
         is_act:Boolean

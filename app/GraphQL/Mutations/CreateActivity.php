@@ -17,11 +17,14 @@ class CreateActivity
     protected $activityRepo;
     protected $projectRepo;
 
+    
     public function __construct(Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo){
         $this->documentRepo = $docRepo;
         $this->activityRepo = $actRepo;
         $this->projectRepo = $proRepo;
     }
+
+    
     /**
      * Return a value for the field.
      *
@@ -35,50 +38,61 @@ class CreateActivity
     {
         //dd($args);
         $act = DB::transaction(function () use($args){
-            ////verifica si la actividad es padre o hija para asi saber donde crear el folder
-            //if ($args['parent_activity_id'] == null) {
-            //    //hace conexion con el drive y crea el folder. Metodos en Helper.php
-            //    $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
-            //    $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
-            //    $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder                
-            //    $args['module_id']          = 1; //id 1 pertenece al modulo Activity
-            //    $args['drive_id']           = $activity_folder->id;
-            //    $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
-            //    $args['activity_id']        = $activity->id;
-            //}else {
-            //    //hace conexion con el drive y crea el folder. Metodos en Helper.php y
-            //    $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
-            //    $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
-            //    $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
-            //    $args['module_id']          = 1; //id 1 pertenece al modulo Activity
-            //    $args['drive_id']           = $activity_folder->id;
-            //    $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
-            //    $args['activity_id']        = $activity->id;
-            //}
-            //    $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
-            if ($args['is_act'] == true) {
-                $amount_total = 0;
-                $added_total = 0;
-                $project = $this->projectRepo->find($args['project_id']);
-                $added_amount = $this->activityRepo->added_activity($args['project_id']);
-                foreach ($added_amount as $add) {
-                    $added_total += $add->amount;
-                }
-                dd($added_total);
-                $acts_amount = $this->activityRepo->act_activity($args['project_id']);
-                //dd($acts_amount);
-                foreach ($acts_amount as $amo) {
-                    $amount_total += $amo->amount;
-                }
-//////////AQUI VAMOS
-                dd($amount_total);
+            //verifica si la actividad es padre o hija para asi saber donde crear el folder
+            if ($args['parent_activity_id'] == null) {
+                //hace conexion con el drive y crea el folder. Metodos en Helper.php
+                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
+                $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
+                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder                
+                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                $args['drive_id']           = $activity_folder->id;
+                $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
+                $args['activity_id']        = $activity->id;
+            }else {
+                //hace conexion con el drive y crea el folder. Metodos en Helper.php y
+                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
+                $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
+                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
+                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                $args['drive_id']           = $activity_folder->id;
+                $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
+                $args['activity_id']        = $activity->id;
             }
-                return $activity;
+            $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
+            $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
+            return $activity;
         }, 3);
         return [
             'activity' => $act,
             'message' => 'Actividad creada'
         ];
+    }
+
+    public function Progress($is_act, $project_id){
+
+        if ($is_act == true) { //Si es acta tenemos que actualizar el progreso del proyecto
+            $acts_total = 0;
+            $added_total = 0;
+            $project = $this->projectRepo->find($project_id); //consultamos el proyecto
+            $added_amount = $this->activityRepo->added_activity($project_id); //traemos todos los amount de los adicionales
+            foreach ($added_amount as $add) {
+                $added_total += $add->amount; //hacemos una sumatoria de los adicionales
+            }
+            $project_total = $added_total + $project->contract_value;
+            $acts_amount = $this->activityRepo->act_activity($project_id); //consultamos amount de todas las actas recibidas en el proyecto
+            
+            foreach ($acts_amount as $amo) {
+                $acts_total += $amo->amount; //Sumatoria de actas recibidas
+            }
+            $progress = round($acts_total/$project_total*100); //sacamos porcentaje de avance segun actas
+            if ($progress <= 100) {
+                $proj['process'] = $progress;
+                $update= $this->projectRepo->update($project_id, $proj); //Actualizamos el projecto con el nuevo porcentaje
+            }else { //si el porcentaje da mas de 100% le asignamos 100
+                $proj['process'] = 100;
+                $this->projectRepo->update($project_id, $proj);
+            }
+        }
     }
 }
 
