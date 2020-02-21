@@ -33,6 +33,7 @@ extend type Mutation {
         movement_date:Date @rules(apply: ["date"])
         payment_method:String @rules(apply: ["required", "max:255"])
         value:Int @rules(apply: ["required","integer"])
+        state_movement:String
         code:String @rules(apply: ["required", "max:255"])        
     ):Accounting_movement @create(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
 }
