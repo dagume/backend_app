@@ -8,9 +8,10 @@ type Role {
   permissions: [Permission]
   required_documents:[Required_documents]
 }
-#type MessageSuccessRole{
-#    
-#}
+type MessageSuccessRole{
+    role:Role
+    message:String
+}
 
 extend type Query{
     #Query roles
@@ -18,10 +19,10 @@ extend type Query{
     roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
     roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
 }
-#extend type Mutation{
-#    role_requiredDoc(
-#      role_id:Int
-#      required_doc:[Int]
-#    )
-#}
+extend type Mutation{  
+    role_requiredDoc(
+      role_id:Int
+      required_doc:[Int]
+    ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\Role_RequireDocument@resolve")
+}
 
