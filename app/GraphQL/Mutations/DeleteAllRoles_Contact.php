@@ -1,19 +1,18 @@
 <?php
 
-namespace App\GraphQL\Queries;
+namespace App\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Repositories\ActivityRepository;
-use DB;
+use App\Repositories\MemberRepository;
 
-class MonthActivities
+class DeleteAllRoles_Contact
 {
-    protected $activityRepo;
+    protected $memberRepo;
 
-    public function __construct(ActivityRepository $actRepo)
+    public function __construct(MemberRepository $memRepo)
     {
-        $this->activityRepo = $actRepo;
+        $this->memberRepo = $memRepo;
     }
     /**
      * Return a value for the field.
@@ -26,11 +25,6 @@ class MonthActivities
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $month_start = strtotime('first day of this month', time());
-        $first_day = date("Y-m-d", $month_start);
-        $month_end = strtotime('last day of this month', time());
-        $last_day = date("Y-m-d", $month_end);
-        $activities = $this->activityRepo->betweenActivity($first_day, $last_day);
-        return $activities;
+        return null;
     }
 }

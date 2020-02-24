@@ -4,10 +4,17 @@ namespace App\GraphQL\Queries;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\Repositories\ActivityRepository;
 use DB;
 
 class WeekActivities
 {
+    protected $activityRepo;
+
+    public function __construct(ActivityRepository $actRepo)
+    {
+        $this->activityRepo = $actRepo;
+    }
     /**
      * Return a value for the field.
      *
@@ -19,7 +26,6 @@ class WeekActivities
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $week=date("W");
         $day_week = date("w");
 
         if ($day_week == 0){
@@ -27,7 +33,7 @@ class WeekActivities
         }
         $first_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")-$day_week+1, date("Y"))).'\'';
         $last_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+(7 - $day_week), date("Y"))).'\'';
-        $activities = DB::select('select * from activities where date_end between ? and ?',[$first_day, $last_day]);
+        $activities = $this->activityRepo->betweenActivity($first_day, $last_day);
         //dd($ultimo_dia);
         return $activities;
     }
