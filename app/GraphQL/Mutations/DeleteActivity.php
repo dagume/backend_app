@@ -39,16 +39,16 @@ class DeleteActivity
             $act = DB::transaction(function () use($args){
                 $activity = $this->activityRepo->find($args['id']); //consultamos la data de la actividad
                 //Consultamos el registro del documento en el drive
-                $doc_ref = $this->document_referenceRepo->getFolderSubActivity($activity->project_id, $activity->id); 
+                $doc_ref = $this->document_referenceRepo->getFolderSubActivity($activity->project_id, $activity->id);
                 $this->activityRepo->delete($activity); // Eliminamos actividad en DB
-                
+
 ////////////////////////REvisar esta linea (Es la que actualiza el avance del proyecto segun actas)
                 $this->progress->Progress($activity->is_act, $activity->project_id);
-                                
+
                 //Eliminamos carpeta raiz de dicha actividad(Se elimina todo lo que este dentro de esa carpeta)
-                $activity_folder = Conection_Drive()->files->delete($doc_ref->drive_id);  
+                $activity_folder = Conection_Drive()->files->delete($doc_ref->drive_id);
                 return $activity;
-            }, 3);    
+            }, 3); 
 		}
         catch (Exception $e)
         {
@@ -56,11 +56,10 @@ class DeleteActivity
                 'activity' => null,
                 'message' => 'No se puede eliminar la actividad, intente más tarde'
             ];
-        }    
+        }
         return [
             'activity' => $act,
             'message' => 'Actividad eliminada exitosamente'
         ];
     }
 }
-        

@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\MemberRepository;
+use DB;
 
 class DeleteAllRoles_Contact
 {
@@ -25,6 +26,23 @@ class DeleteAllRoles_Contact
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        return null;
+        try
+		{
+            $mem = DB::transaction(function () use($args){
+                $members = $this->memberRepo->deleteContact_Project($args['project_id'], $args['contact_id']);
+                return $members;
+            }, 3);
+        }
+        catch (\Illuminate\Database\QueryException $e)
+        {
+			return [
+                'member' => null,
+                'message' => 'Este contacto no se puede eliminar(Tiene transacciones registradas, intente eliminar por Role)'
+            ];
+        }
+        return [
+            'member' => $mem,
+            'message' => 'Contacto eliminado exitosamente'
+        ];
     }
 }
