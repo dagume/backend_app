@@ -30,18 +30,18 @@ class DeleteAllRoles_Contact
 		{
             $mem = DB::transaction(function () use($args){
                 $members = $this->memberRepo->deleteContact_Project($args['project_id'], $args['contact_id']);
-                return $members;
+                return $args['contact_id'];
             }, 3);
         }
         catch (\Illuminate\Database\QueryException $e)
         {
 			return [
-                'member' => null,
+                'contact_id' => null,
                 'message' => 'Este contacto no se puede eliminar(Tiene transacciones registradas, intente eliminar por Role)'
             ];
         }
         return [
-            'member' => $mem,
+            'contact_id' => $mem,
             'message' => 'Contacto eliminado exitosamente'
         ];
     }

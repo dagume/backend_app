@@ -11,6 +11,11 @@ type MessageSuccessMember {
     member:Member
     message: String
 }
+#Mensaje exitoso de eliminacion de contacto en projecto
+type MessageSuccessDelete {
+    contact_id:Int
+    message: String
+}
 type MemberRoles{
     contact_id:String
     role1:String
@@ -38,5 +43,5 @@ extend type Mutation {
     ):MessageSuccessMember @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
 
     delete_member(id: ID!): Member @delete
-    deleteContact_Project(project_id:Int! contact_id:Int!): MessageSuccessMember @field(resolver: "App\\GraphQL\\Mutations\\DeleteAllRoles_Contact@resolve")
+    deleteContact_Project(project_id:Int! contact_id:Int!): MessageSuccessDelete @field(resolver: "App\\GraphQL\\Mutations\\DeleteAllRoles_Contact@resolve")
 }
