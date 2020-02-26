@@ -48,7 +48,7 @@ class DeleteActivity
                 //Eliminamos carpeta raiz de dicha actividad(Se elimina todo lo que este dentro de esa carpeta)
                 $activity_folder = Conection_Drive()->files->delete($doc_ref->drive_id);
                 return $activity;
-            }, 3); 
+            }, 3);
 		}
         catch (Exception $e)
         {

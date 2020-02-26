@@ -21,7 +21,7 @@ class Project extends Model
         'description',
         'contract_value',
         'expenses',
-        'process',
+        'progress',
         'state',
         'place',
         'address',

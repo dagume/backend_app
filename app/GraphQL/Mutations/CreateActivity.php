@@ -17,14 +17,14 @@ class CreateActivity
     protected $activityRepo;
     protected $projectRepo;
 
-    
+
     public function __construct(Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo){
         $this->documentRepo = $docRepo;
         $this->activityRepo = $actRepo;
         $this->projectRepo = $proRepo;
     }
 
-    
+
     /**
      * Return a value for the field.
      *
@@ -42,7 +42,7 @@ class CreateActivity
                 //hace conexion con el drive y crea el folder. Metodos en Helper.php
                 $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
                 $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
-                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder                
+                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
                 $args['module_id']          = 1; //id 1 pertenece al modulo Activity
                 $args['drive_id']           = $activity_folder->id;
                 $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
@@ -79,16 +79,16 @@ class CreateActivity
             }
             $project_total = $added_total + $project->contract_value;
             $acts_amount = $this->activityRepo->act_activity($project_id); //consultamos amount de todas las actas recibidas en el proyecto
-            
+
             foreach ($acts_amount as $amo) {
                 $acts_total += $amo->amount; //Sumatoria de actas recibidas
             }
             $progress = round($acts_total/$project_total*100); //sacamos porcentaje de avance segun actas
             if ($progress <= 100) {
-                $proj['process'] = $progress;
+                $proj['progress'] = $progress;
                 $update= $this->projectRepo->update($project_id, $proj); //Actualizamos el projecto con el nuevo porcentaje
             }else { //si el porcentaje da mas de 100% le asignamos 100
-                $proj['process'] = 100;
+                $proj['progress'] = 100;
                 $this->projectRepo->update($project_id, $proj);
             }
         }

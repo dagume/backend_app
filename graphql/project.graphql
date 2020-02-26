@@ -9,7 +9,7 @@ type Project {#implements GlobalSearch{
     description: String
     contract_value: Int
     expenses: Int
-    process: Int
+    progress: Int
     state: state_project
     place:String
     address:String
@@ -48,7 +48,7 @@ type MessageSuccessProject {
 input placeProject{
     longitud:String @rules(apply: ["required"])
     latitud: String @rules(apply: ["required"])
-        
+
 }
 
 extend type Query{
@@ -93,7 +93,7 @@ extend type Mutation {
         end_date: Date @rules(apply: ["nullable","date"])
         description: String @rules(apply: ["nullable"])
         contract_value: Int
-        state: state_project 
+        state: state_project
         place: [placeProject]
         address: String
         association: associationProject
