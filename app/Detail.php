@@ -14,10 +14,10 @@ class Detail extends Model
 
     protected $fillable = [
         'product_id',
-        'order_id',
+        'quo_id',
         'mea_id',
         'quantity',
-        'value',        
+        'value',
         'delivered_amount',
         'subtotal'
     ];
@@ -26,9 +26,9 @@ class Detail extends Model
     {
         return $this->belongsTo('App\Product');
     }
-    public function order()
+    public function quotation()
     {
-        return $this->belongsTo('App\Order');
+        return $this->belongsTo('App\Quotation','quo_id');
     }
     public function measure()
     {

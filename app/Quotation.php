@@ -24,6 +24,10 @@ class Quotation extends Model
         'file_date'
     ];
 
+    public function details()
+    {
+        return $this->hasMany('App\Detail','quo_id');
+    }
     public function order()
     {
         return $this->belongsTo('App\Order');

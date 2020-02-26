@@ -52,16 +52,13 @@ class Application_quotation
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        global $order_folder;
+        try {
         $ord = DB::transaction(function () use($args){  //se crea la transacion
             $args['application_date']   = now();
             $args['state']              = 0; //el valor 0 es el estado de Application
             $args['sender_data']        = auth()->user()->id;
             $order = $this->orderRepo->create($args);   //creamos la nueva orden
-
-            foreach ($args['updetails'] as $arg) {
-                $arg['order_id'] = $order->id;
-                $details[] = $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
-            }
 
             //Hacemos conexion con el drive y creamos el folder de la orden. Metodos en Helper.php
             $order_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderOrders($args['project_id'])->drive_id), ['fields' => 'id']);
@@ -75,7 +72,7 @@ class Application_quotation
             $doc_ref_order->drive_id = $order_folder->id;
             $doc_ref_order->save();     //guardamos el registro del folder raiz de la orden
 
-            $order_doc['order_id'] = $arg['order_id'];
+            $order_doc['order_id'] = $order->id;
             $order_doc['document_type'] = 0; // 0 = application_quote
             $order_doc['code'] = 'SC_'.$order->id.'_'.date("d").date("m").date("y");
             $order_doc['date'] = now();
@@ -83,12 +80,23 @@ class Application_quotation
 
             $emails = $args['email_contacts']; //Array con ID de posibles proveedores
             foreach ($emails as $ema ) {
+                $quotation = new Quotation;
+                $quotation->order_id = $order->id;
+                $quotation->contact_id = $ema;
+                $quotation->authorized = false;
+                $quotation->save();     //guardamos la cotizacion solicitada
+
+                foreach ($args['updetails'] as $arg) {
+                    $arg['quo_id'] = $quotation->id;
+                    $details[] = $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
+                }
+
                 $data = [
                     'title' => 'Solicitud de Cotización',
                     'code' => $order_doc['code'],
                     'provider' => $this->contactRepo->find($ema),
                     'sender' => $this->contactRepo->find($order->sender_data),
-                    'details' => $this->detailRepo->getDataPDF($order->id)
+                    'details' => $this->detailRepo->getDataPDF($quotation->id)
                 ];
 
                 $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
@@ -114,12 +122,6 @@ class Application_quotation
                 $doc_ref_file->drive_id = $file_id['path'];
                 $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
 
-                $quotation = new Quotation;
-                $quotation->order_id = $order->id;
-                $quotation->contact_id = $ema;
-                $quotation->authorized = false;
-                $quotation->save();     //guardamos la cotizacion solicitada
-
                 $hashed = Hash::make('quotation', [
                     'memory' => 1024,
                     'time' => 2,
@@ -133,6 +135,18 @@ class Application_quotation
             }
             return $order;
         }, 3);
+    } catch (Exception $e) {
+        global $order_folder;
+        //dd($project_folder->id);
+        if (!is_null ($order_folder) || !empty($order_folder))
+        {
+            Conection_Drive()->files->delete($order_folder->id);
+        }
+        return [
+            'order' => null,
+            'message' => 'La solicitud de cotizacion no fue registrada, vuelva a intentarlo'
+        ];
+    }
         return [
             'order' => $ord,
             'message' => 'Solicitud enviada correctamente'

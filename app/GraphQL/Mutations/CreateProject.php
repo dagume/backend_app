@@ -41,7 +41,7 @@ class CreateProject
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    { 
+    {
         global $project_folder;
         try {
             //dd(DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id);
@@ -64,7 +64,7 @@ class CreateProject
                 $args['place'] = $someJSON;
                 $project = $this->projectRepo->create($args); //guarda registro del nuevo proyecto
 
-                //Creamos el contacto del proyecto para agregarlo como integrante y asi poderlo usar 
+                //Creamos el contacto del proyecto para agregarlo como integrante y asi poderlo usar
                 //como una cuenta que recibe y trasnfiere dinero
                 $con['name'] = $project->id.'_'.$project->name;
                 $con['state'] = 0;
@@ -144,7 +144,7 @@ class CreateProject
                         $doc_ref_activity->drive_id = $build_folder->id;
                         $doc_ref_activity->save();
                     }
-                    
+
                     //Hacemos conexion con el drive y creamos el folder de Contabilidad. Metodos en Helper.php
                     $account_folder = Conection_Drive()->files->create(Create_Folder('Contabilidad', $project_folder->id), ['fields' => 'id']);
                     $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
@@ -172,15 +172,15 @@ class CreateProject
         } catch (Exception $e) {
             global $project_folder;
             //dd($project_folder->id);
-            if (!is_null ($project_folder) || !empty($project_folder)) 
+            if (!is_null ($project_folder) || !empty($project_folder))
             {
                 Conection_Drive()->files->delete($project_folder->id);
             }
             return [
                 'project' => null,
-                'message' => 'El proyecto no fue registrado, vuelva a intentar'
-            ];            
-        }            
+                'message' => 'El proyecto no fue registrado, vuelva a intentarlo'
+            ];
+        }
         return [
             'project' => $proj,
             'message' => 'Proyecto creado exitosamente'

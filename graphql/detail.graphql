@@ -2,23 +2,23 @@
 type Detail{
     id: ID!
     product:Product!
-    order:Order!
+    quotation:Quotation!
     measure:Measure!
     quantity:Int!
-    value:Int    
+    value:Int
     delivery_amount:Int
     subtotal:Int
 }
 
 #Mensaje exitoso de creacion
-type MessageSuccessDetail {    
+type MessageSuccessDetail {
     message: String
 }
 
 input DetailsOrder{
     id:ID!
     quantity: Int! @rules(apply: ["required", "integer"])
-    value:Int! @rules(apply: ["required", "integer"])    
+    value:Int! @rules(apply: ["required", "integer"])
 }
 
 extend type Mutation {

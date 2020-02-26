@@ -13,7 +13,6 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'quotation_id',
         'project_id',
         'contact_id',
         'name',
@@ -39,14 +38,8 @@ class Order extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function details()
-    {
-        return $this->hasMany('App\Detail');
-    }
     public function order_documents()
     {
         return $this->hasMany('App\Order_document');
     }
-
-
 }
