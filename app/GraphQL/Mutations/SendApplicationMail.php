@@ -61,12 +61,29 @@ class SendApplicationMail
             $this->orderRepo->update($order->id, $ord);
             $emails = $args['email_contacts']; //Array con ID de posibles proveedores
             foreach ($emails as $ema ) {
+                $quoOrd = $this->quotationRepo->QuotationsForOrder($args['order_id']);
+                $quotation = new Quotation;
+                $quotation->order_id = $args['order_id'];
+                $quotation->contact_id = $ema;
+                $quotation->authorized = false;
+                $quotation->save();     //guardamos la cotizacion solicitada
+
+                $details = $this->detailRepo->getDetailQuo($quoOrd[0]->id);
+
+                foreach ($details as $det) {
+                    $detail['product_id'] = $det->product_id;
+                    $detail['quo_id'] = $quotation->id;
+                    $detail['mea_id'] = $det->mea_id;
+                    $detail['quantity'] = $det->quantity;
+                    $this->detailRepo->create($detail);
+                    //dd($this->detailRepo->create($detail));
+                }
                 $data = [
                     'title' => 'Solicitud de Cotización',
                     'code' => $this->order_docRepo->getOrderDoc($args['order_id'], 0)->code, //consultamos el order doument, 0 = tipo de documento(Solicitud)
                     'provider' => $this->contactRepo->find($ema),
                     'sender' => $this->contactRepo->find($order->sender_data),
-                    'details' => $this->detailRepo->getDataPDF($order->id)
+                    'details' => $this->detailRepo->getDataPDF( $quotation->id)
                 ];
 
                 $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
@@ -95,11 +112,11 @@ class SendApplicationMail
                 $doc_ref_file->drive_id = $file_id['path'];
                 $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
 
-                $quotation = new Quotation;
-                $quotation->order_id = $args['order_id'];
-                $quotation->contact_id = $ema;
-                $quotation->authorized = false;
-                $quotation->save();     //guardamos la cotizacion solicitada
+                //$quotation = new Quotation;
+                //$quotation->order_id = $args['order_id'];
+                //$quotation->contact_id = $ema;
+                //$quotation->authorized = false;
+                //$quotation->save();     //guardamos la cotizacion solicitada
 
                 $hashed = Hash::make('quotation', [
                     'memory' => 1024,
@@ -112,7 +129,7 @@ class SendApplicationMail
                 //Envio de correo a cada uno de los contactos
                 Mail::to(User::find($ema)->email)
                 ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), $order));
-                
+
                 return $order;
             }
         }, 3);

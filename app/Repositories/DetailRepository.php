@@ -24,6 +24,12 @@ class DetailRepository extends BaseRepository
         where  d.quo_id = ?', [$quo_id]);
         return $detailsPDF;
     }
+    public function getDetailQuo($quo_id)
+    {
+        //Trae los detalles de una cotizacion
+        $data = DB::select('SELECT * FROM details where quo_id = ?',[$quo_id]);
+        return $data;
+    }
     //public function getDataPdfOrder($order_id)
     //{
     //    //Buscamos el folder padre donde se va crear el nuevo folder
