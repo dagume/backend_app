@@ -23,7 +23,10 @@ input DetailsOrder{
 
 extend type Mutation {
     #detail
-    updateDetailForOrder(
+    UpdateDetailQuotation(
         detailsOrder:[DetailsOrder]
-    ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailForOrder@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailQuotation@resolve") @middleware(checks:["auth:api"])
+    #updateDetailForOrder(
+    #    detailsOrder:[DetailsOrder]
+    #): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailForOrder@resolve") @middleware(checks:["auth:api"])
 }

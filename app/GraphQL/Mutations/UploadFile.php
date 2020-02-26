@@ -71,16 +71,7 @@ class UploadFile
             $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
             $quo['file_id'] = $args['drive_id'];
             $quo['file_date'] = now();
-            $this->quotationRepo->update($quotation->id, $quo);//actualizamos la cotizacion con su nuevo archivo cargado
-
-            ////Consultamos el registro del la orden donde guardaremos la cotizacion
-            //$document_reference = $this->document_referenceRepo->getFolderOrderCurrent($args['order_id']);
-            //$doc_ref['parent_document_id'] = $document_reference->id;
-            //$contact = $this->contactRepo->find($args['con_id']); //consultamos en contacto para asignarle un nombre
-            ////se le asigna un nombre
-            //$doc_ref['name'] = 'COT_'.$args['order_id'].'_'.date("d").date("m").date("y").$contact->name;
-            //$doc_ref['is_folder'] = false;
-            //$doc_ref['module_id'] = 5; // 5 = modulo de orden
+            $this->quotationRepo->update($quotation->id, $quo);//actualizamos la cotizacion con su nuevo archivo cargado            
         }
 
             //$mem_rol_id = $this->memberRepo->mem_rol_contact($args['contact_id']);         // Buscamos todos los roles_id y members_id que tiene el contacto
