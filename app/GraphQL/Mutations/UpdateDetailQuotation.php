@@ -12,7 +12,7 @@ class UpdateDetailQuotation
 
     protected $detailRepo;
 
-    public function __constructor(DetailRepository $detRepo)
+    public function __construct(DetailRepository $detRepo)
     {
         $this->detailRepo = $detRepo;
     }
@@ -27,10 +27,11 @@ class UpdateDetailQuotation
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $det = DB::transaction(function () use($args){  //se crea la transacion            
+        $det = DB::transaction(function () use($args){  //se crea la transacion
             foreach ($args['detailsOrder'] as $arg) {    //Vamos actualizando los detalles de la orden actual
                 $arg['subtotal'] = $arg['quantity'] * $arg['value'];
-                $updated_details = $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden                
+                //dd($arg);
+                $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
             }
         }, 3);
         return [

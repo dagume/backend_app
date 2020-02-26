@@ -56,7 +56,7 @@ extend type Mutation {
         description: String @rules(apply: ["nullable"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
-        state: stateActivity @rules(apply: ["required"])
+        state: stateActivity
         completed:Boolean @rules(apply: ["required"])
         priority:priorityActivity
         notes:String

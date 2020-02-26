@@ -27,6 +27,7 @@ type Contact {#implements GlobalSearch{
 }
 
 type Doc_contact{
+    doc_id:Int
     folder_id:String
     created_at:Date
     updated_at:Date

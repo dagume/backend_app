@@ -24,7 +24,7 @@ class Filter_contact
         $contacts = new User;
         $query = trim($args['searchText']);
         $contacts = DB::table('contacts')
-            ->where('state','=', 1)            
+            ->where('state','=', 1)
             ->where(function ($que) {
                 global $query;
                 $que->where(function ($que1) {
@@ -33,7 +33,7 @@ class Filter_contact
                 ->orwhere('identification_number','ILIKE',$query);
                 })
                 ->orwhere('name','ILIKE',$query);
-            })                     
+            })
             ->get();
         return $contacts;
 
