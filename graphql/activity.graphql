@@ -57,7 +57,7 @@ extend type Mutation {
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
         state: stateActivity
-        completed:Boolean @rules(apply: ["required"])
+        completed:Boolean
         priority:priorityActivity
         notes:String
         amount: Int @rules(apply: ["nullable", "integer"])
