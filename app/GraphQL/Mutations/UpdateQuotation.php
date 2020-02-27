@@ -32,6 +32,11 @@ class UpdateQuotation
     {
         $quo = DB::transaction(function () use($args){  //se crea la transacion
             $quotation = $this->quotationRepo->find($args['id']); //consultamos la cotizacion a autorizar
+            $quotations = $this->quotationRepo->QuotationsForOrder($quotation->order_id);
+            foreach ($quotations as $quos) {
+                $authorized['authorized'] = false;
+                $this->quotationRepo->update($quos->id, $authorized);
+            }
             $quo['authorized'] = true; //cambiamos el estadp de la quotation (Esta sera la cotizacion autorizada)
             $quo['date'] = now(); //registramos la fecha de autorizacion
             $order = $this->orderRepo->find($quotation->order_id);// Consultamos la orden para luego cambiar su sestado a Approved
