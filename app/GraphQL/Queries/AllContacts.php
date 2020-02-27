@@ -7,7 +7,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\User;
 use DB;
 
-class Filter_contact
+class AllContacts
 {
     /**
      * Return a value for the field.
@@ -20,21 +20,21 @@ class Filter_contact
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        global $query;
-        $contacts = new User;
-        $query = trim($args['searchText']);
-        $contacts = DB::table('contacts')
-            ->where('state','=', 1)
-            ->where(function ($que) {
-                global $query;
-                $que->where(function ($que1) {
-                    global $query;
-                    $que1->where('lastname','ILIKE',$query)
-                ->orwhere('identification_number','ILIKE',$query);
-                })
-                ->orwhere('name','ILIKE',$query);
-            })
-            ->get();
-        return $contacts;
+        //global $query;
+        //$contacts = new User;
+        //$query = trim($args['searchText']);
+        //$contacts = DB::table('contacts')
+        //    ->where('state','=', 1)
+        //    ->where(function ($que) {
+        //        global $query;
+        //        $que->where(function ($que1) {
+        //            global $query;
+        //            $que1->where('lastname','ILIKE',$query)
+        //        ->orwhere('identification_number','ILIKE',$query);
+        //        })
+        //        ->orwhere('name','ILIKE',$query);
+        //    })
+        //    ->get();
+        return null;
     }
 }

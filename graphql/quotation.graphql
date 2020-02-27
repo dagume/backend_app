@@ -5,7 +5,7 @@ type Quotation{
     order:Order
     contact:Contact
     file_id:String
-    details:Detail
+    details:[Detail]
     authorized:Boolean
     date: Date
     hash_id:String
