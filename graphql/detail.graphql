@@ -29,4 +29,8 @@ extend type Mutation {
     sendBuyOrder(
         quo_id:Int
     ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\SendBuyOrder@resolve") @middleware(checks:["auth:api"])
+
+    deleteDetail(id: ID!): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\DeleteDetail@resolve")
+
+
 }

@@ -4,18 +4,10 @@ namespace App\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Repositories\DetailRepository;
-use DB;
+use App\Detail;
 
-class UpdateDetailQuotation
+class DeleteDetail
 {
-
-    protected $detailRepo;
-
-    public function __construct(DetailRepository $detRepo)
-    {
-        $this->detailRepo = $detRepo;
-    }
     /**
      * Return a value for the field.
      *
@@ -27,14 +19,15 @@ class UpdateDetailQuotation
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $det = DB::transaction(function () use($args){  //se crea la transacion
-            foreach ($args['detailsOrder'] as $arg) {    //Vamos actualizando los detalles de la orden actual
-                $arg['subtotal'] = $arg['quantity'] * $arg['value'];
-                $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
-            }
-        }, 3);
-        return [
-            'message' => 'Cotazación registrada'
-        ];
+        try
+		{
+			$detail = Detail::find($args['id']);
+			$detail->delete();
+		}
+        catch (\Illuminate\Database\QueryException $e)
+        {
+			return ['message' => 'Este producto no se puede eliminar'];
+        }
+        return ['message' => 'Producto descartado'];
     }
 }

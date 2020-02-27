@@ -33,7 +33,7 @@ class UpdateQuotation
         $quo = DB::transaction(function () use($args){  //se crea la transacion
             $quotation = $this->quotationRepo->find($args['id']); //consultamos la cotizacion a autorizar
             $quotations = $this->quotationRepo->QuotationsForOrder($quotation->order_id);
-            foreach ($quotations as $quos) {
+            foreach ($quotations as $quos) { //recorremos todas las cotizaciones asociadas a esa orden para dejarlar en false y luego solo poner True la que se autorizo
                 $authorized['authorized'] = false;
                 $this->quotationRepo->update($quos->id, $authorized);
             }
