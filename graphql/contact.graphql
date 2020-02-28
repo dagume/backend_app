@@ -37,8 +37,9 @@ type Doc_contact{
 
 #regimen del contacto
 enum contactRegime{
-    Simplificado
-    Contributivo
+    No responsable de IVA
+    Responsable de IVA
+    Autoretenedor
 }
 
 #tipos de contacto
@@ -46,6 +47,7 @@ enum contactType{
     persona @enum(value: 1)
     empresa @enum(value: 2)
 }
+
 #Tipo de identificacion Contacto
 enum contactIdType{
     CC @enum(value: 1)
@@ -67,7 +69,7 @@ extend type Query{
     #filter_name_contact(name: String!  @where(operator: "ilike")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])
     contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
     #arreglar que no salga contacto del projecto
-    contacts: [Contact!]! @all(model: "App\\User")  #@middleware(checks:["auth:api"])
+    contacts(state:Int @where(operator: "=")): [Contact!]! @all(model: "App\\User")  #@middleware(checks:["auth:api"])
     contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") #@middleware(checks:["auth:api"])
 }
 extend type Mutation {
