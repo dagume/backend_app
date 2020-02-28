@@ -1,0 +1,12 @@
+#impuestos
+type Taxes{
+    id:ID!
+    name:String
+    percentage:Int
+}
+#extend type Query{
+#    taxes:[Taxes] @all(model:"App\\Taxe")
+#}
+#extend type Mutation{
+#
+#}

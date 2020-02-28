@@ -21,7 +21,9 @@ class Quotation extends Model
         'authorized',
         'date',
         'hash_id',
-        'file_date'
+        'file_date',
+        'discount',
+        'discount_type'
     ];
 
     public function details()

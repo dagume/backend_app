@@ -24,6 +24,8 @@ input DetailsOrder{
 extend type Mutation {
     #detail
     UpdateDetailQuotation(
+        discount:Int
+        discount_type:Int
         detailsOrder:[DetailsOrder]
     ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailQuotation@resolve") @middleware(checks:["auth:api"])
 

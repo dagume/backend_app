@@ -10,10 +10,18 @@ type Quotation{
     date: Date
     hash_id:String
     file_date:Date
+    discount:Int
+    discount_type:Discount_type
 }
 
 type Subscription {
     authorizationUpdated(authorized: Boolean): Quotation
+}
+
+#Tipo de descuento
+enum Discount_type{
+    AntesIVA @enum(value: 0)
+    DespuesIVA @enum(value: 1)
 }
 
 #Mensaje exitoso de creacion
