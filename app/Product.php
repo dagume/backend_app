@@ -15,9 +15,14 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'name',
-        'description'
+        'description',
+        'tax_id'
     ];
 
+    public function taxe()
+    {
+        return $this->belongsTo('App\Taxe');
+    }
     public function category()
     {
         return $this->belongsTo('App\Category');

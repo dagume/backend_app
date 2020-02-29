@@ -3,7 +3,8 @@ type Product {#implements GlobalSearch{
     id:ID!
     category:Category
     name:String!
-    description:String    
+    description:String
+    taxe:Taxe
 }
 type MessageSuccessProduct {
     product:Product
@@ -23,7 +24,7 @@ extend type Mutation {
         name: String! @rules(apply: ["required", "max:255","unique:products,name"])
         description: String @rules(apply: ["max:255"])
     ):MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") #@middleware(checks:["auth:api"])
-    
+
     updateProduct(
         id: ID! @rules(apply: ["required"])
         category_id: Int! @rules(apply: ["required"])
