@@ -6,19 +6,27 @@ type Taxe{
 
     products:[Product]
 }
+
 type MessageSuccessTaxe {
     taxe:Taxe
     message: String
 }
+
 extend type Query{
     taxes:[Taxe] @all(model:"App\\Taxe")
 }
 
 extend type Mutation{
-    #crear taxe
+    #crear impuesto
     createTaxe(
         name:String! @rules(apply:["required"])
         percentage:Int! @rules(apply:["required","integer"])
     ):MessageSuccessTaxe @field(resolver: "App\\GraphQL\\Mutations\\CreateTaxe@resolve") #@middleware(checks:["auth:api"])
-}
 
+    #actualizar impuesto
+    updateTaxe(
+        id:ID! @rules(apply: ["required"])
+        name:String! @rules(apply:["required"])
+        percentage:Int! @rules(apply:["required","integer"])
+    ): Taxe @update(model: "App\\Taxe")
+}
