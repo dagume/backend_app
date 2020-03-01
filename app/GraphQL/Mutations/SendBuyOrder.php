@@ -56,16 +56,27 @@ class SendBuyOrder
         $buy_order = DB::transaction(function () use($args){  //se crea la transacion
             $subtotal_order = 0;
             $quotation = $this->quotationRepo->find($args['quo_id']);
+
             if ($quotation->authorized == true) {
+
                 $details = $this->detailRepo->getDetailQuo($args['quo_id']);
                 foreach ($details as $det) {
                     $subtotal_order += $det->subtotal;
                 }
-                $iva = round($subtotal_order * 0.19, 2);
+
+                //if ($quotation->discount_type == 1) {
+                //    $discount = round($subtotal_order * 0.19, 2);
+//
+                //} else {
+                //    # code...
+                //}
+
+                $discount = round($subtotal_order * ($quotation->discount / 100), 2); // porcentaje de descuento
+
                 $order['contact_id'] = $quotation->contact_id;
                 $order['state'] = 2; // 2 = estado Orden abierta
                 $order['subtotal'] = $subtotal_order;
-                $order['total'] = $subtotal_order + $iva;
+                $order['total'] = $subtotal_order - $discount; //Total de la orden con descuento
                 $updated_order = $this->orderRepo->update($quotation->order_id, $order);
 
                 $order_doc['order_id'] = $quotation->order_id;
@@ -79,7 +90,9 @@ class SendBuyOrder
                     'code' => $order_doc['code'],
                     'provider' => $this->contactRepo->find($order['contact_id']),
                     'sender' => $this->contactRepo->find($updated_order->sender_data),
-                    'details' => $this->detailRepo->getDataPDF($quotation->id)
+                    'details' => $this->detailRepo->getDataPDF($quotation->id),
+                    'quotation' => $quotation,
+                    'discount' => $discount
                 ];
                 $pdf = PDF::loadView('orden', $data);   //Creacion del PDF
                 $pdf_name = $order_doc['code'].$this->contactRepo->find($updated_order->contact_id)->name;
@@ -104,11 +117,11 @@ class SendBuyOrder
                 $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
                 Mail::to(User::find($updated_order->contact_id)->email)
                     ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), Order::find($updated_order->id)));
-
+                return $message = 'Orden de Compra enviada.';
             }else {
-                return ['message'=>'No han autorizado esta compra'];
+                return $message = 'No han autorizado esta compra';
             }
         }, 3);
-        return ['message' => 'Orden de Compra enviada.'];
+        return ['message' => $buy_order];
     }
 }

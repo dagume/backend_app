@@ -102,9 +102,9 @@
                 @else
                     <p>SEÑORES</p>
                 @endif
-                
+
                 <b>{{$provider->name}} {{$provider->lastname}}</b><br/>
-                
+
                 @if ($provider->identification_type == 1)
                     <b>CC. {{$provider->identification_number}}</b>
                 @elseif ($provider->identification_type == 2)
@@ -131,6 +131,7 @@
                             <th>UNIDAD</th>
                             <th>CANTIDAD</th>
                             <th>PRECIO UNITARIO</th>
+                            <th>% IVA</th>
                             <th>COSTO TOTAL</th>
                         </tr>
                         @foreach ($details as  $key => $det)
@@ -140,10 +141,12 @@
                                 <td>{{ $det->measure_name }}</td>
                                 <td>{{ $det->quantity }}</td>
                                 <td>{{ $det->value_product }}</td>
+                                <td>{{ $det->percentage }}%</td>
                                 <td>{{ $det->subtotal_product }}</td>
                             </tr>
                         @endforeach
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -156,10 +159,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>IVA **%</td>
-                                <td>******</td>
+                                <td></td>
+                                <td>Descuento {{$quotation->discount}}%</td>
+                                <td>{{$discount}}</td>
                             </tr>
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

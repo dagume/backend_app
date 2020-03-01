@@ -15,11 +15,12 @@ class DetailRepository extends BaseRepository
     public function getDataPDF($quo_id)
     {
         //Buscamos el folder padre donde se va crear el nuevo folder
-        $detailsPDF = DB::select('select p.id as product_id, p.name as product_name, m.name as measure_name, d.quantity, d.value as value_product, d.subtotal as subtotal_product, o.subtotal as subtotal_order, o.total as total_order
+        $detailsPDF = DB::select('select p.id as product_id, p.name as product_name, m.name as measure_name, d.quantity, d.value as value_product,t.percentage, d.subtotal as subtotal_product, o.subtotal as subtotal_order, o.total as total_order
 		from orders as o
         inner join quotations as q on o.id = q.order_id
 		inner join details as d on q.id = d.quo_id
         inner join products as p on d.product_id = p.id
+		inner join taxes as t on p.tax_id = t.id
         inner join measures as m on d.mea_id = m.id
         where  d.quo_id = ?', [$quo_id]);
         return $detailsPDF;
