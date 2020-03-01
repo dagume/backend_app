@@ -21,7 +21,7 @@ class Product extends Model
 
     public function taxe()
     {
-        return $this->belongsTo('App\Taxe');
+        return $this->belongsTo('App\Taxe','tax_id');
     }
     public function category()
     {

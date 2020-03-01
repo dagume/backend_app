@@ -6,17 +6,20 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\DetailRepository;
 use App\Repositories\QuotationRepository;
+use App\Repositories\ProductRepository;
 use DB;
 
 class UpdateDetailQuotation
 {
     protected $detailRepo;
     protected $quotationRepo;
+    protected $productRepo;
 
-    public function __construct(DetailRepository $detRepo, QuotationRepository $quoRepo)
+    public function __construct(DetailRepository $detRepo, QuotationRepository $quoRepo, ProductRepository $proRepo)
     {
         $this->detailRepo = $detRepo;
         $this->quotationRepo = $quoRepo;
+        $this->productRepo = $proRepo;
     }
     /**
      * Return a value for the field.
@@ -29,12 +32,15 @@ class UpdateDetailQuotation
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $det = DB::transaction(function () use($args){  //se crea la transacion
+        DB::transaction(function () use($args){  //se crea la transacion
             foreach ($args['detailsOrder'] as $arg) {    //Vamos actualizando los detalles de la orden actual
-                $arg['subtotal'] = $arg['quantity'] * $arg['value'];
-                $detail = $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
+                $percentage = $this->detailRepo->getTaxeDetail($arg['id']); //porcentaje de Iva del producto
+                $subtotalWithOutIva = $arg['quantity'] * $arg['value']; //subtotal sin iva
+                $iva = round($subtotalWithOutIva * ($percentage->percentage / 100), 2); //Iva segun el establecido
+                $arg['subtotal'] = $subtotalWithOutIva + $iva;
+                $detailUpdate = $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
             }
-            $this->quotationRepo->update($detail->quo_id, $args);
+            $this->quotationRepo->update($detailUpdate->quo_id, $args);
         }, 3);
         return [
             'message' => 'Cotazación registrada'

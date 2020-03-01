@@ -30,6 +30,14 @@ class DetailRepository extends BaseRepository
         $data = DB::select('SELECT * FROM details where quo_id = ?',[$quo_id]);
         return $data;
     }
+    public function getTaxeDetail($detail_id)
+    {
+        //Buscamos el impuesto que trae el producto agregado en el detalle
+        $percentage = DB::select('select t.percentage from details as d
+        inner join products as p on p.id = d.product_id
+        inner join taxes as t on t.id = p.tax_id where d.id = ?', [$detail_id]);
+        return $percentage[0];
+    }
     //public function getDataPdfOrder($order_id)
     //{
     //    //Buscamos el folder padre donde se va crear el nuevo folder
