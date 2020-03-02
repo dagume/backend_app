@@ -13,6 +13,7 @@ use App\Repositories\DetailRepository;
 use App\Repositories\Document_referenceRepository;
 use App\Repositories\Order_documentRepository;
 use App\Repositories\ContactRepository;
+use App\Repositories\ProjectRepository;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -31,8 +32,9 @@ class Application_quotation
     protected $documentRepo;
     protected $order_docRepo;
     protected $contactRepo;
+    protected $projectRepo;
 
-    public function __construct(OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, Document_referenceRepository $docRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo)
+    public function __construct(ProjectRepository $proRepo, OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, Document_referenceRepository $docRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo)
     {
         $this->quotationRepo = $quoRepo;
         $this->orderRepo = $ordRepo;
@@ -40,6 +42,7 @@ class Application_quotation
         $this->documentRepo = $docRepo;
         $this->order_docRepo = $ordocRepo;
         $this->contactRepo = $conRepo;
+        $this->projectRepo = $proRepo;
     }
     /**
      * Return a value for the field.
@@ -97,7 +100,8 @@ class Application_quotation
                     'code' => $order_doc['code'],
                     'provider' => $this->contactRepo->find($ema),
                     'sender' => $this->contactRepo->find($order->sender_data),
-                    'details' => $this->detailRepo->getDataPDF($quotation->id)
+                    'details' => $this->detailRepo->getDataPDF($quotation->id),
+                    'project' => $this->projectRepo->find($args['project_id'])
                 ];
 
                 $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF

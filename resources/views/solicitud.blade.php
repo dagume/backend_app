@@ -75,9 +75,11 @@
 
 </head>
 <body>
-    <div id="watermark">
-        <img src="https://res.cloudinary.com/dqcyu2ism/image/upload/v1568132792/DOCUMENTOS_zlqusj.jpg" height="100%" widht="100%"/>
-    </div>
+    @if($project->association === 0)
+        <div id="watermark">
+            <img src="https://res.cloudinary.com/dqcyu2ism/image/upload/v1568132792/DOCUMENTOS_zlqusj.jpg" height="100%" widht="100%"/>
+        </div>
+    @endif 
     <main>
         <div class='page-header'>
             <h4>{{$title}}</h4>

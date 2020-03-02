@@ -130,9 +130,8 @@ class SendApplicationMail
                 //Envio de correo a cada uno de los contactos
                 Mail::to(User::find($ema)->email)
                 ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), $order));
-
-                return $order;
             }
+            return $order;
         }, 3);
         return [
             'order' => $orde,
