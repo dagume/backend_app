@@ -66,6 +66,7 @@ class SendApplicationMail
                 $quotation->order_id = $args['order_id'];
                 $quotation->contact_id = $ema;
                 $quotation->authorized = false;
+                $quotation->received = false;
                 $quotation->save();     //guardamos la cotizacion solicitada
 
                 $details = $this->detailRepo->getDetailQuo($quoOrd[0]->id);

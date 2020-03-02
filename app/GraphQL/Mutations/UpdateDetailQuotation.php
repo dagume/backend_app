@@ -40,6 +40,7 @@ class UpdateDetailQuotation
                 $arg['subtotal'] = $subtotalWithOutIva + $iva;
                 $detailUpdate = $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
             }
+            $args['received'] = false;
             $this->quotationRepo->update($detailUpdate->quo_id, $args);
         }, 3);
         return [

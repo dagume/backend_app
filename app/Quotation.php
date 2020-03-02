@@ -23,7 +23,8 @@ class Quotation extends Model
         'hash_id',
         'file_date',
         'discount',
-        'discount_type'
+        'discount_type',
+        'received'
     ];
 
     public function details()

@@ -12,6 +12,7 @@ type Quotation{
     file_date:Date
     discount:Int
     discount_type:Discount_type
+    received:Boolean
 }
 
 type Subscription {

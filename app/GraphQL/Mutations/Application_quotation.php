@@ -84,6 +84,7 @@ class Application_quotation
                 $quotation->order_id = $order->id;
                 $quotation->contact_id = $ema;
                 $quotation->authorized = false;
+                $quotation->received = false;
                 $quotation->save();     //guardamos la cotizacion solicitada
 
                 foreach ($args['updetails'] as $arg) {
@@ -99,7 +100,7 @@ class Application_quotation
                     'details' => $this->detailRepo->getDataPDF($quotation->id)
                 ];
 
-                $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
+                $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF
                 $pdf_name = $order_doc['code'].$this->contactRepo->find($ema)->name;
                 $pdf->save(storage_path('pdf').'/'.$pdf_name.'.pdf');
                 $adapter = new GoogleDriveAdapter(Conection_Drive(), $order_folder->id); //Cargar pdf en el drive
