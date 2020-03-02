@@ -84,7 +84,8 @@ class SendApplicationMail
                     'code' => $this->order_docRepo->getOrderDoc($args['order_id'], 0)->code, //consultamos el order doument, 0 = tipo de documento(Solicitud)
                     'provider' => $this->contactRepo->find($ema),
                     'sender' => $this->contactRepo->find($order->sender_data),
-                    'details' => $this->detailRepo->getDataPDF( $quotation->id)
+                    'details' => $this->detailRepo->getDataPDF( $quotation->id),
+                    'project' => $this->documentRepo->getFolderOrderCurrent($args['order_id'])->project_id
                 ];
 
                 $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
