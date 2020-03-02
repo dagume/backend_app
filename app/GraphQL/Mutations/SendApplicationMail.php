@@ -14,6 +14,7 @@ use App\Repositories\QuotationRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\DetailRepository;
+use App\Repositories\ProjectRepository;
 use App\Mail\RequestForQuotation;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -33,8 +34,10 @@ class SendApplicationMail
     protected $contactRepo;
     protected $orderRepo;
     protected $detailRepo;
+    protected $projectRepo;
 
-    public function __construct(Order_documentRepository $ordocRepo, Document_referenceRepository $docRepo, QuotationRepository $quoRepo, ContactRepository $conRepo, OrderRepository $ordRepo, DetailRepository $detRepo)
+
+    public function __construct(ProjectRepository $proRepo, Order_documentRepository $ordocRepo, Document_referenceRepository $docRepo, QuotationRepository $quoRepo, ContactRepository $conRepo, OrderRepository $ordRepo, DetailRepository $detRepo)
     {
         $this->order_docRepo = $ordocRepo;
         $this->documentRepo = $docRepo;
@@ -42,6 +45,8 @@ class SendApplicationMail
         $this->contactRepo = $conRepo;
         $this->orderRepo = $ordRepo;
         $this->detailRepo = $detRepo;
+        $this->projectRepo = $proRepo;
+
     }
 
     /**
@@ -79,13 +84,14 @@ class SendApplicationMail
                     $this->detailRepo->create($detail);
                     //dd($this->detailRepo->create($detail));
                 }
+                $project = $this->projectRepo->find($this->documentRepo->getFolderOrderCurrent($args['order_id'])->project_id);
                 $data = [
                     'title' => 'Solicitud de Cotización',
                     'code' => $this->order_docRepo->getOrderDoc($args['order_id'], 0)->code, //consultamos el order doument, 0 = tipo de documento(Solicitud)
                     'provider' => $this->contactRepo->find($ema),
                     'sender' => $this->contactRepo->find($order->sender_data),
                     'details' => $this->detailRepo->getDataPDF( $quotation->id),
-                    'project' => $this->documentRepo->getFolderOrderCurrent($args['order_id'])->project_id
+                    'project' => $project
                 ];
 
                 $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
