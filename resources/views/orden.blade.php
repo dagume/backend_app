@@ -183,8 +183,11 @@
                 <br/><br/>
                 <p>Cordialmente,</p>
                 <br/><br/>
-                <p>{{$sender->name}} {{$sender->lastname}}</p>
-                <p>{{$sender->email}}</p>
+                <b>Ing. LEONARDO ÁLVAREZ FONSECA</b>
+                <p>     Gerente General</p>
+                <br/><br/>
+                <p>Enviado por: {{$sender->name}} {{$sender->lastname}}</p>
+                <p>             {{$sender->email}}</p>
         </div>
     </main>
 </body>
