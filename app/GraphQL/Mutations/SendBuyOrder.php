@@ -54,29 +54,28 @@ class SendBuyOrder
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $buy_order = DB::transaction(function () use($args){  //se crea la transacion
-            $subtotal_order = 0;
+            $subtotal_with_iva = 0;
+            $subtotal = 0;
             $quotation = $this->quotationRepo->find($args['quo_id']);
 
             if ($quotation->authorized == true) {
 
                 $details = $this->detailRepo->getDetailQuo($args['quo_id']);
                 foreach ($details as $det) {
-                    $subtotal_order += $det->subtotal;
+                    $subtotal_with_iva += $det->subtotal;
+                    $subtotal += $det->value * $det->quantity;
                 }
 
-                //if ($quotation->discount_type == 1) {
-                //    $discount = round($subtotal_order * 0.19, 2);
-//
-                //} else {
-                //    # code...
-                //}
-
-                $discount = round($subtotal_order * ($quotation->discount / 100), 2); // porcentaje de descuento
+                if ($quotation->discount_type == 1) {
+                    $discount = round($subtotal_with_iva * ($quotation->discount / 100), 2); // porcentaje de descuento
+                } else {
+                    $discount = round($subtotal * ($quotation->discount / 100), 2); // porcentaje de descuento
+                }
 
                 $order['contact_id'] = $quotation->contact_id;
                 $order['state'] = 2; // 2 = estado Orden abierta
-                $order['subtotal'] = $subtotal_order;
-                $order['total'] = $subtotal_order - $discount; //Total de la orden con descuento
+                $order['subtotal'] = $subtotal_with_iva;
+                $order['total'] = $subtotal_with_iva - $discount; //Total de la orden con descuento
                 $updated_order = $this->orderRepo->update($quotation->order_id, $order);
 
                 $order_doc['order_id'] = $quotation->order_id;

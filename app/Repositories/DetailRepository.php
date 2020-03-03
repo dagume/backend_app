@@ -22,7 +22,7 @@ class DetailRepository extends BaseRepository
         inner join products as p on d.product_id = p.id
 		inner join taxes as t on p.tax_id = t.id
         inner join measures as m on d.mea_id = m.id
-        where  d.quo_id = ?', [$quo_id]);
+        where  d.quo_id = ? and quantity <> 0', [$quo_id]);
         return $detailsPDF;
     }
     public function getDetailQuo($quo_id)
