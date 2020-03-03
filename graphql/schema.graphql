@@ -30,6 +30,7 @@ type Mutation
 #import measure.graphql
 #import puc.graphql
 #import taxe.graphql
+#import payment_agreement.graphql
 
 #Mensaje exitoso de creacion
 type MessageSuccess {
