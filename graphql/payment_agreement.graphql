@@ -1,7 +1,7 @@
 #plan unico de cuentas
 type PaymentAgreement{
     id: ID!
-    order_id:Order
+    order:Order
     pay_date:Date
     amount:Int
     state:Boolean
