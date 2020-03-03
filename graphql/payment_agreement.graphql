@@ -1,0 +1,27 @@
+#plan unico de cuentas
+type PaymentAgreement{
+    id: ID!
+    order_id:Order
+    pay_date:Date
+    amount:Int
+    state:Boolean
+    #next_pay:Date
+}
+type MessageSuccessAgreement {
+    payment_agreement:PaymentAgreement
+    message: String
+}
+extend type Query{
+    #Query Puc
+    pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
+    pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
+    pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"        
+}
+extend type Mutation{
+    createPaymentAgreement(
+        order_id:Int
+        pay_date:Date
+        amount:Int
+        state:Boolean
+    ):PaymentAgreement @create(model: "App\\PaymentAgreement") 
+}
