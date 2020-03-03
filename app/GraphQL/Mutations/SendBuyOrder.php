@@ -92,7 +92,8 @@ class SendBuyOrder
                     'sender' => $this->contactRepo->find($updated_order->sender_data),
                     'details' => $this->detailRepo->getDataPDF($quotation->id),
                     'quotation' => $quotation,
-                    'discount' => $discount
+                    'discount' => $discount,
+                    'project' => $this->quotationRepo->getAssociation($args['quo_id']) //veridicamos si es consorcio o no el proyecto actual
                 ];
                 $pdf = PDF::loadView('orden', $data);   //Creacion del PDF
                 $pdf_name = $order_doc['code'].$this->contactRepo->find($updated_order->contact_id)->name;

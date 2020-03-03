@@ -79,7 +79,7 @@
         <div id="watermark">
             <img src="https://res.cloudinary.com/dqcyu2ism/image/upload/v1568132792/DOCUMENTOS_zlqusj.jpg" height="100%" widht="100%"/>
         </div>
-    @endif 
+    @endif
     <main>
         <div class='page-header'>
             <h4>{{$title}}</h4>
@@ -97,13 +97,13 @@
         <div id="page-content">
             <p>Tunja, {{date("d")}} de {{strftime("%B")}} de {{date("Y")}}</p>
             <br/>
-            <div id="receiver"> 
+            <div id="receiver">
 
                 @if($provider->type === 1)
                     <p>SEÑOR(A)</p>
                 @else
                     <p>SEÑORES</p>
-                @endif 
+                @endif
 
                 <b>{{$provider->name}} {{$provider->lastname}}</b><br/>
 

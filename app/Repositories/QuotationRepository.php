@@ -37,6 +37,16 @@ class QuotationRepository extends BaseRepository
         return $reference[0];
     }
 
+    public function getAssociation($quotation_id)
+    {
+        //Trae una cotizacion en especifico
+        $data = DB::select('select p.association from quotations as q
+        inner join orders as o on q.order_id = o.id
+        inner join projects as p on p.id = o.project_id
+        where  q.id = ?', [$quotation_id]);
+        return $data[0];
+    }
+
     //public function addQuotation($order_id, $contact_id)
     //{
     //    //actualiza una cotizacion
