@@ -15,6 +15,7 @@ type Order{
     lat:Float
     lon:Float
     order_documents:[Order_documents]
+    payment_agreements:[PaymentAgreement]
 }
 #Mensaje exitoso de creacion
 type MessageSuccessOrder {

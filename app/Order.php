@@ -42,4 +42,8 @@ class Order extends Model
     {
         return $this->hasMany('App\Order_document');
     }
+    public function payment_agreements()
+    {
+        return $this->hasMany('App\PaymentAgreement');
+    }
 }
