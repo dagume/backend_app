@@ -11,7 +11,7 @@ type Quotation{
     hash_id:String
     file_date:Date
     discount:Int
-    discount_type:Discount_type
+    discount_type:Int
     received:Boolean
 }
 
