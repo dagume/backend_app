@@ -35,14 +35,35 @@ class RolesController extends Controller
 
     public function index(Request $request)
     {
-        $user = DB::select('select * from contacts where id = ?', [5]);
-        //dd($user[0]->name);
-                $data = [
-                    'title' => 'Solicitud de Cotización',
-                    'user' => $user[0]
-                ];
+        $project = DB::select('select p.association from quotations as q
+        inner join orders as o on q.order_id = o.id
+        inner join projects as p on p.id = o.project_id
+        where  q.id =?', [80]);
+        $details = DB::select('select p.id as product_id, p.name as product_name, m.name as measure_name, d.quantity, d.value as value_product,t.percentage, d.subtotal as subtotal_product, o.subtotal as subtotal_order, o.total as total_order
+        from orders as o
+inner join quotations as q on o.id = q.order_id
+        inner join details as d on q.id = d.quo_id
+inner join products as p on d.product_id = p.id
+        inner join taxes as t on p.tax_id = t.id
+inner join measures as m on d.mea_id = m.id
+where  d.quo_id = ? and quantity <> 0', [80]);
+        $quo = DB::select('select * from quotations where id = ?', [80]);
+        $user = DB::select('select * from contacts where id = ?', [3]);
+        $discount = round(20000 * (10 / 100)); // porcentaje de descuento
 
-                $pdf = PDF::loadView('solicitud', $data)->setPaper('a4');   //Creacion del PDF
+        //dd($details);
+                $data = [
+                        'title' => 'Orden de compra',
+                        'code' => 'sc23423',
+                        'provider' => $user[0],
+                        'sender' => $user[0],
+                        'details' => $details,
+                        'quotation' => $quo[0],
+                        'discount' => $discount,
+                        'project' => $project[0] //veridicamos si es consorcio o no el proyecto actual
+                ];
+                //dd($data);
+                $pdf = PDF::loadView('orden', $data)->setPaper('a4');   //Creacion del PDF
                 //$pdf_name = $order_doc['code'].$this->contactRepo->find($ema)->name;
                 return $pdf->stream();
                 //$pdf->save(storage_path('pdf').'/'.$pdf_name.'.pdf');

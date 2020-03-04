@@ -17,8 +17,12 @@ type MessageSuccessDetail {
 
 input DetailsOrder{
     id:ID!
-    quantity: Int! @rules(apply: ["required", "integer"])
-    value:Int! @rules(apply: ["required", "integer"])
+    quantity: Int @rules(apply: ["required", "integer"])
+    value:Int @rules(apply: ["required", "integer"])
+}
+input DeliveryDetails{
+    id:ID!
+    delivery_amount:Int @rules(apply: ["required", "integer"])
 }
 
 extend type Mutation {
@@ -28,6 +32,10 @@ extend type Mutation {
         discount_type:Int
         detailsOrder:[DetailsOrder]
     ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDetailQuotation@resolve") #@middleware(checks:["auth:api"])
+    #actualizar entrega
+    updateDelivered(
+        delivery_details:[DeliveryDetails]
+    ): MessageSuccessDetail @field(resolver: "App\\GraphQL\\Mutations\\UpdateDeliveryDetails@resolve") #@middleware(checks:["auth:api"])
 
     sendBuyOrder(
         quo_id:Int
