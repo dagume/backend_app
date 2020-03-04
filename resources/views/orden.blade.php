@@ -54,7 +54,6 @@
             text-align: center;
         }
         #order-table, #body-order-table >td {
-            border: gray 1px solid;
             border-collapse: collapse;
             padding: 8px;
         }
@@ -70,6 +69,15 @@
         #page-footer > p {
             margin-bottom: 0;
             margin-top: 0;
+        }
+        .trWithoutBorder > td {
+            border: none;
+        }
+        .trWithBorder > td {
+            border: gray 1px solid;
+        }
+        .tdWithBorder {
+            border: gray 1px solid;
         }
     </style>
 
@@ -137,7 +145,7 @@
                             <th>COSTO TOTAL</th>
                         </tr>
                         @foreach ($details as  $key => $det)
-                            <tr>
+                            <tr class="trWithBorder">
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $det->product_name }}</td>
                                 <td>{{ $det->measure_name }}</td>
@@ -153,8 +161,8 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>SUBTOTAL</td>
-                                <td>{{ $details[0]->subtotal_order }}</td>
+                                <td class="tdWithBorder">SUBTOTAL</td>
+                                <td class="tdWithBorder">{{ $details[0]->subtotal_order }}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -162,8 +170,8 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>Descuento {{$quotation->discount}}%</td>
-                                <td>{{$discount}}</td>
+                                <td class="tdWithBorder">Descuento {{$quotation->discount}}%</td>
+                                <td class="tdWithBorder">{{$discount}}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -171,8 +179,8 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>TOTAL</td>
-                                <td>{{ $details[0]->total_order }}</td>
+                                <td class="tdWithBorder">TOTAL</td>
+                                <td class="tdWithBorder">{{ $details[0]->total_order }}</td>
                             </tr>
                     </tbody>
                 </table>
