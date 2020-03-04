@@ -62,10 +62,12 @@ class SendApplicationMail
     {
         $orde = DB::transaction(function () use($args){  //se crea la transacion
             $order = $this->orderRepo->find($args['order_id']);
-            $ord['state'] = 0;  //el valor 0 es el estado de application
-            $this->orderRepo->update($order->id, $ord);
+            //$ord['state'] = 0;  //el valor 0 es el estado de application
+            //$this->orderRepo->update($order->id, $ord);
+            $idContacts = $this->quotationRepo->getIDContactsOrder($args['order_id']);
             $emails = $args['email_contacts']; //Array con ID de posibles proveedores
-            foreach ($emails as $ema ) {
+            $send_this_emails = array_diff($emails, $idContacts); //Devuelve un array que contiene todas las entradas de idContacts que no están presentes en el arrayde emails.
+            foreach ($send_this_emails as $ema ) {
                 $quoOrd = $this->quotationRepo->QuotationsForOrder($args['order_id']);
                 $quotation = new Quotation;
                 $quotation->order_id = $args['order_id'];
@@ -138,6 +140,10 @@ class SendApplicationMail
                 Mail::to(User::find($ema)->email)
                 ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), $order));
             }
+            //dd(array_intersect($emails, $idContacts));
+            //if (!is_null(array_intersect($emails, $idContacts))) {
+            //   //AQUI VA SU CORREO
+            //}
             return $order;
         }, 3);
         return [

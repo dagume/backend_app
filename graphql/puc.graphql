@@ -4,6 +4,7 @@ type Puc{
     son_pucs: [Puc]
     name: String
     description: String
+    accounting_movements:[Accounting_movement]
 }
 
 type PucLevels{
@@ -14,6 +15,7 @@ type PucLevels{
     thirdlevel_id:Int
     thirdlevel_name:String
 }
+
 extend type Query{
     #Query Puc
     pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])

@@ -26,8 +26,12 @@ class UpdateDeliveryDetails
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function() use($args){
-
+            //validar si esa orden ya fue comprada
+            //Validar que la cantidad entregada no sea mayor a la cantidad comprada
+            foreach ($args['delivery_details'] as $arg) {
+                $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
+            }
         }, 3);
-        return null;
+        return ['message' => 'Entrega registrada'];
     }
 }

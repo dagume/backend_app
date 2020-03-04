@@ -12,12 +12,6 @@ class QuotationRepository extends BaseRepository
     {
         return new Quotation;
     }
-    //public function lastQuotation()
-    //{
-    //    //Trae la ultima cotizacion registrada
-    //    $reference = DB::select('SELECT id FROM quotations ORDER BY id DESC LIMIT 1'); //Quotation::max('id')
-    //    return $reference[0];
-    //}
     public function updateQuotation($quotation_id, $quotation_hash)
     {
         //actualiza una cotizacion
@@ -46,11 +40,14 @@ class QuotationRepository extends BaseRepository
         where  q.id = ?', [$quotation_id]);
         return $data[0];
     }
-
-    //public function addQuotation($order_id, $contact_id)
-    //{
-    //    //actualiza una cotizacion
-    //    $reference = DB::select('INSERT INTO quotations(order_id, contact_id ) VALUES (?, ?)', [$order_id, $contact_id]);
-    //    return $reference[0];
-    //}
+    public function getIDContactsOrder($order_id)
+    {
+        //Trae el id de los contactos a los que se ha cotizado en la orden
+        $data = DB::select('select contact_id from quotations where order_id = ?', [$order_id]);
+        //dd($data);
+        foreach ($data as $dat) {
+            $ids[] = $dat->contact_id; 
+        }
+        return $ids;
+    }
 }

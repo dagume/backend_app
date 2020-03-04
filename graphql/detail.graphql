@@ -22,7 +22,7 @@ input DetailsOrder{
 }
 input DeliveryDetails{
     id:ID!
-    delivery_amount:Int @rules(apply: ["required", "integer"])
+    delivered_amount:Int @rules(apply: ["required", "integer"])
 }
 
 extend type Mutation {
