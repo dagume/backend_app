@@ -13,9 +13,15 @@ type MessageSuccessAgreement {
 }
 extend type Query{
     #Query Puc
-    pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
-    pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
-    pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"        
+    PaymentAgreements: [PaymentAgreement] @all(model: "App\\PaymentAgreement") #@middleware(checks:["auth:api"])  #, "can:project.list"
+
+    todayPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\TodayPaymentAgreement@resolve")
+    weekPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\WeekPaymentAgreements@resolve")
+    monthPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\MonthPaymentAgreements@resolve")
+
+    #pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
+    #pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
+    #pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"        
 }
 extend type Mutation{
     createPaymentAgreement(

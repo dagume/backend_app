@@ -67,9 +67,9 @@ class SendBuyOrder
                 }
 
                 if ($quotation->discount_type == 1) {
-                    $discount = round($subtotal_with_iva * ($quotation->discount / 100), 2); // porcentaje de descuento
+                    $discount = round($subtotal_with_iva * ($quotation->discount / 100)); // porcentaje de descuento
                 } else {
-                    $discount = round($subtotal * ($quotation->discount / 100), 2); // porcentaje de descuento
+                    $discount = round($subtotal * ($quotation->discount / 100)); // porcentaje de descuento
                 }
 
                 $order['contact_id'] = $quotation->contact_id;

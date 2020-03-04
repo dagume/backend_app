@@ -63,7 +63,7 @@ class UpdateDetailForOrder
             $quotations = $this->quotationRepo->QuotationsForOrder($updated_details->order_id);
             foreach ($quotations as $quo) {
                 if ($quo->authorized == true) {
-                    $iva = round($order_subtotal * 0.19, 2);
+                    $iva = round($order_subtotal * 0.19);
                     $order['contact_id'] = $quo->contact_id;
                     $order['state'] = 2; // 2 = estado Orden abierta
                     $order['subtotal'] = $order_subtotal;

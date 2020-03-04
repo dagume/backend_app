@@ -36,7 +36,7 @@ class UpdateDetailQuotation
             foreach ($args['detailsOrder'] as $arg) {    //Vamos actualizando los detalles de la orden actual
                 $percentage = $this->detailRepo->getTaxeDetail($arg['id']); //porcentaje de Iva del producto
                 $subtotalWithOutIva = $arg['quantity'] * $arg['value']; //subtotal sin iva
-                $iva = round($subtotalWithOutIva * ($percentage->percentage / 100), 2); //Iva segun el establecido
+                $iva = round($subtotalWithOutIva * ($percentage->percentage / 100)); //Iva segun el establecido
                 $arg['subtotal'] = $subtotalWithOutIva + $iva;
                 $detailUpdate = $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
             }
