@@ -10,7 +10,7 @@ class Accounting_movement extends Model
 
     protected $primaryKey = 'id';
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'puc_id', //

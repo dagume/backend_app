@@ -15,10 +15,11 @@ type Accounting_movement {
     exist_code:Boolean    
 }
 #Mensaje exitoso de creacion
-#type MessageSuccessAccountMovement {
-#    accounting_movement:Accounting_movement
-#    message: String
-#}
+type MessageSuccessAccountMovement {
+    accounting_movement:Accounting_movement
+    message: String
+}
+
 extend type Query{
     #movimientos entre cuentas
     account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
@@ -36,6 +37,6 @@ extend type Mutation {
         payment_method:String @rules(apply: ["required", "max:255"])
         value:Int @rules(apply: ["required","integer"])
         state_movement:String
-        code:String @rules(apply: ["required", "max:255"])        
-    ):Accounting_movement @create(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
+        code:String     
+    ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") #@middleware(checks:["auth:api"])
 }
