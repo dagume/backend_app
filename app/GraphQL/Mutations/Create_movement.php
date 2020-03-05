@@ -5,15 +5,18 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Accounting_movementRepository;
+use App\Repositories\MemberRepository;
 use DB;
 
 class Create_movement
 {
     protected $accountRepo;
+    protected $memberRepo;
 
-    public function __construct(Accounting_movementRepository $acoRepo)
+    public function __construct(MemberRepository $memRepo, Accounting_movementRepository $acoRepo)
     {
         $this->accountRepo = $acoRepo;
+        $this->memberRepo = $memRepo;
     }
     /**
      * Return a value for the field.
@@ -29,7 +32,22 @@ class Create_movement
         $mov = DB::transaction(function () use($args){
             $args['registration_date'] = now();
             $args['sender_id'] = auth()->user()->id;
-            $movement = $this->accountRepo->create($args);
+            if ($args['type_movement'] == 2 && is_null($args['puc_id'])) {
+                
+                $args['puc_id']= 112010; //REvisar que cuenta del puc va (Cuentas por cobrar)
+                $movement = $this->accountRepo->create($args); 
+                $origin = $args['origin_id'];
+                $destination = $args['destination_id'];
+                $args['puc_id']= 2335; //REvisar que cuenta del puc va (Cuentas por pagar)
+                $args['origin_id']= $destination; 
+                $args['destination_id']= $origin; 
+                $args['state_movement']= false; 
+                $args['project_id']= $this->memberRepo->project_idMember($destination)->project_id; 
+                $entry = $this->accountRepo->create($args);
+            }else{
+                $movement = $this->accountRepo->create($args);
+
+            }
             return $movement;
         }, 3);
         return [

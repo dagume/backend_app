@@ -18,6 +18,11 @@ class MemberRepository extends BaseRepository
         $data = DB::select('DELETE FROM members where project_id = ? and contact_id = ?',[$project_id, $contact_id]);
         return $data;
     }
+    public function project_idMember($member_id)
+    {
+        $data = DB::select('select project_id FROM members where id = ?',[$member_id]);
+        return $data[0];
+    }
     //public function mem_rol_contact($contact_id)
     //{
     //    //traemos todos los roles de un contacto en todo el sistema

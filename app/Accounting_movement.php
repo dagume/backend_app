@@ -24,7 +24,8 @@ class Accounting_movement extends Model
         'state_movement',
         'sender_id',
         'code', //
-        'exist_code'
+        'type_movement'
+        //'exist_code'
     ];
 
 

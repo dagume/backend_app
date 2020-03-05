@@ -9,10 +9,16 @@ type Accounting_movement {
     movement_date:Date
     payment_method:String
     value:Int
-    state_movement:String
+    state_movement:Boolean
     sender_id:Int
     code:String
-    exist_code:Boolean    
+    #exist_code:Boolean 
+    type_movement:type_mov   
+}
+enum type_mov{
+    Ingreso @enum(value: 0)
+    Gasto @enum(value: 1)
+    Transferencia @enum(value: 2)
 }
 #Mensaje exitoso de creacion
 type MessageSuccessAccountMovement {
@@ -31,14 +37,15 @@ extend type Query{
 extend type Mutation {
     #movimientos entre cuentas
     create_movement(
-        puc_id: Int @rules(apply: ["required","integer"])
+        puc_id: Int @rules(apply: ["nullable"])
         project_id: Int @rules(apply: ["required","integer"])
         destination_id: Int @rules(apply: ["integer"])
         origin_id: Int @rules(apply: ["required","integer"])
         movement_date:Date @rules(apply: ["date"])
         payment_method:String @rules(apply: ["required", "max:255"])
         value:Int @rules(apply: ["required","integer"])
-        state_movement:String
-        code:String     
+        state_movement:Boolean
+        code:String  
+        type_movement:type_mov @rules(apply: ["required"])
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
 }
