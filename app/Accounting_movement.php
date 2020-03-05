@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Accounting_movement extends Model
 {
-    protected  $table= 'accounting_movements';
+    protected  $table = 'accounting_movements';
 
     protected $primaryKey = 'id';
 
@@ -24,7 +24,6 @@ class Accounting_movement extends Model
         'state_movement',
         'sender_id',
         'code', //
-        'type_movement'
         //'exist_code'
     ];
 

@@ -13,7 +13,6 @@ type Accounting_movement {
     sender_id:Int
     code:String
     #exist_code:Boolean 
-    type_movement:type_mov   
 }
 enum type_mov{
     Ingreso @enum(value: 0)
@@ -46,6 +45,5 @@ extend type Mutation {
         value:Int @rules(apply: ["required","integer"])
         state_movement:Boolean
         code:String  
-        type_movement:type_mov @rules(apply: ["required"])
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
 }

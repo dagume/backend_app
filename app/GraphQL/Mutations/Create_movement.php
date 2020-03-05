@@ -32,22 +32,22 @@ class Create_movement
         $mov = DB::transaction(function () use($args){
             $args['registration_date'] = now();
             $args['sender_id'] = auth()->user()->id;
-            if ($args['type_movement'] == 2 && is_null($args['puc_id'])) {
-                
-                $args['puc_id']= 112010; //REvisar que cuenta del puc va (Cuentas por cobrar)
-                $movement = $this->accountRepo->create($args); 
-                $origin = $args['origin_id'];
-                $destination = $args['destination_id'];
-                $args['puc_id']= 2335; //REvisar que cuenta del puc va (Cuentas por pagar)
-                $args['origin_id']= $destination; 
-                $args['destination_id']= $origin; 
-                $args['state_movement']= false; 
-                $args['project_id']= $this->memberRepo->project_idMember($destination)->project_id; 
-                $entry = $this->accountRepo->create($args);
-            }else{
+            //if ($args['type_movement'] == 2 && is_null($args['puc_id'])) {
+            //    
+            //    $args['puc_id']= 112010; //REvisar que cuenta del puc va (Cuentas por cobrar)
+            //    $movement = $this->accountRepo->create($args); 
+            //    $origin = $args['origin_id'];
+            //    $destination = $args['destination_id'];
+            //    $args['puc_id']= 2335; //REvisar que cuenta del puc va (Cuentas por pagar)
+            //    $args['origin_id']= $destination; 
+            //    $args['destination_id']= $origin; 
+            //    $args['state_movement']= false; 
+            //    $args['project_id']= $this->memberRepo->project_idMember($destination)->project_id; 
+            //    $entry = $this->accountRepo->create($args);
+            //}else{
                 $movement = $this->accountRepo->create($args);
 
-            }
+            //}
             return $movement;
         }, 3);
         return [
