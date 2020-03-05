@@ -22,16 +22,16 @@ type MessageSuccessAccountMovement {
 
 extend type Query{
     #movimientos entre cuentas
-    account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
+    #account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
     #movimientos entre cuentas desde un project
-    project_movement(puc_id:Int @where(operator: "=") project_id:Int @where(operator: "=")): [Accounting_movement] @all(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
+    puc_movements(puc_id:Int @where(operator: "=") project_id:Int @where(operator: "=")): [Accounting_movement] @all(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
 }
 extend type Mutation {
     #movimientos entre cuentas
     create_movement(
         puc_id: Int @rules(apply: ["required","integer"])
         project_id: Int @rules(apply: ["required","integer"])
-        destination_id: Int @rules(apply: ["required","integer"])
+        destination_id: Int @rules(apply: ["integer"])
         origin_id: Int @rules(apply: ["required","integer"])
         movement_date:Date @rules(apply: ["date"])
         payment_method:String @rules(apply: ["required", "max:255"])
