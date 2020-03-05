@@ -12,5 +12,5 @@ class RoleRepository extends BaseRepository
     {
         return new Role;
     }
-    
+       
 }

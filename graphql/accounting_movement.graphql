@@ -21,6 +21,8 @@ type MessageSuccessAccountMovement {
 }
 
 extend type Query{
+    #movimiento
+    movement(id:Int! @eq): Accounting_movement @find(model:"App\\Accounting_movement")
     #movimientos entre cuentas
     #account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
     #movimientos entre cuentas desde un project

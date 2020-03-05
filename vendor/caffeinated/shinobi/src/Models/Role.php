@@ -19,7 +19,7 @@ class Role extends Model implements RoleContract
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'description', 'special'];
+    protected $fillable = ['name', 'slug', 'description', 'special', 'is_visible'];
 
     /**
      * Create a new Role instance.
