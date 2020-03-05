@@ -6,6 +6,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Accounting_movementRepository;
 use DB;
+
 class Create_movement
 {
     protected $accountRepo;

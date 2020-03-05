@@ -38,5 +38,5 @@ extend type Mutation {
         value:Int @rules(apply: ["required","integer"])
         state_movement:String
         code:String     
-    ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") #@middleware(checks:["auth:api"])
+    ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
 }
