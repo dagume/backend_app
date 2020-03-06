@@ -40,7 +40,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-   
+
     public function parent_contact()
     {
         return $this->BelongsTo(User::class, 'parent_contact_id');
@@ -60,9 +60,9 @@ class User extends Authenticatable
     public function quotations()
     {
         return $this->hasMany('App\Quotation', 'contact_id', 'id');
-    }    
+    }
     public function documents_contact()
     {
-        return $this->hasMany('App\Document_contact');
+        return $this->hasMany('App\Document_contact','con_id');
     }
 }

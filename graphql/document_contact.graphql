@@ -2,10 +2,11 @@
 type Document_contact {
   id: ID!
   contact: Contact
-  document_rol: Document_rol  
+  document_rol: Document_rol
+  document_references: [Document_reference]
 }
 
-#extend type Query{      
+#extend type Query{
     #Query documentos requeridos
 
     #filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])

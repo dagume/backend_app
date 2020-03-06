@@ -26,4 +26,8 @@ class Document_contact extends Model
     {
         return $this->belongsTo('App\Document_rol', 'doc_id','id');
     }
+    public function document_references()
+    {
+        return $this->hasMany('App\Document_reference', 'doc_id','id');
+    }
 }
