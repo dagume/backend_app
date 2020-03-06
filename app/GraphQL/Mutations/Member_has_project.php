@@ -4,11 +4,18 @@ namespace App\GraphQL\Mutations;
 
 use App\Member;
 use GraphQL\Type\Definition\ResolveInfo;
-use DB;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\Repositories\MemberRepository;
+use DB;
 
 class Member_has_project
 {
+    protected $memberRepo;
+
+    public function __construct(MemberRepository $memRepo)
+    {
+        $this->memberRepo = $memRepo;
+    }
     /**
      * Return a value for the field.
      *
@@ -21,13 +28,12 @@ class Member_has_project
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $mem = DB::transaction(function () use($args){
-            $member = new Member;
-            $member->project_id     = $args['project_id'];
-            $member->contact_id     = $args['contact_id'];
-            $member->role_id        = $args['role_id'];
-            $member->state          = $args['state'];
-            $member->save();
-            
+            $args['state'] = 1;
+            $member = $this->memberRepo->create($args);
+
+            //if ($args['project_id'] == ) {
+            //    # code...
+            //}
             //dd($member);
             return $member;
         }, 3);

@@ -39,7 +39,6 @@ extend type Mutation {
         project_id: Int @rules(apply: ["integer", "required"])
         contact_id: Int @rules(apply: ["integer","required"])
         role_id:     Int @rules(apply: ["integer","required"])
-        state:  Int = 1
     ):MessageSuccessMember @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
 
     delete_member(id: ID!): Member @delete
