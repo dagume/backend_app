@@ -23,7 +23,6 @@ type Contact {#implements GlobalSearch{
     orders:[Order]
     quotations:[Quotation]
     documents_contact:[Document_contact]
-
 }
 
 type Doc_contact{
@@ -44,8 +43,10 @@ enum contactRegime{
 
 #tipos de contacto
 enum contactType{
+    #proyecto @enum(value: 0)
     persona @enum(value: 1)
     empresa @enum(value: 2)
+
 }
 
 #Tipo de identificacion Contacto

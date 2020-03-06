@@ -68,6 +68,7 @@ class CreateProject
                 //como una cuenta que recibe y trasnfiere dinero
                 $con['name'] = $project->id.'_'.$project->name;
                 $con['state'] = 0;
+                $con['type'] = 0;
                 $contact = $this->contactRepo->create($con);
                 $member['project_id'] = $project->id;
                 $member['contact_id'] = $contact->id;
