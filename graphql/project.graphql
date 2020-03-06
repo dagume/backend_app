@@ -32,7 +32,7 @@ enum typeProject {
 enum associationProject {
     APP @enum(value: 0)
     consorcio @enum(value: 1)
-    
+
 }
 enum state_project {
     Seleccion @enum(value: 1)

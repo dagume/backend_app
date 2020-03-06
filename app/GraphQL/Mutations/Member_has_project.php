@@ -27,6 +27,7 @@ class Member_has_project
             $member->role_id        = $args['role_id'];
             $member->state          = $args['state'];
             $member->save();
+            
             //dd($member);
             return $member;
         }, 3);

@@ -46,7 +46,6 @@ enum contactType{
     #proyecto @enum(value: 0)
     persona @enum(value: 1)
     empresa @enum(value: 2)
-
 }
 
 #Tipo de identificacion Contacto

@@ -68,11 +68,12 @@ class CreateProject
                 //como una cuenta que recibe y trasnfiere dinero
                 $con['name'] = $project->id.'_'.$project->name;
                 $con['state'] = 0;
-                $con['type'] = 0;
+                $con['type'] = 0; // 0 = Tipo de contacto PROYECTO
                 $contact = $this->contactRepo->create($con);
                 $member['project_id'] = $project->id;
                 $member['contact_id'] = $contact->id;
                 $member['role_id'] = DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id;
+                //PENDIENTE QUE ESTADO DEJAR A MEMBER
                 $this->memberRepo->create($member);
 
                 if ($args['parent_project_id'] != null) {   //Si es proyecto padre no se le crea estructura de carpetas
