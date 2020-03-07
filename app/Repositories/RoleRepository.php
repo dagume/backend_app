@@ -12,5 +12,11 @@ class RoleRepository extends BaseRepository
     {
         return new Role;
     }
-       
+    public function getRolProject()
+    {
+        $data = DB::select('select id from roles where name = ?', ['Proyecto']);
+        return $data[0];
+    }
+    
+
 }

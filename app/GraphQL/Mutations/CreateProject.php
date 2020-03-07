@@ -14,6 +14,7 @@ use App\Repositories\Document_referenceRepository;
 use App\Repositories\ActivityRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\MemberRepository;
+use App\Repositories\RoleRepository;
 
 class CreateProject
 {
@@ -22,13 +23,15 @@ class CreateProject
     protected $activityRepo;
     protected $contactRepo;
     protected $memberRepo;
+    protected $roleRepo;
 
-    public function __construct(ProjectRepository $proRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo, ContactRepository $conRepo, MemberRepository $memRepo){
+    public function __construct(RoleRepository $rolRepo, ProjectRepository $proRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo, ContactRepository $conRepo, MemberRepository $memRepo){
         $this->projectRepo = $proRepo;
         $this->documentRepo = $docRepo;
         $this->activityRepo = $actRepo;
         $this->contactRepo = $conRepo;
         $this->memberRepo = $memRepo;
+        $this->roleRepo = $rolRepo;
     }
 
     /**
@@ -47,12 +50,10 @@ class CreateProject
             //dd(DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id);
             //Transaccion para create
             $proj = DB::transaction(function () use($args){
-                //buscamos el id del projecto para asignarlo a su nombre en DRIVE
-                $id = $this->projectRepo->lastProject()->id + 1;
                 if ($args['type'] == 0) {
-                    $folder_name = $id.'_pub_' . $args['name'];
+                    $folder_name = 'pub_' . $args['name'];
                 }else {
-                    $folder_name = $id.'_priv_' . $args['name'];
+                    $folder_name = 'priv_' . $args['name'];
                 }
                 if ($args['parent_project_id'] != null) {
                     //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
@@ -72,8 +73,8 @@ class CreateProject
                 $contact = $this->contactRepo->create($con);
                 $member['project_id'] = $project->id;
                 $member['contact_id'] = $contact->id;
-                $member['role_id'] = DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id;
-                //PENDIENTE QUE ESTADO DEJAR A MEMBER
+                $member['role_id'] = $this->roleRepo->getRolProject()->id;
+                //Estos miembros tendran estado null para saber que es el miembro propio del projecto
                 $this->memberRepo->create($member);
 
                 if ($args['parent_project_id'] != null) {   //Si es proyecto padre no se le crea estructura de carpetas
