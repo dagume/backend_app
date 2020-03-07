@@ -14,4 +14,6 @@ type Document_reference{
     document_contact:Document_contact
     order_id:Int
     drive_id: String
+    created_at:Date 
+    updated_at:Date
 }

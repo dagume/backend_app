@@ -107,4 +107,9 @@ extend type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
     ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
+    
+    updateContactState(
+        id: ID! @rules(apply: ["required"])
+        state:Int @rules(apply: ["required"])
+    ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
 }
