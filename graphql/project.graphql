@@ -52,6 +52,19 @@ input placeProject{
 
 }
 
+
+############################################
+input OrderByClause{
+    field: String!
+    order: SortOrder!
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}
+#############################################
+
 extend type Query{
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
@@ -62,9 +75,9 @@ extend type Query{
     projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos por estado
-    state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    ########state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos por fecha de inicio
-    projects_descending_order: [Project] @field(resolver: "App\\GraphQL\\Queries\\ProjectsDescendingOrder@resolve")
+    state_projects(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project")
 
 }
 

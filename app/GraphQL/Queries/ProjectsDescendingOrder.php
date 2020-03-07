@@ -19,7 +19,9 @@ class ProjectsDescendingOrder
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $projects = DB::select('select * from projects where parent_project_id IS NOT NULL and state <> 4 order by start_date desc');
+        $projects = DB::select('select * from projects 
+            where parent_project_id IS NOT NULL 
+            and state <> 4 order by start_date desc');
         return $projects;
     }
 }
