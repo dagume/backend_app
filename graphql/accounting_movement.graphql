@@ -18,12 +18,14 @@ enum pay_meth{
     Efectivo @enum(value: 0)
     TarjetaCredito @enum(value: 1)
     PSE @enum(value: 2)
+    Transferencia @enum(value: 3)
 }
 
 enum type_mov{
     Ingreso @enum(value: 0)
     Gasto @enum(value: 1)
     Transferencia @enum(value: 2)
+    
 }
 #Mensaje exitoso de creacion
 type MessageSuccessAccountMovement {
