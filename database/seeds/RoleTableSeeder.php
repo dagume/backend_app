@@ -65,7 +65,7 @@ class RoleTableSeeder extends Seeder
         'name'          => 'Proyecto',
         'slug'          => 'Proyecto',
         'special'       => 'no-access',
-        'is_visible'   => false,
+        'is_visible'   => true,
         ]);
     }
 }

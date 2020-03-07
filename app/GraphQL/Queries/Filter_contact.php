@@ -24,7 +24,7 @@ class Filter_contact
         $contacts = new User;
         $query = trim($args['searchText']);
         $contacts = DB::table('contacts')
-            ->where('state','=', 1)
+            ->where('type','!=', 0)
             ->where(function ($que) {
                 global $query;
                 $que->where(function ($que1) {
