@@ -32,6 +32,7 @@ type Doc_contact{
     updated_at:Date
     drive_id:String
     name_required_documents:String
+    role_id:Int
 }
 
 #regimen del contacto
@@ -63,7 +64,7 @@ type MessageSuccessContact {
 }
 extend type Query{
     #Query documentos requerido por contacto
-    require_doc_contact(contact_id: Int! @eq project_id:Int! @eq): [Doc_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") #@middleware(checks:["auth:api"])
+    require_doc_contact(contact_id: Int! @eq): [Doc_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") #@middleware(checks:["auth:api"])
     #Query Contacts
     filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")#@middleware(checks:["auth:api"])
     #filter_name_contact(name: String!  @where(operator: "ilike")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])
