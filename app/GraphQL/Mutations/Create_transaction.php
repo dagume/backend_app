@@ -7,8 +7,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Accounting_movementRepository;
 use App\Repositories\MemberRepository;
 use DB;
-
-class Create_movement
+class Create_transaction
 {
     protected $accountRepo;
     protected $memberRepo;
@@ -30,13 +29,21 @@ class Create_movement
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $mov = DB::transaction(function () use($args){
-            
             $args['registration_date'] = now();
-            $args['sender_id'] = auth()->user()->id;
+            $args['sender_id'] = auth()->user()->id;                   
             $args['state_movement'] = True;
-            
+            $args['puc_id']= 112010; //Revisar que cuenta del puc va (Cuentas por cobrar)
             $movement = $this->accountRepo->create($args);
             
+            $origin = $args['origin_id'];
+            $destination = $args['destination_id'];
+            $args['puc_id']= 2335; //Revisar que cuenta del puc va (Cuentas por pagar)
+            $args['origin_id']= $destination;
+            $args['destination_id']= $origin;
+            $args['state_movement']= false;
+            $args['project_id']= $this->memberRepo->project_idMember($destination)->project_id;
+            $entry = $this->accountRepo->create($args);
+    
             return $movement;
         }, 3);
         return [
