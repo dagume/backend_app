@@ -73,10 +73,9 @@ extend type Query{
     #projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    ########projects_paginator_with_parent(parent_project_id: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos por estado
     state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
-    #Lista proyectos por fecha de inicio
+    #Lista proyectos con todos los filtros
     projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project")
 }
 

@@ -20,5 +20,6 @@ extend type Query{
     #Query Puc
     pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
     pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
+    puc(id:Int @eq name:String @eq): Puc @find(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"    
     pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"        
 }
