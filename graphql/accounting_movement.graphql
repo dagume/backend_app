@@ -52,14 +52,12 @@ extend type Mutation {
         code:String
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
     #Transaciones entre cuentas
-    create_transaction(
-        puc_id: Int @rules(apply: ["nullable"])
+    create_transaction(        
         project_id: Int @rules(apply: ["required","integer"])
         destination_id: Int @rules(apply: ["integer"])
         origin_id: Int @rules(apply: ["required","integer"])
         movement_date:Date @rules(apply: ["date"])
         payment_method:pay_meth
         value:Int @rules(apply: ["required","integer"])
-        code:String
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_transaction@resolve") @middleware(checks:["auth:api"])
 }
