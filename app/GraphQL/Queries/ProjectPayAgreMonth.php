@@ -7,7 +7,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\PaymentAgreementRepository;
 use DB;
 
-class PaymentAgreementsDate
+class ProjectPayAgreMonth
 {
     protected $payment;
 
@@ -26,8 +26,9 @@ class PaymentAgreementsDate
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $pay_date = '\''.$args['pay_date'].'\'';
-        $payments = $this->payment->getPaymentAgreementsDate($args['project_id'], $pay_date);
+        $first_date = '\''.$args['first_date'].'\'';
+        $end_date = '\''.$args['end_date'].'\'';
+        $payments = $this->payment->getprojectPayAgreMonth($args['project_id'], $first_date, $end_date);
         return $payments;
     }
 }

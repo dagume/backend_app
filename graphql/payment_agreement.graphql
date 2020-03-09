@@ -28,6 +28,7 @@ extend type Query{
     monthPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\MonthPaymentAgreements@resolve")
 
     paymentAgreementsDate(pay_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\PaymentAgreementsDate@resolve") #@middleware(checks:["auth:api"])  #, "can:project.list"
+    projectPayAgreMonth(first_date: Date! end_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\ProjectPayAgreMonth@resolve") #@middleware(checks:["auth:api"])  #, "can:project.list"
 
     #pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
     #pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
