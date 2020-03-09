@@ -14,6 +14,7 @@ type Order{
     sender_data:Contact
     lat:Float
     lon:Float
+    pending_debt:Int
     order_documents:[Order_documents]
     payment_agreements:[PaymentAgreement]
 }

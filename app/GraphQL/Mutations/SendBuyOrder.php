@@ -76,6 +76,7 @@ class SendBuyOrder
                 $order['state'] = 2; // 2 = estado Orden abierta
                 $order['subtotal'] = $subtotal_with_iva;
                 $order['total'] = $subtotal_with_iva - $discount; //Total de la orden con descuento
+                $order['pending_debt'] = $order['total']; 
                 $updated_order = $this->orderRepo->update($quotation->order_id, $order);
 
                 $order_doc['order_id'] = $quotation->order_id;

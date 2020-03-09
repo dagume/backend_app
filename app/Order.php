@@ -24,7 +24,8 @@ class Order extends Model
         'total',
         'sender_data',
         'lat',
-        'lon'
+        'lon',
+        'pending_debt'
     ];
     public function quotations()
     {
