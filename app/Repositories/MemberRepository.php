@@ -28,6 +28,13 @@ class MemberRepository extends BaseRepository
         $data = DB::select('select contact_id from members where project_id = ? and state isnull', [$project_id]);
         return $data[0];
     }
+    public function getNameMember($member_id)
+    {
+        $data = DB::select('select c.name as name from members as m
+            inner join contacts as c on c.id = m.contact_id
+            where m.id = ?', [$member_id]);
+        return $data[0];
+    }
     //public function mem_rol_contact($contact_id)
     //{
     //    //traemos todos los roles de un contacto en todo el sistema
