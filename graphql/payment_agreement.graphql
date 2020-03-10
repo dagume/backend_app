@@ -40,5 +40,5 @@ extend type Mutation{
         pay_date:Date
         amount:Int
         state:Boolean
-    ):PaymentAgreement @create(model: "App\\PaymentAgreement") 
+    ):PaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") #@middleware(checks:["auth:api"])
 }
