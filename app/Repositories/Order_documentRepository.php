@@ -24,4 +24,10 @@ class Order_documentRepository extends BaseRepository
         $drive_id = DB::select('select drive_id from(select *  from document_reference where name in (select name from orders where id = ?) and order_id = ?) as name_order', [$order_id, $order_id]);
         return $drive_id[0];
     }
+    public function getCodeOrderBuy($order_id)
+    {
+        //Buscamos el codigo de la orden de compra
+        $data = DB::select('select code from order_documents where order_id = ? and document_type = 1', [$order_id]);
+        return $data[0];
+    }
 }
