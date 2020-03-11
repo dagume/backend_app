@@ -3,8 +3,8 @@ type Accounting_movement {
     id:ID!
     puc:Puc
     project:Project
-    destination:Member
-    origin:Member
+    destination:Contact
+    origin:Contact
     registration_date:Date
     movement_date:Date
     payment_method:pay_meth

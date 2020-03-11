@@ -38,10 +38,10 @@ class Accounting_movement extends Model
     }
     public function origin()
     {
-        return $this->belongsTo('App\Member', 'origin_id');
+        return $this->belongsTo('App\User', 'origin_id');
     }
     public function destination()
     {
-        return $this->belongsTo('App\Member', 'destination_id');
+        return $this->belongsTo('App\User', 'destination_id');
     }
 }
