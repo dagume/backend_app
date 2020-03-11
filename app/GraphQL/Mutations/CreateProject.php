@@ -67,9 +67,10 @@ class CreateProject
 
                 //Creamos el contacto del proyecto para agregarlo como integrante y asi poderlo usar
                 //como una cuenta que recibe y trasnfiere dinero
-                $con['name'] = $project->id.'_'.$project->name;
-                $con['state'] = 0;
+                $con['name'] = $project->name;
+                $con['state'] = 1;
                 $con['type'] = 0; // 0 = Tipo de contacto PROYECTO
+                $con['identification_number'] = $project->id; // va el id del proyecto para poderlo referenciar en modulo de cuentas
                 $contact = $this->contactRepo->create($con);
                 $member['project_id'] = $project->id;
                 $member['contact_id'] = $contact->id;

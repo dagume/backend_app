@@ -34,12 +34,12 @@ class CreatePaymentAgreement
     {
         //$data = DB::transaction(function () use($args){  //se crea la transacion
         //    if ($args['state'] != false) {
-        //        $order = $this->orderRepo->find($args['order_id']); 
+        //        $order = $this->orderRepo->find($args['order_id']);
         //        $pending['pending_debt'] = $order->pending_debt - $args['pending_debt'];
         //        //$this->orderRepo->update($order->id, $pending);
 //
         //        $movement['puc_id']= 5105; //registrar cuenta
-        //        $movement['project_id']= $order->project_id; 
+        //        $movement['project_id']= $order->project_id;
         //        //$movement['destination_id']= ;
         //        //$movement['origin_id']= ;
         //        $movement['movement_date']= now();
