@@ -44,7 +44,7 @@ class Member_has_project
                 $args['state'] = 1;
                 $member = $this->memberRepo->create($args);
 
-                $mem['project_id'] = strstr($contact->name, '_', true); //sacamos el project_id del nombre del contacto
+                $mem['project_id'] = $contact->identification_number;
                 $mem['contact_id'] = $this->memberRepo->getMemberProject($args['project_id'])->contact_id;
                 $mem['role_id'] = $this->roleRepo->getRolProject()->id;
                 $mem['state'] = 1;

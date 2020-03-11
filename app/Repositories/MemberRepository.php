@@ -30,9 +30,10 @@ class MemberRepository extends BaseRepository
     }
     public function getNameMember($member_id)
     {
-        $data = DB::select('select c.name as name from members as m
-            inner join contacts as c on c.id = m.contact_id
-            where m.id = ?', [$member_id]);
+        //Traemos el identification number de ese contacto, el cual sera el id del proyecto al que pertenece
+        $data = DB::select('select c.identification_number as contact_id from members as m
+        inner join contacts as c on c.id = m.contact_id
+        where m.id = ?', [$member_id]);
         return $data[0];
     }
     //public function mem_rol_contact($contact_id)

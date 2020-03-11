@@ -45,7 +45,7 @@ class Create_transaction
             $args['destination_id']= $origin;
             $args['state_movement']= false;
             $args['payment_method']= null;
-            $args['project_id'] = strstr($mem->name, '_', true); //sacamos el project_id del nombre del contacto
+            $args['project_id'] = $mem->identification_number;
             $entry = $this->accountRepo->create($args);
 
             return $movement;
