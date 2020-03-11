@@ -29,30 +29,34 @@ class Create_transaction
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $mov = DB::transaction(function () use($args){
-            $args['registration_date'] = now();
-            $args['sender_id'] = auth()->user()->id;
-            $args['state_movement'] = True;
-            $args['puc_id']= 112010; //Revisar que cuenta del puc va (Cuentas por cobrar)
-            $movement = $this->accountRepo->create($args);
-
-            $mem = $this->memberRepo->getNameMember($args['destination_id']);
-            $origin = $args['origin_id'];
-            $destination = $args['destination_id'];
-
-            $args['puc_id']= 2335; //Revisar que cuenta del puc va (Cuentas por pagar)
-            $args['origin_id']= $destination;
-            $args['destination_id']= $origin;
-            $args['state_movement']= false;
-            $args['payment_method']= null;
-            $args['project_id'] = $mem->identification_number;
-            $entry = $this->accountRepo->create($args);
-
-            return $movement;
-        }, 3);
+        //$mov = DB::transaction(function () use($args){
+        //    $args['registration_date'] = now();
+        //    $args['sender_id'] = auth()->user()->id;
+        //    $args['state_movement'] = True;
+        //    $args['puc_id']= 112010; //Revisar que cuenta del puc va (Cuentas por cobrar)
+        //    $movement = $this->accountRepo->create($args);
+//
+        //    $mem = $this->memberRepo->getNameMember($args['destination_id']);
+        //    $origin = $args['origin_id'];
+        //    $destination = $args['destination_id'];
+//
+        //    $args['puc_id']= 2335; //Revisar que cuenta del puc va (Cuentas por pagar)
+        //    $args['origin_id']= $destination;
+        //    $args['destination_id']= $origin;
+        //    $args['state_movement']= false;
+        //    $args['payment_method']= null;
+        //    $args['project_id'] = $mem->identification_number;
+        //    $entry = $this->accountRepo->create($args);
+//
+        //    return $movement;
+        //}, 3);
+        //return [
+        //    'accounting_movement' => $mov,
+        //    'message' => "Movimiento registrado"
+        //];
         return [
-            'accounting_movement' => $mov,
-            'message' => "Movimiento registrado"
+            'accounting_movement' => null,
+            'message' => "Funcion en construcción"
         ];
     }
 }

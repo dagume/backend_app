@@ -19,6 +19,11 @@ type payAgreDate{
     order_id:Int
     name:String
 }
+#Mensaje exitoso de creacion
+type MessageSuccessPaymentAgreement {
+    paymentAgreement:PaymentAgreement
+    message: String
+}
 extend type Query{
     #Query Puc
     PaymentAgreements: [PaymentAgreement] @all(model: "App\\PaymentAgreement") #@middleware(checks:["auth:api"])  #, "can:project.list"
@@ -40,5 +45,10 @@ extend type Mutation{
         pay_date:Date
         amount:Int
         state:Boolean
-    ):PaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") #@middleware(checks:["auth:api"])
+
+        puc_id:Int
+        destination_id:Int
+        origin_id: Int
+        payment_method:pay_meth
+    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") #@middleware(checks:["auth:api"])
 }
