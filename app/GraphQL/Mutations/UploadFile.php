@@ -91,15 +91,15 @@ class UploadFile
             //    }
             //}
 
-        //if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
-        //    $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;
-        //    $doc_ref_file->name = $args['name'];
-        //    $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
-        //    $doc_ref_file->contact_id = $args['contact_id'];
-        //    $doc_ref_file->module_id = 3; //id 3 pertenece al modulo Contact
-        //    $doc_ref_file->drive_id = $args['drive_id'];
-        //    $doc_ref_file->save();
-        //}
+        if ($args['accounting_movements_id'] != null && $args['project_id'] != null) {
+            $doc_ref_file->parent_document_id = DB::table('document_reference')->where('accounting_movements_id', $args['accounting_movements_id'])->first()->id;
+            $doc_ref_file->name = $args['name'];
+            $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
+            $doc_ref_file->accounting_movements_id = $args['accounting_movements_id'];
+            $doc_ref_file->module_id = 3; //id 3 pertenece al modulo Contact
+            $doc_ref_file->drive_id = $args['drive_id'];
+            $doc_ref_file->save();
+        }
         return [
             'message' => 'Archivo cargado'
         ];
