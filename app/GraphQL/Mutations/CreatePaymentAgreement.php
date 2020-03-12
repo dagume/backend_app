@@ -35,32 +35,33 @@ class CreatePaymentAgreement
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $data = DB::transaction(function () use($args){  //se crea la transacion
-            if ($args['state'] != false) {
-                $order = $this->orderRepo->find($args['order_id']);
-                $pending['pending_debt'] = $order->pending_debt - $args['pending_debt'];
-                $this->orderRepo->update($order->id, $pending);
-
-                $movement['puc_id'] = $args['puc_id'];
-                $movement['project_id'] = $order->project_id;
-                $movement['destination_id'] = $args['destination_id'];
-                $movement['origin_id'] = $args['origin_id'];
-                $movement['movement_date'] = now();
-                $movement['payment_method'] = $args['payment_method'];
-                $movement['value'] = $args['amount'];
-                $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
-                $movement['state_movement'] = True;
-                $movement['registration_date'] = now();
-                $movement['sender_id'] = auth()->user()->id;
-                $account_movement = $this->accountRepo->create($movement);
-            }
-            $payment = $this->paymentRepo->create($args);
-            return $payment;
-        }, 3);
-        return [
-            'paymentAgreement' => $data,
-            'message' => "Movimiento registrado"
-        ];
+        //$data = DB::transaction(function () use($args){  //se crea la transacion
+        //    if ($args['state'] != false) {
+        //        $order = $this->orderRepo->find($args['order_id']);
+        //        //ARREGLO AQUI
+        //        $pending['pending_debt'] = $order->pending_debt - $args['pending_debt'];
+        //        $this->orderRepo->update($order->id, $pending);
+//
+        //        $movement['puc_id'] = $args['puc_id'];
+        //        $movement['project_id'] = $order->project_id;
+        //        $movement['destination_id'] = $args['destination_id'];
+        //        $movement['origin_id'] = $args['origin_id'];
+        //        $movement['movement_date'] = now();
+        //        $movement['payment_method'] = $args['payment_method'];
+        //        $movement['value'] = $args['amount'];
+        //        $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
+        //        $movement['state_movement'] = True;
+        //        $movement['registration_date'] = now();
+        //        $movement['sender_id'] = auth()->user()->id;
+        //        $account_movement = $this->accountRepo->create($movement);
+        //    }
+        //    $payment = $this->paymentRepo->create($args);
+        //    return $payment;
+        //}, 3);
+        //return [
+        //    'paymentAgreement' => $data,
+        //    'message' => "Movimiento registrado"
+        //];
         return [
                 'paymentAgreement' => null,
                 'message' => "En construccion"
