@@ -41,14 +41,14 @@ extend type Query{
 }
 extend type Mutation{
     createPaymentAgreement(
-        order_id:Int
+        order_id:Int @rules(apply: ["required","integer"])
         pay_date:Date
-        amount:Int
-        state:Boolean
+        amount:Int @rules(apply: ["required","integer"])
+        state:Boolean @rules(apply: ["required"])
 
-        puc_id:Int
+        puc_id:Int 
         destination_id:Int
         origin_id: Int
         payment_method:pay_meth
-    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") #@middleware(checks:["auth:api"])
+    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") @middleware(checks:["auth:api"])
 }
