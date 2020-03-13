@@ -68,7 +68,7 @@ class UploadFile
             $quo['file_id'] = $args['drive_id'];
             $quo['file_date'] = now();
             $this->quotationRepo->update($quotation->id, $quo);//actualizamos la cotizacion con su nuevo archivo cargado   
-        }elseif ($args['activity_id'] == null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] != null && $args['accounting_movements_id'] != null) {
+        }elseif ($args['activity_id'] == null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] == null && $args['accounting_movements_id'] != null) {
             $account['parent_document_id'] = $this->document_referenceRepo->getFolderAccounting($args['project_id'])->id;
             $account['name'] = $args['name'];
             $account['is_folder'] = 0; // 0 = Tipo File, 1 = Tipo Folder

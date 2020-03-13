@@ -40,6 +40,7 @@ extend type Query{
     #account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
     #movimientos entre cuentas desde un project
     puc_movements(puc_id:Int @where(operator: "=") project_id:Int @where(operator: "=")): [Accounting_movement] @all(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
+    movements_project_contact(project_id:Int! @where(operator: "=") origin_id:Int! @where(operator: "=", clause: "orWhere") destination_id:Int! @where(operator: "=")):[Accounting_movement] @all(model: "App\\Accounting_movement")
 }
 extend type Mutation {
     #movimientos (Gastos e ingresos)
