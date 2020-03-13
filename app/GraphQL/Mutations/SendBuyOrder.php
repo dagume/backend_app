@@ -15,6 +15,7 @@ use App\Repositories\OrderRepository;
 use App\Repositories\Order_documentRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\Document_referenceRepository;
+use App\Repositories\RoleRepository;
 use DB;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -30,9 +31,9 @@ class SendBuyOrder
     protected $order_docRepo;
     protected $contactRepo;
     protected $documentRepo;
+    protected $roleRepo;
 
-
-    public function __construct(QuotationRepository $quoRepo, DetailRepository $detRepo, OrderRepository $ordRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo, Document_referenceRepository $docRepo)
+    public function __construct(RoleRepository $rolRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, OrderRepository $ordRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo, Document_referenceRepository $docRepo)
     {
         $this->quotationRepo = $quoRepo;
         $this->detailRepo = $detRepo;
@@ -40,6 +41,7 @@ class SendBuyOrder
         $this->order_docRepo = $ordocRepo;
         $this->contactRepo = $conRepo;
         $this->documentRepo = $docRepo;
+        $this->roleRepo = $rolRepo;
 
     }
     /**
@@ -84,16 +86,16 @@ class SendBuyOrder
                 $order_doc['code'] = 'ORD_'.$quotation->order_id.'_'.date("d").date("m").date("y");
                 $order_doc['date'] = now();
                 $order_document = $this->order_docRepo->create($order_doc); //guardamos el registro del order_doc para saber si es Solicitud, orden o factura
-
+                $contact = $this->contactRepo->find($order['contact_id']);
                 $data = [
                     'title' => 'Orden de compra',
                     'code' => $order_doc['code'],
-                    'provider' => $this->contactRepo->find($order['contact_id']),
+                    'provider' => $contact,
                     'sender' => $this->contactRepo->find($updated_order->sender_data),
                     'details' => $this->detailRepo->getDataPDF($quotation->id),
                     'quotation' => $quotation,
                     'discount' => $discount,
-                    'project' => $this->quotationRepo->getAssociation($args['quo_id']) //veridicamos si es consorcio o no el proyecto actual
+                    'project' => $this->quotationRepo->getAssociation($args['quo_id']) //verificamos si es consorcio o no el proyecto actual
                 ];
                 $pdf = PDF::loadView('orden', $data);   //Creacion del PDF
                 $pdf_name = $order_doc['code'].$this->contactRepo->find($updated_order->contact_id)->name;
@@ -118,6 +120,12 @@ class SendBuyOrder
                 $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
                 Mail::to(User::find($updated_order->contact_id)->email)
                     ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), Order::find($updated_order->id)));
+                
+                    //Asignamos a este contacto como proveedor del proyecto 
+                    /////////////////////$member['project_id'] = $updated_order->project_id;
+                    /////////////////////$member['contact_id'] = $contact->id;
+                    /////////////////////$member['role_id'] = $this->roleRepo->getRolProveedor()->id;; 
+                    /////////////////////$this->memberRepo->create($member);
                 return $message = 'Orden de Compra enviada.';
             }else {
                 return $message = 'No han autorizado esta compra';

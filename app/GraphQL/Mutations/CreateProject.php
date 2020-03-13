@@ -75,7 +75,7 @@ class CreateProject
                 $member['project_id'] = $project->id;
                 $member['contact_id'] = $contact->id;
                 $member['role_id'] = $this->roleRepo->getRolProject()->id;
-                //Estos miembros tendran estado null para saber que es el miembro propio del projecto
+                //Estos miembros tendran type = 0 para saber que es el miembro propio del projecto
                 $this->memberRepo->create($member);
 
                 if ($args['parent_project_id'] != null) {   //Si es proyecto padre no se le crea estructura de carpetas

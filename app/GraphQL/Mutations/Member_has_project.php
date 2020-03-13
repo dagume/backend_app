@@ -33,6 +33,7 @@ class Member_has_project
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        dd($this->memberRepo->create_member());
         $mem = DB::transaction(function () use($args){
             $role_id = $this->roleRepo->getRolProject()->id;
             $contact = $this->contactRepo->find($args['contact_id']);
