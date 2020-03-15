@@ -63,6 +63,7 @@ class CreateProject
                 }
                 $someJSON = json_encode($args['place']);
                 $args['place'] = $someJSON;
+                $args['state'] = 1; //Estado de seleccion 
                 $project = $this->projectRepo->create($args); //guarda registro del nuevo proyecto
 
                 //Creamos el contacto del proyecto para agregarlo como integrante y asi poderlo usar
