@@ -27,7 +27,10 @@ class Accounting_movement extends Model
         //'exist_code'
     ];
 
-
+    public function document_references()
+    {
+        return $this->hasMany('App\Document_reference', 'accounting_movements_id');
+    }
     public function project()
     {
         return $this->belongsTo('App\Project');

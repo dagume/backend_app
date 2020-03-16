@@ -17,10 +17,11 @@ type Project {#implements GlobalSearch{
     association:associationProject
     consortium_name:String
     consortium_nit:Int
-    id_folder: String
+    folder_id: String
     members: [Member]
     activities:[Activity]
     orders: [Order]
+    document_references:[Document_reference]
 }
 
 #Tipos proyecto
@@ -75,8 +76,9 @@ extend type Query{
     state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos con todos los filtros
     projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project")
+    #Lista el folder_id para soportes
+    folder_supports(project_id:Int!):Document_reference @field(resolver: "App\\GraphQL\\Queries\\Folder_supports@resolve")#@middleware(checks:["auth:api"])
 }
-
 extend type Mutation {
     #Crear Proyecto
     createProject(

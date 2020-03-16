@@ -27,6 +27,10 @@ class Document_reference extends Model
         'drive_id'
     ];
     //falta relacion accounting_movements
+    public function accounting_movement()
+    {
+        return $this->belongsTo('App\Accounting_movement', 'accounting_movements_id', 'id');
+    }
     public function parent_document()
     {
         return $this->belongsTo('App\Document_reference', 'parent_document_id', 'id');

@@ -8,7 +8,7 @@ type Document_reference{
     project: Project
     contact: Contact
     document_contact: Document_contact
-    accounting_movements_id: Int
+    accounting_movement: Accounting_movement
     module: Module
     order_document:Order_documents
     document_contact:Document_contact

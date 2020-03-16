@@ -31,6 +31,9 @@ class Project extends Model
         'consortium_nit',
         'folder_id',
     ];
+    public function document_references(){
+        return $this->hasMany('App\Document_reference', 'project_id', 'id');
+    }
     public function accounts(){
         return $this->hasMany('App\Account', 'project_id', 'id');
     }

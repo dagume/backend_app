@@ -12,6 +12,7 @@ type Accounting_movement {
     state_movement:Boolean
     sender_id:Int
     code:String
+    document_references:[Document_reference]
     #exist_code:Boolean
 }
 enum pay_meth{
