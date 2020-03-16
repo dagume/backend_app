@@ -37,12 +37,12 @@ class MemberRepository extends BaseRepository
         return $data[0];
     }
     //PENDIENTE////////////////////////////////////
-    //public function create_member(){
-    //    $data = DB::select('select c.identification_number as contact_id from members as m
-    //    inner join contacts as c on c.id = m.contact_id
-    //    where m.id = ?', [$member_id]);
-    //    return $this->find(3);
-    //}
+    public function create_member(){
+        $data = DB::select('select c.identification_number as contact_id from members as m
+        inner join contacts as c on c.id = m.contact_id
+        where m.id = ?', [$member_id]);
+        return $this->find(3);
+    }
     //public function mem_rol_contact($contact_id)
     //{
     //    //traemos todos los roles de un contacto en todo el sistema
