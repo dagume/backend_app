@@ -1,6 +1,7 @@
 #Actividades
 type Activity { #implements GlobalSearch{
     id:ID!
+    project:Project
     activities:[Activity]
     name:String!
     description:String
@@ -45,7 +46,7 @@ extend type Query{
     todayActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\TodayActivities@resolve")
     weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
     monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve")
-    #added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    state_activities(state: stateActivity! @where(operator: "=") project_id:Int! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
 }
 
