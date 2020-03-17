@@ -45,6 +45,8 @@ extend type Query{
     todayActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\TodayActivities@resolve")
     weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
     monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve")
+    #added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+
 }
 
 extend type Mutation {
@@ -73,7 +75,7 @@ extend type Mutation {
         description: String @rules(apply: ["nullable"])
         priority:String
         notes:String
-        state:String
+        state:stateActivity
         amount: Int @rules(apply: ["nullable", "integer"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])

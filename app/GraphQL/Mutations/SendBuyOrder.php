@@ -78,7 +78,7 @@ class SendBuyOrder
                 $order['state'] = 2; // 2 = estado Orden abierta
                 $order['subtotal'] = $subtotal_with_iva;
                 $order['total'] = $subtotal_with_iva - $discount; //Total de la orden con descuento
-                $order['pending_debt'] = $order['total']; 
+                $order['pending_debt'] = $order['total'];
                 $updated_order = $this->orderRepo->update($quotation->order_id, $order);
 
                 $order_doc['order_id'] = $quotation->order_id;
@@ -120,11 +120,11 @@ class SendBuyOrder
                 $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
                 Mail::to(User::find($updated_order->contact_id)->email)
                     ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), Order::find($updated_order->id)));
-                
-                    //Asignamos a este contacto como proveedor del proyecto 
+
+                    //Asignamos a este contacto como proveedor del proyecto
                     /////////////////////$member['project_id'] = $updated_order->project_id;
                     /////////////////////$member['contact_id'] = $contact->id;
-                    /////////////////////$member['role_id'] = $this->roleRepo->getRolProveedor()->id;; 
+                    /////////////////////$member['role_id'] = $this->roleRepo->getRolProveedor()->id;;
                     /////////////////////$this->memberRepo->create($member);
                 return $message = 'Orden de Compra enviada.';
             }else {
