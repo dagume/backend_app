@@ -24,7 +24,7 @@ class Folder_supports
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    { 
-        dd($this->projectRepo->payment_supports_project($args['project_id']));
+    {
+        return $this->projectRepo->payment_supports_project($args['project_id']);
     }
 }
