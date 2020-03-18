@@ -16,6 +16,7 @@ use App\Repositories\Order_documentRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\Document_referenceRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\MemberRepository;
 use DB;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -32,8 +33,9 @@ class SendBuyOrder
     protected $contactRepo;
     protected $documentRepo;
     protected $roleRepo;
+    protected $memberRepo;
 
-    public function __construct(RoleRepository $rolRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, OrderRepository $ordRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo, Document_referenceRepository $docRepo)
+    public function __construct(MemberRepository $memRepo, RoleRepository $rolRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, OrderRepository $ordRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo, Document_referenceRepository $docRepo)
     {
         $this->quotationRepo = $quoRepo;
         $this->detailRepo = $detRepo;
@@ -42,7 +44,7 @@ class SendBuyOrder
         $this->contactRepo = $conRepo;
         $this->documentRepo = $docRepo;
         $this->roleRepo = $rolRepo;
-
+        $this->memberRepo = $memRepo;
     }
     /**
      * Return a value for the field.
@@ -120,12 +122,14 @@ class SendBuyOrder
                 $doc_ref_file->save();  //guardamos registro del del PDF generado y cargado en el drive
                 Mail::to(User::find($updated_order->contact_id)->email)
                     ->send(new RequestForQuotation(Document_reference::find($doc_ref_file->id), Quotation::find($quotation->id), Order::find($updated_order->id)));
-
+                if (empty($this->memberRepo->get_member($updated_order->project_id, $contact->id, $this->roleRepo->getRolProveedor()->id)))
+                {
                     //Asignamos a este contacto como proveedor del proyecto
-                    /////////////////////$member['project_id'] = $updated_order->project_id;
-                    /////////////////////$member['contact_id'] = $contact->id;
-                    /////////////////////$member['role_id'] = $this->roleRepo->getRolProveedor()->id;;
-                    /////////////////////$this->memberRepo->create($member);
+                    $member['project_id'] = $updated_order->project_id;
+                    $member['contact_id'] = $contact->id;
+                    $member['role_id'] = $this->roleRepo->getRolProveedor()->id;
+                    $this->memberRepo->create($member);
+                }
                 return $message = 'Orden de Compra enviada.';
             }else {
                 return $message = 'No han autorizado esta compra';

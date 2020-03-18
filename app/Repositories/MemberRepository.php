@@ -37,12 +37,19 @@ class MemberRepository extends BaseRepository
         return $data[0];
     }
     //PENDIENTE////////////////////////////////////
-    public function create_member()
+    //public function create_member()
+    //{
+    //    $data = DB::select('select c.identification_number as contact_id from members as m
+    //    inner join contacts as c on c.id = m.contact_id
+    //    where m.id = ?', [$member_id]);
+    //    return $this->find(3);
+    //}
+    public function get_member($project_id, $contact_id, $role_id)
     {
-        $data = DB::select('select c.identification_number as contact_id from members as m
-        inner join contacts as c on c.id = m.contact_id
-        where m.id = ?', [$member_id]);
-        return $this->find(3);
+        //Consultamos si ese miembro ya existe en base de datos
+        $data = DB::select('select * from members where project_id = ? and contact_id = ? and role_id = ?',[$project_id, $contact_id, $role_id]);
+        //dd(empty($data));
+        return $data;
     }
     //public function mem_rol_contact($contact_id)
     //{
