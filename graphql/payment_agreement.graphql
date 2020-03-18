@@ -36,8 +36,8 @@ extend type Query{
     projectPayAgreMonth(first_date: Date! end_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\ProjectPayAgreMonth@resolve") #@middleware(checks:["auth:api"])  #, "can:project.list"
 
     #pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
-    #pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
-    #pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"        
+    #pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"
+    #pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"
 }
 extend type Mutation{
     createPaymentAgreement(
@@ -46,9 +46,11 @@ extend type Mutation{
         amount:Int @rules(apply: ["required","integer"])
         state:Boolean @rules(apply: ["required"])
 
-        puc_id:Int 
+        puc_id:Int
         destination_id:Int
+        destination_role_id:Int
         origin_id: Int
+        origin_role_id: Int
         payment_method:pay_meth
     ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") @middleware(checks:["auth:api"])
 }

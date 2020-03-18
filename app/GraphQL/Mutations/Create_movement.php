@@ -38,15 +38,16 @@ class Create_movement
                 $args['state_movement'] = True;
                 if ($args['origin_id'] == $args['destination_id']) {// si origen y destino son iguales, el destino se deja nulo para luego poder generar reportes sin error
                     $args['destination_id'] = null;
+                    $args['destination_role_id'] = null;
                 }
                 $movement = $this->accountRepo->create($args); //registramos el movimiento
                 //Saber si es prestamo o pago entre proyectos
-                if (!is_null($args['destination_id'])) { //si no es nulo quiere decir que si tiene un destino el movimiento 
+                if (!is_null($args['destination_id'])) { //si no es nulo quiere decir que si tiene un destino el movimiento
                     if ($contact_origin->type == 0 && $contact_destination->type == 0 ) { //Si los dos contactos son tipo proyecto se debe crear doble registro
                         if ($args['project_id'] == $contact_origin->identification_number) {// verificamos en que proyecto deberia quedar guardado el segundo registro
-                            $args['project_id'] = $contact_destination->identification_number;                    
+                            $args['project_id'] = $contact_destination->identification_number;
                         }else {
-                            $args['project_id'] = $contact_origin->identification_number;                    
+                            $args['project_id'] = $contact_origin->identification_number;
                         }
                         $movement = $this->accountRepo->create($args);
                     }

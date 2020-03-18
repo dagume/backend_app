@@ -47,7 +47,6 @@ extend type Query{
     weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
     monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve")
     state_activities(state: stateActivity! @where(operator: "=") project_id:Int! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
-
 }
 
 extend type Mutation {

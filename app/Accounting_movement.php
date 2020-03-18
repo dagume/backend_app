@@ -16,7 +16,9 @@ class Accounting_movement extends Model
         'puc_id', //
         'project_id', //
         'destination_id', //
+        'destination_role_id', //
         'origin_id', //
+        'origin_role_id', //
         'registration_date',
         'movement_date', //
         'payment_method', //

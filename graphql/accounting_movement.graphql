@@ -4,7 +4,9 @@ type Accounting_movement {
     puc:Puc
     project:Project
     destination:Contact
+    destination_role_id:Int
     origin:Contact
+    origin_role_id:Int
     registration_date:Date
     movement_date:Date
     payment_method:pay_meth
@@ -26,7 +28,7 @@ enum type_mov{
     Ingreso @enum(value: 0)
     Gasto @enum(value: 1)
     Transferencia @enum(value: 2)
-    
+
 }
 #Mensaje exitoso de creacion
 type MessageSuccessAccountMovement {
@@ -40,13 +42,13 @@ extend type Query{
     #movimientos entre cuentas
     #account_movement(puc_id: Int! @eq): Accounting_movement @find(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
     #movimientos entre cuentas desde un project
-    puc_movements(puc_id:Int @where(operator: "=") 
+    puc_movements(puc_id:Int @where(operator: "=")
     project_id:Int @where(operator: "=")
     ): [Accounting_movement] @all(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
     #histórico de movimientos entre el proyecto y un contacto
     movements_project_contact(
-        project_id:Int! @where(operator: "=") 
-        origin_id:Int! @where(operator: "=", clause: "orWhere") 
+        project_id:Int! @where(operator: "=")
+        origin_id:Int! @where(operator: "=", clause: "orWhere")
         destination_id:Int! @where(operator: "=")
     ):[Accounting_movement] @all(model: "App\\Accounting_movement")
 }
@@ -56,14 +58,16 @@ extend type Mutation {
         puc_id: Int @rules(apply: ["nullable"])
         project_id: Int @rules(apply: ["required","integer"])
         destination_id: Int @rules(apply: ["required","integer"])
+        destination_role_id:Int
         origin_id: Int @rules(apply: ["required","integer"])
+        origin_role_id:Int
         movement_date:Date @rules(apply: ["date"])
         payment_method:pay_meth
         value:Int @rules(apply: ["required","integer"])
         code:String
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
     #Transaciones entre cuentas
-    #create_transaction(        
+    #create_transaction(
     #    project_id: Int @rules(apply: ["required","integer"])
     #    destination_id: Int @rules(apply: ["integer"])
     #    origin_id: Int @rules(apply: ["required","integer"])

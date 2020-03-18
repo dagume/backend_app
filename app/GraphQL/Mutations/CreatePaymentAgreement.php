@@ -38,14 +38,16 @@ class CreatePaymentAgreement
         $data = DB::transaction(function () use($args){  //se crea la transacion
             if ($args['state'] != false) {
                 $order = $this->orderRepo->find($args['order_id']);
-                
+
                 $pending['pending_debt'] = $order->pending_debt - $args['amount'];
                 $this->orderRepo->update($order->id, $pending);
 
                 $movement['puc_id'] = $args['puc_id'];
                 $movement['project_id'] = $order->project_id;
                 $movement['destination_id'] = $args['destination_id'];
+                $movement['destination_role_id'] = $args['destination_role_id'];
                 $movement['origin_id'] = $args['origin_id'];
+                $movement['origin_role_id'] = $args['origin_role_id'];
                 $movement['movement_date'] = now();
                 $movement['payment_method'] = $args['payment_method'];
                 $movement['value'] = $args['amount'];
