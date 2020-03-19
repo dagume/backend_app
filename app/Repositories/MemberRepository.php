@@ -49,7 +49,7 @@ class MemberRepository extends BaseRepository
         //Consultamos si ese miembro ya existe en base de datos
         $data = DB::select('select * from members where project_id = ? and contact_id = ? and role_id = ?',[$project_id, $contact_id, $role_id]);
         //dd(empty($data[0]));
-        return $data[0];
+        return $data;
     }
     //public function mem_rol_contact($contact_id)
     //{
