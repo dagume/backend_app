@@ -13,12 +13,12 @@ class ContactRepository extends BaseRepository
         return new User;
     }
 
-    //public function lastContact()
-    //{
-    //    //Trae ultimo contacto registrado
-    //    $reference = DB::select('SELECT id FROM contacts ORDER BY id DESC LIMIT 1'); //User::max('id')
-    //    return $reference[0];
-    //}
+    public function getContactIdentificatioNumber($identification_number)
+    {
+        //Trae contacto segun numero de identificacion
+        $reference = DB::select('SELECT id FROM contacts where identification_number = ?',[$identification_number]);
+        return $reference[0];
+    }
 
 
 }

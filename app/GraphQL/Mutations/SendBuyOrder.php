@@ -57,6 +57,7 @@ class SendBuyOrder
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        //$this->memberRepo->get_member(7, 3, 3);
         $buy_order = DB::transaction(function () use($args){  //se crea la transacion
             $subtotal_with_iva = 0;
             $subtotal = 0;
