@@ -42,7 +42,7 @@ class DeleteMember
                 //Si es role proyecto se deben eliminar dos registros de member
                 if ($member->role_id == $project_role) {
                     $cont = $this->contactRepo->getContactIdentificatioNumber($member->project_id);
-                    $mem = $this->memberRepo->get_member($contact->identification_number, $cont->id, $project_role);
+                    $mem = $this->memberRepo->get_member($contact->identification_number, $cont->id, $project_role)[0];
                     $member2 = $this->memberRepo->find($mem->id);
                     $this->memberRepo->delete($member);
                     $this->memberRepo->delete($member2);
