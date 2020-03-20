@@ -26,11 +26,25 @@ class UpdateRequiredDocument
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $docReference = $this->document_referenceRepo->getDocumentRequired($args['contact_id'], $args['doc_id']);
-        $docReference['drive_id'] = $args['drive_id'];
-        ////////////////////////////
-        /////Falta eliminar el archivo que esta en drive
-        ////////////////////////////
-        $this->document_referenceRepo->update($docReference->id, $docReference);
+        try {
+            $mess = DB::transaction(function () use($args){
+                $docReference = $this->document_referenceRepo->getDocumentRequired($args['contact_id'], $args['doc_id']); //buscamos el registro del documento requerido
+                if (!empty($docReference)) {//Si existe algun regstro debemos actualizarlo
+                    $documentReference['drive_id'] = $args['drive_id'];
+                    $this->document_referenceRepo->update($docReference->id, $documentReference); //Guardamos el nuevo drive_id
+                    Conection_Drive()->files->delete($docReference->drive_id); //eliminamos el archivo en el drive
+                    return $message = 'Documento actualizado exitosamente';
+                }else{
+                    return $message = 'No hay documento guardado';
+                }
+            }, 3);
+        } catch (Exception $e) {
+            return [
+                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar'
+            ];
+        }
+        return [
+            'message' => $mess
+        ];
     }
 }

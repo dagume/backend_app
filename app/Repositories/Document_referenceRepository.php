@@ -55,6 +55,9 @@ class Document_referenceRepository extends BaseRepository
     public function getDocumentRequired($contact_id, $doc_id)
     {   //buscamos el registro de del documento requerido
         $folderContact = DB::select('select * from document_reference where contact_id = ? and doc_id = ?', [$contact_id, $doc_id]);
+        if (empty($folderContact)) {
+            return [];
+        }
         return $folderContact[0];
     }
 }
