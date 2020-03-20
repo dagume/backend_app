@@ -49,6 +49,12 @@ type Mutation {
         drive_id:String @rules(apply: ["required"])
         accounting_movements_id: Int @rules(apply: ["nullable"])
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
+
+    uploadRequiredDocument(
+        contact_id:Int @rules(apply: ["required", "nullable"])
+        doc_id:Int @rules(apply: ["required", "nullable"])
+        drive_id:String @rules(apply: ["required"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\UpdateRequiredDocument@resolve")
 }
     #uploadRequiredDocument(
     #    activity_id:Int @rules(apply: ["nullable"])
