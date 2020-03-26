@@ -84,9 +84,10 @@ class SendApplicationMail
                     $detail['mea_id'] = $det->mea_id;
                     $detail['quantity'] = $det->quantity;
                     $this->detailRepo->create($detail);
-                    //dd($this->detailRepo->create($detail));
                 }
+
                 $project = $this->projectRepo->find($this->documentRepo->getFolderOrderCurrent($args['order_id'])->project_id);
+
                 $data = [
                     'title' => 'Solicitud de Cotización',
                     'code' => $this->order_docRepo->getOrderDoc($args['order_id'], 0)->code, //consultamos el order doument, 0 = tipo de documento(Solicitud)

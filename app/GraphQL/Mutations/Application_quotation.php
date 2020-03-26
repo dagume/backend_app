@@ -14,6 +14,7 @@ use App\Repositories\Document_referenceRepository;
 use App\Repositories\Order_documentRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\ProductRepository;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -33,8 +34,9 @@ class Application_quotation
     protected $order_docRepo;
     protected $contactRepo;
     protected $projectRepo;
+    protected $productRepo;
 
-    public function __construct(ProjectRepository $proRepo, OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, Document_referenceRepository $docRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo)
+    public function __construct(ProductRepository $prodRepo, ProjectRepository $proRepo, OrderRepository $ordRepo, QuotationRepository $quoRepo, DetailRepository $detRepo, Document_referenceRepository $docRepo, Order_documentRepository $ordocRepo, ContactRepository $conRepo)
     {
         $this->quotationRepo = $quoRepo;
         $this->orderRepo = $ordRepo;
@@ -43,6 +45,8 @@ class Application_quotation
         $this->order_docRepo = $ordocRepo;
         $this->contactRepo = $conRepo;
         $this->projectRepo = $proRepo;
+        $this->productRepo = $prodRepo;
+
     }
     /**
      * Return a value for the field.
@@ -89,6 +93,14 @@ class Application_quotation
                 $quotation->authorized = false;
                 $quotation->received = false;
                 $quotation->save();     //guardamos la cotizacion solicitada
+
+                //Traemos servicio de trasnporte para agregarlo al detalle de la cotizacion
+                $producto = $this->productRepo->getTransport();
+                $detTransport['product_id'] = $producto->id;
+                $detTransport['quo_id'] = $quotation->id;
+                $detTransport['quantity'] = 1;
+                $this->detailRepo->create($detTransport); //Registramos el servicio de transporte en la orden
+
 
                 foreach ($args['updetails'] as $arg) {
                     $arg['quo_id'] = $quotation->id;

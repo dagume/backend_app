@@ -43,7 +43,8 @@ class UploadFile
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $doc_ref_file = new Document_reference;
-        if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] == null && $args['accounting_movements_id'] == null) { //Para subir documento de actividad
+        if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] == null && $args['accounting_movements_id'] == null) {
+            //Para subir documento de actividad
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
             $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
@@ -52,7 +53,8 @@ class UploadFile
             $doc_ref_file->module_id = 1; //id 1 pertenece al modulo activity
             $doc_ref_file->drive_id = $args['drive_id'];
             $doc_ref_file->save();
-        }elseif ($args['activity_id'] == null && $args['project_id'] == null && $args['con_id'] != null && $args['doc_id'] != null && $args['order_id'] == null && $args['accounting_movements_id'] == null) { //Para subir documento requerido
+        }elseif ($args['activity_id'] == null && $args['project_id'] == null && $args['con_id'] != null && $args['doc_id'] != null && $args['order_id'] == null && $args['accounting_movements_id'] == null) {
+            //Para subir documento requerido
             $document_contact = $this->document_contactRepo->create($args);     // le asignamos el mismos drive_id al file_id que es el que usa doc_member
             $doc_ref['parent_document_id'] = $this->document_referenceRepo->getContactFolder($args['con_id'])->id;
             $doc_ref['name'] = $this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents;
@@ -67,12 +69,13 @@ class UploadFile
             $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
             $quo['file_id'] = $args['drive_id'];
             $quo['file_date'] = now();
-            $this->quotationRepo->update($quotation->id, $quo);//actualizamos la cotizacion con su nuevo archivo cargado   
+            $this->quotationRepo->update($quotation->id, $quo);
+            //actualizamos la cotizacion con su nuevo archivo cargado
         }elseif ($args['activity_id'] == null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] == null && $args['accounting_movements_id'] != null) {
             $account['parent_document_id'] = $this->document_referenceRepo->getFolderAccounting($args['project_id'])->id;
             $account['name'] = $args['name'];
             $account['is_folder'] = 0; // 0 = Tipo File, 1 = Tipo Folder
-            $account['project_id'] = $args['project_id']; 
+            $account['project_id'] = $args['project_id'];
             $account['accounting_movements_id'] = $args['accounting_movements_id'];
             $account['module_id'] = 4; //id 3 pertenece al modulo account
             $account['drive_id'] = $args['drive_id'];
