@@ -101,7 +101,6 @@ class Application_quotation
                 $detTransport['quantity'] = 1;
                 $this->detailRepo->create($detTransport); //Registramos el servicio de transporte en la orden
 
-
                 foreach ($args['updetails'] as $arg) {
                     $arg['quo_id'] = $quotation->id;
                     $details[] = $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
@@ -115,6 +114,7 @@ class Application_quotation
                     'details' => $this->detailRepo->getDataPDF($quotation->id),
                     'project' => $this->projectRepo->find($args['project_id'])
                 ];
+                //dd($data);
 
                 $pdf = PDF::loadView('solicitud', $data);   //Creacion del PDF
                 $pdf_name = $order_doc['code'].$this->contactRepo->find($ema)->name;

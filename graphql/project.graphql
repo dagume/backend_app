@@ -46,6 +46,9 @@ type MessageSuccessProject {
     project:Project
     message: String
 }
+type TotalAmount{
+    amount:Int
+}
 
 input placeProject{
     longitud:String @rules(apply: ["required"])
@@ -64,7 +67,8 @@ enum SortOrder {
 }
 
 
-extend type Query{
+extend type Query
+{
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
@@ -78,6 +82,8 @@ extend type Query{
     projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project")
     #Lista el folder_id para soportes
     folder_supports(project_id:Int!):Document_reference @field(resolver: "App\\GraphQL\\Queries\\Folder_supports@resolve")#@middleware(checks:["auth:api"])
+    #Traer el total del contrato(Sumando actas)
+    get_contract_value(project_id:Int!): TotalAmount @field(resolver: "App\\GraphQL\\Queries\\Contract_value@resolve")#@middleware(checks:["auth:api"])
 }
 extend type Mutation {
     #Crear Proyecto

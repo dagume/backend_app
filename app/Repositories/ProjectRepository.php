@@ -19,4 +19,10 @@ class ProjectRepository extends BaseRepository
             where d_r.project_id = ? and d_r.is_folder = true and d_r.name = \'Contabilidad\'',[$project_id]);
         return $data[0];
     }
+    public function get_contract_value($project_id)
+    {   //trae el valor del contrato del proyecto sumando todos sus adicionales
+        $data = DB::select('select amount from activities where project_id= ? and is_added = true and amount <> 0',[$project_id]);
+        return $data;
+    }
+
 }
