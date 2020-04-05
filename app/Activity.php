@@ -26,7 +26,8 @@ class Activity extends Model
         'amount',
         'is_added',
         'drive_id',
-        'is_act'
+        'is_act',
+        'type'
     ];
 
     public function project()

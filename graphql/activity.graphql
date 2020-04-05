@@ -15,6 +15,7 @@ type Activity { #implements GlobalSearch{
     is_added:Boolean
     drive_id:String
     is_act:Boolean
+    type:typeActivity
 }
 
 #estados de actividad
@@ -23,6 +24,12 @@ enum stateActivity{
     Completado @enum(value: 2)
     Proceso @enum(value: 3)
     Atrasado @enum(value: 4)
+}
+
+#tipo de actividad
+enum typeActivity{
+    Contractual @enum(value: 0)
+    Obra @enum(value: 1)
 }
 
 #estados de actividad
@@ -65,6 +72,7 @@ extend type Mutation {
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean @rules(apply: ["required"])
         is_act:Boolean @rules(apply: ["required"])
+        type:typeActivity @rules(apply: ["required"])
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
 
     #Editar actividad
@@ -80,6 +88,7 @@ extend type Mutation {
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
         is_act:Boolean
+        type:typeActivity
     ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
     delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
