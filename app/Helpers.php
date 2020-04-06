@@ -2,7 +2,6 @@
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
-
 function delete($path)
 {
     if ($file = $this->getFileObject($path)) {
