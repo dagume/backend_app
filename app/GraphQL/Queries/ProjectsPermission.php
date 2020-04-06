@@ -1,20 +1,13 @@
 <?php
 
 namespace App\GraphQL\Queries;
-
+use Illuminate\Database\Query\Builder;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Repositories\ActivityRepository;
 use DB;
 
-class WeekActivities
+class ProjectsPermission
 {
-    protected $activityRepo;
-
-    public function __construct(ActivityRepository $actRepo)
-    {
-        $this->activityRepo = $actRepo;
-    }
     /**
      * Return a value for the field.
      *
@@ -26,16 +19,19 @@ class WeekActivities
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $day_week = date("w");
 
-        if ($day_week == 0){
-            $day_week = 7;
-        }
-        $first_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")-$day_week+1, date("Y"))).'\'';
-        $last_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+(7 - $day_week), date("Y"))).'\'';
-        dd($first_day, $last_day);
-        $activities = $this->activityRepo->betweenActivity($first_day, $last_day);
-        //dd($ultimo_dia);
-        return $activities;
+    }
+    public function visibleProjects($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Builder
+    {
+
+        $contact_id = auth()->user()->id;
+        $projects =  DB::table('projects')
+        ->select('projects.*')
+        ->distinct()
+        ->join('members', 'projects.id', '=', 'members.project_id')
+        ->where('projects.state', $args['state'])
+        ->where('members.contact_id', $contact_id);
+        
+        return $projects;
     }
 }

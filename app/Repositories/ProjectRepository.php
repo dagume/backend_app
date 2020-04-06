@@ -24,5 +24,10 @@ class ProjectRepository extends BaseRepository
         $data = DB::select('select amount from activities where project_id= ? and is_added = true and amount <> 0',[$project_id]);
         return $data;
     }
+    public function get_projects_for_contact($contact_id)
+    {   //trae el valor del contrato del proyecto sumando todos sus adicionales
+        $data = DB::select('select amount from activities where project_id= ? and is_added = true and amount <> 0',[$project_id]);
+        return $data;
+    }
 
 }

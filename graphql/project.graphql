@@ -71,15 +71,24 @@ extend type Query
 {
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(id:ID! @eq): Project @find(model: "App\\Project") @can(ability: "view", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
     #projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])  #, "can:project.list"
     #projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #projects_with_parent(parent_project_id: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
     #Lista proyectos por estado
     state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos con todos los filtros
-    projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project")
+    projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
+
+    projects_paginator_with_parent_permisssion(
+        state: state_project!
+        orderBy: [OrderByClause!] @orderBy
+        ):[Project]
+        @paginate(builder: "App\\GraphQL\\Queries\\ProjectsPermission@visibleProjects")
+        @can(ability: "viewAny", model: "App\\Project")
+        @middleware(checks:["auth:api", "can:project.list"])
+
     #Lista el folder_id para soportes
     folder_supports(project_id:Int!):Document_reference @field(resolver: "App\\GraphQL\\Queries\\Folder_supports@resolve")#@middleware(checks:["auth:api"])
     #Traer el total del contrato(Sumando actas)
@@ -117,7 +126,7 @@ extend type Mutation {
         association: associationProject
         consortium_name:String
         consortium_nit:Int
-    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
+    ): Project @update(model: "App\\Project") @can(ability: "update", model: "App\\Project") @middleware(checks:["auth:api", "can:project.edit"]) #@can(ability: "update", model: "App\\Project")
     #Editar estado Proyecto
     updateStateProject(
         id: ID! @rules(apply: ["required"])

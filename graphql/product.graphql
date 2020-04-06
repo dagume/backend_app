@@ -14,7 +14,7 @@ extend type Query{
     #Products
     filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
     product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") #@middleware(checks:["auth:api"])
-    products: [Product!]! @all(model: "App\\Product") #@middleware(checks:["auth:api"])
+    products: [Product!]! @all(model: "App\\Product")   #@middleware(checks:["auth:api"])
     products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product") #@middleware(checks:["auth:api"])
 }
 

@@ -51,6 +51,20 @@ class MemberRepository extends BaseRepository
         //dd(empty($data[0]));
         return $data;
     }
+    public function get_user_has_project($contact_id, $project_id)
+    {
+        //Consultamos si ese contacto pertenece a un proyecto en especifico
+        $data = DB::select('select * from members where contact_id = ? and project_id = ?',[$contact_id, $project_id]);
+        //dd(empty($data[0]));
+        return $data;
+    }
+    public function get_members_for_a_contact($contact_id)
+    {
+        //Consultamos si ese contacto algun proyecto
+        $data = DB::select('select * from members where contact_id = ?',[$contact_id]);
+        //dd(empty($data[0]));
+        return $data;
+    }
     //public function mem_rol_contact($contact_id)
     //{
     //    //traemos todos los roles de un contacto en todo el sistema
