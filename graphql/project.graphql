@@ -79,9 +79,9 @@ extend type Query
     #Lista proyectos por estado
     state_projects(state: state_project @where(operator: "=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Lista proyectos con todos los filtros
-    projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
+    #projects_paginator_with_parent(state: state_project @where(operator: "=") parent_project_id: Int @where(operator: "!=") orderBy: [OrderByClause!] @orderBy): [Project] @paginate(type: "paginator" model: "App\\Project") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
 
-    projects_paginator_with_parent_permisssion(
+    projects_paginator_with_parent(
         state: state_project!
         orderBy: [OrderByClause!] @orderBy
         ):[Project]
