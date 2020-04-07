@@ -36,8 +36,17 @@ type Mutation
 type MessageSuccess {
     message: String
 }
+type MessageSuccessPassword {
+    message: String
+    type:String
+}
 
 type Mutation {
+    updatePassword(
+        contact_id:ID!
+        password:String
+        password_confirmation:String
+    ): MessageSuccessPassword @field(resolver: "App\\GraphQL\\Mutations\\UpdatePassword@resolve")
     #upload drive
     uploadFile(
         name:String @rules(apply: ["max:255"])
