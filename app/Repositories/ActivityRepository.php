@@ -18,7 +18,11 @@ class ActivityRepository extends BaseRepository
         return $reference;
     }
     public function betweenActivity($first_day, $last_day){
-        //Traemos las actividades que vencen hoy
+        //Traemos las actividades que vencen entre ciertas fechas
+        //$reference = DB::table('activities')
+        //            ->whereBetween('date_end', [$first_day, $last_day])
+        //            ->where('is_act', false)->get();
+        ////dd($activities);
         $reference =  DB::select('select * from activities where date_end between ? and ? and is_act = false',[$first_day, $last_day]);
         return $reference;
     }

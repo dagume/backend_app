@@ -23,15 +23,20 @@ class ProjectsPermission
     }
     public function visibleProjects($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Builder
     {
-
-        $contact_id = auth()->user()->id;
-        $projects =  DB::table('projects')
-        ->select('projects.*')
+        $contact_id = auth()->user()->id; //usuario logueado
+        $projects =  DB::table('projects') //Buscamos los id de los projectos permitidos por usuario
+        ->select('projects.id')
         ->distinct()
         ->join('members', 'projects.id', '=', 'members.project_id')
         ->where('projects.state', $args['state'])
-        ->where('members.contact_id', $contact_id);
-        
-        return $projects;
+        ->where('members.contact_id', $contact_id)->get();
+
+        foreach ($projects as $pro) { //Ponemos los ids en un arreglo
+            $projects_id[] = $pro->id;
+        }
+
+        $permission_projects = DB::table('projects') //creamos el Query Builder para pasar al paginador
+        ->whereIn('id', $projects_id);
+        return $permission_projects;
     }
 }

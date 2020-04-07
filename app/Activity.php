@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Project;
 
 class Activity extends Model
 {
@@ -30,9 +32,9 @@ class Activity extends Model
         'type'
     ];
 
-    public function project()
+    public function project(): BelongsTo
     {
-        return $this->belongsTo('App\Project');
+        return $this->belongsTo(Project::class);
     }
     public function activities()
     {
