@@ -33,5 +33,18 @@ abstract class BaseRepository
     {
         $object->delete();
     }
+    public function getObjects($data)
+    {
+        foreach($data as $key => $value) {
+            $objects[] = $this->getModel();
+            foreach ($value as $key2 => $value2) {
+                $objects[$key]->$key2 = $value2;
+            }
+        }
+        if (empty($objects)) {
+            return [];
+        }
+        return $objects;
+    }
 
 }

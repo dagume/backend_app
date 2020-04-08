@@ -5,6 +5,7 @@ namespace App\GraphQL\Queries;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\ActivityRepository;
+use App\Activity;
 use DB;
 
 class MonthActivities

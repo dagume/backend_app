@@ -15,16 +15,14 @@ class ActivityRepository extends BaseRepository
     public function todayActivity($date){
         //Traemos las actividades que vencen hoy
         $reference = DB::select('select * from activities where date_end = ? and  is_act = false',[$date]);
-        return $reference;
+        return $this->getObjects($reference);
     }
     public function betweenActivity($first_day, $last_day){
         //Traemos las actividades que vencen entre ciertas fechas
-        //$reference = DB::table('activities')
-        //            ->whereBetween('date_end', [$first_day, $last_day])
-        //            ->where('is_act', false)->get();
-        ////dd($activities);
-        $reference =  DB::select('select * from activities where date_end between ? and ? and is_act = false',[$first_day, $last_day]);
-        return $reference;
+        $reference = DB::table('activities')
+                    ->whereBetween('date_end', [$first_day, $last_day])
+                    ->where('is_act', false)->get();
+        return $this->getObjects($reference);
     }
     public function act_activity($project_id){
         //Traemos las actividades que son acta
@@ -36,11 +34,4 @@ class ActivityRepository extends BaseRepository
         $added = DB::select('select amount from activities where project_id = ? and is_added = true',[$project_id]);
         return $added;
     }
-    //public function getFolderContact()
-    //{
-    //    //trae la referencia del folder raiz de Contactos
-    //    $folderContact = DB::select('SELECT id, drive_id FROM document_reference WHERE name = ?', ['Contactos']);
-    //    return $folderContact[0];
-    //}
-
 }

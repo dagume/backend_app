@@ -33,9 +33,7 @@ class WeekActivities
         }
         $first_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")-$day_week+1, date("Y"))).'\'';
         $last_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+(7 - $day_week), date("Y"))).'\'';
-        dd($first_day, $last_day);
         $activities = $this->activityRepo->betweenActivity($first_day, $last_day);
-        //dd($ultimo_dia);
         return $activities;
     }
 }
