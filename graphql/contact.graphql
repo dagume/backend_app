@@ -100,7 +100,7 @@ extend type Mutation {
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType @rules(apply: ["integer"])
-        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
+        identification_number: Int @rules(apply: ["required"])
         email: String @rules(apply: ["required", "max:255"])
         phones:String @rules(apply: ["max:30"])
         state:Int @rules(apply: ["required"])

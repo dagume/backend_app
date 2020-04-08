@@ -38,12 +38,13 @@ class UpdatePassword
                     'type' => 'Successful'
                 ];
             }
+            return[
+                'message' => 'La nueva contraseña no coincide',
+                'type' => 'Failed'
+            ];
         }
-
-
-
         return[
-            'message' => 'Los datos no coinciden',
+            'message' => 'Contraseña actual incorrecta',
             'type' => 'Failed'
         ];
 
