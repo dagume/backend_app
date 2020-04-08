@@ -5,13 +5,13 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\MeasureRepository;
-
+use DB;
 class CreateMeasure
 {
     protected $measureRepo;
 
     public function __construct(MeasureRepository $meaRepo)
-    {        
+    {
         $this->measureRepo = $meaRepo;
     }
     /**
@@ -25,10 +25,27 @@ class CreateMeasure
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-       $measure = $this->$measureRepo->create($args);
-       return [
-           'measure' => $measure,
-           'message' => 'Unidad creada con exito'
-       ]; 
+        $mea = DB::transaction(function () use($args){
+
+            try
+            {
+                $measure = $this->measureRepo->create($args);
+                return $measure;
+            }
+            catch (\Illuminate\Database\QueryException $e)
+            {
+                return [
+                    'measure' => null,
+                    'message' => 'Error, vuelva a intentar',
+                    'type' => 'Failed'
+                ];
+            }
+
+        }, 3);
+        return [
+            'measure' => $mea,
+            'message' => 'Unidad creada con exito',
+            'type' => 'Successful'
+        ];
     }
 }

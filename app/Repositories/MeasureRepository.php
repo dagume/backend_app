@@ -11,5 +11,5 @@ class MeasureRepository extends BaseRepository
     public function getModel()
     {
         return new Measure;
-    }    
+    }
 }

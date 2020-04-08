@@ -6,6 +6,7 @@ type Measure{
 type MessageSuccessMeasure {
     measure:Measure
     message: String
+    type:String
 }
 
 extend type Query{
@@ -16,7 +17,7 @@ extend type Query{
 extend type Mutation {
     #unidad de medida
     createMeasure(
-        name: String @rules(apply: ["required", "max:255"])
+        name: String! @rules(apply: ["required", "max:255"])
     ):MessageSuccessMeasure @field(resolver: "App\\GraphQL\\Mutations\\CreateMeasure@resolve") #@middleware(checks:["auth:api"])
 
     updateMeasure(
