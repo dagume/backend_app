@@ -26,7 +26,6 @@ class CreateMeasure
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $mea = DB::transaction(function () use($args){
-
             try
             {
                 $measure = $this->measureRepo->create($args);
@@ -40,7 +39,6 @@ class CreateMeasure
                     'type' => 'Failed'
                 ];
             }
-
         }, 3);
         return [
             'measure' => $mea,
