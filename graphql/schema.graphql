@@ -44,8 +44,9 @@ type MessageSuccessPassword {
 type Mutation {
     updatePassword(
         contact_id:ID!
-        password:String
-        password_confirmation:String
+        present_password:String!
+        new_password:String!
+        new_password_confirmation:String!
     ): MessageSuccessPassword @field(resolver: "App\\GraphQL\\Mutations\\UpdatePassword@resolve")
     #upload drive
     uploadFile(

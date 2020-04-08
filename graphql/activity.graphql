@@ -1,7 +1,7 @@
 #Actividades
 type Activity { #implements GlobalSearch{
     id:ID!
-    project(category: String @eq(key: "project_id")):Project
+    project:Project #(category: String @eq(key: "project_id"))
     activities:[Activity]
     name:String!
     description:String

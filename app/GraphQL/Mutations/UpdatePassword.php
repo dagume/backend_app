@@ -28,14 +28,20 @@ class UpdatePassword
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $contact = $this->contactRepo->find($args['contact_id']);
-        if ($args['password'] === $args['password_confirmation']) {
-            $data['password'] = Hash::make( $args['password']);
-            $this->contactRepo->update($contact->id, $data);
-            return[
-                'message' => 'Contraseña Actualizada',
-                'type' => 'Successful'
-            ];
+
+        if (Hash::check($args['present_password'], $contact->password)) {
+            if ($args['new_password'] === $args['new_password_confirmation']) {
+                $data['password'] = Hash::make( $args['new_password']);
+                $this->contactRepo->update($contact->id, $data);
+                return[
+                    'message' => 'Contraseña Actualizada',
+                    'type' => 'Successful'
+                ];
+            }
         }
+
+
+
         return[
             'message' => 'Los datos no coinciden',
             'type' => 'Failed'
