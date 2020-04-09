@@ -37,8 +37,8 @@ type Doc_contact{
 
 #regimen del contacto
 enum contactRegime{
-    No responsable de IVA
-    Responsable de IVA
+    No_Responsable_IVA
+    Responsable_IVA
     Autoretenedor
 }
 
@@ -93,26 +93,42 @@ extend type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8", "nullable"])
-    ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve")#@middleware(checks:["auth:api"])
+    ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve") @middleware(checks:["auth:api", "can:contact.create"])
 
     updateContact(
         id: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["required", "max:255"])
+        name: String @rules(apply: ["max:255"])
         lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType @rules(apply: ["integer"])
-        identification_number: Int @rules(apply: ["required"])
-        email: String @rules(apply: ["required", "max:255"])
+        identification_number: Int @rules(apply: ["integer"])
+        email: String @rules(apply: ["max:255"])
         phones:String @rules(apply: ["max:30"])
-        state:Int @rules(apply: ["required"])
+        state:Int @rules(apply: ["integer"])
         locate:String @rules(apply: ["max:255"])
         city:String @rules(apply: ["max:255"])
         regime:contactRegime @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
-    ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
+    ): Contact @update(model: "App\\User") @middleware(checks:["auth:api", "can:contact.edit"])
+
+    updateProfile(
+        id: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["max:255"])
+        lastname: String @rules(apply: ["max:255"])
+        identification_type: contactIdType @rules(apply: ["integer"])
+        identification_number: Int @rules(apply: ["integer"])
+        email: String @rules(apply: ["max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["integer"])
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        regime:contactRegime @rules(apply: ["max:50", "nullable"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Contact @update(model: "App\\User") @can(ability: "update", model: "App\\User") @middleware(checks:["auth:api"])
 
     updateContactState(
         id: ID! @rules(apply: ["required"])
         state:Int @rules(apply: ["required"])
-    ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
+    ): Contact @update(model: "App\\User") @middleware(checks:["auth:api", "can:contact.edit"])
 }

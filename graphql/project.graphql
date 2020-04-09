@@ -80,7 +80,7 @@ extend type Query
     project(id:ID! @eq): Project @find(model: "App\\Project") @can(ability: "view", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
 
     #lista los proyectos padre para asignar al momento de crear un nuevo proyecto
-    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api", "can:project.create"])
+    projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project")
 
     #Lista proyectos con todos los filtros
     projects_paginator_with_parent(state: state_project! orderBy: [OrderByClause!] @orderBy):[Project] @paginate(builder: "App\\GraphQL\\Queries\\ProjectsPermission@visibleProjects") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
