@@ -4,15 +4,16 @@ namespace App\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Repositories\MeasureRepository;
+use App\Repositories\PucRepository;
 use DB;
-class CreateMeasure
-{
-    protected $measureRepo;
 
-    public function __construct(MeasureRepository $meaRepo)
+class CreatePuc
+{
+    protected $pucRepo;
+
+    public function __construct(PucRepository $puRepo)
     {
-        $this->measureRepo = $meaRepo;
+        $this->pucRepo = $puRepo;
     }
     /**
      * Return a value for the field.
@@ -25,22 +26,25 @@ class CreateMeasure
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-            try
-            {
-                $measure = $this->measureRepo->create($args);
-                return $measure;
+        try
+        {
+            if (empty($args['description'])) {
+                $args['description'] = null;
             }
-            catch (\Illuminate\Database\QueryException $e)
-            {
-                return [
-                    'measure' => null,
-                    'message' => 'Error, vuelva a intentar',
-                    'type' => 'Failed'
-                ];
-            }
+            $puc = DB::insert('insert into puc (id, parent_puc_id, name, description) values (?, ?, ?, ?)', [$args['id'], $args['parent_puc_id'], $args['name'], $args['description']]);
+
+        }catch (\Illuminate\Database\QueryException $e)
+        {
+            return [
+                'measure' => null,
+                //'message' => 'Error, vuelva a intentar',
+                'message' => $e->getMessage(),
+                'type' => 'Failed'
+            ];
+        }
         return [
-            'measure' => $mea,
-            'message' => 'Unidad creada con exito',
+            'puc' => $this->pucRepo->find($args['id']),
+            'message' => 'Cuenta creada con exito',
             'type' => 'Successful'
         ];
     }

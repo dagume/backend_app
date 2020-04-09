@@ -15,11 +15,23 @@ type PucLevels{
     thirdlevel_id:Int
     thirdlevel_name:String
 }
-
+type MessageSuccessPuc{
+    puc:Puc
+    message:String
+    type:String
+}
 extend type Query{
     #Query Puc
     pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
-    pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"    
-    puc(id:Int @eq name:String @eq): Puc @find(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"    
-    pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"        
+    pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"
+    puc(id:Int @eq name:String @eq): Puc @find(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"
+    pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"
+}
+extend type Mutation{
+    create_puc(
+        id:Int! @rules(apply: ["required","unique:puc,id"])
+        parent_puc_id:Int @rules(apply: ["required"])
+        name:String @rules(apply: ["required"])
+        description:String
+    ):MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\CreatePuc@resolve") #@middleware(checks:["auth:api"])
 }
