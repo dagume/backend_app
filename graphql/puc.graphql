@@ -28,10 +28,20 @@ extend type Query{
     pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") #@middleware(checks:["auth:api"])  #, "can:project.list"
 }
 extend type Mutation{
+
+    #Crear PUC
     create_puc(
         id:Int! @rules(apply: ["required","unique:puc,id"])
         parent_puc_id:Int @rules(apply: ["required"])
         name:String @rules(apply: ["required"])
         description:String
     ):MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\CreatePuc@resolve") #@middleware(checks:["auth:api"])
+
+    #Editar PUC
+    update_puc(
+        id:ID! @rules(apply: ["required"])
+        parent_puc_id:Int
+        name:String
+        description:String
+    ):Puc @update(model: "App\\Puc") #@middleware(checks:["auth:api"])
 }
