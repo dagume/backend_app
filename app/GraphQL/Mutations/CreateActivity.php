@@ -23,8 +23,6 @@ class CreateActivity
         $this->activityRepo = $actRepo;
         $this->projectRepo = $proRepo;
     }
-
-
     /**
      * Return a value for the field.
      *

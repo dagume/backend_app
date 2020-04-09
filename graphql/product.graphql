@@ -29,10 +29,10 @@ extend type Mutation {
     #Actualizar Producto
     updateProduct(
         id: ID! @rules(apply: ["required"])
-        category_id: Int @rules(apply: ["required"])
-        name: String @rules(apply: ["required", "max:255","unique:products,name"])
+        category_id: Int
+        name: String
         description: String @rules(apply: ["max:255"])
-        tax_id: Int @rules(apply: ["required","integer"])
+        tax_id: Int @rules(apply: ["integer"])
     ): Product @update(model: "App\\Product")
     #Eliminar Producto
     deleteProduct(id: ID!): MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\DeleteProduct@resolve")
