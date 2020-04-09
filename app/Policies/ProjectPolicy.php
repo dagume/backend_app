@@ -9,12 +9,15 @@ use App\Repositories\MemberRepository;
 
 class ProjectPolicy
 {
-    protected $memberRepo;
     use HandlesAuthorization;
 
-    public function __construct(MemberRepository $memRepo){
+    protected $memberRepo;
+
+    public function __construct(MemberRepository $memRepo)
+    {
         $this->memberRepo = $memRepo;
     }
+
     /**
      * Determine whether the user can view any projects.
      *
@@ -23,7 +26,6 @@ class ProjectPolicy
      */
     public function viewAny(User $user)
     {
-        //dd($user);
         $members = $this->memberRepo->get_members_for_a_contact($user->id);
         if(empty($members)){
             return False;
@@ -40,7 +42,6 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project)
     {
-        //dd($user,$project);
         $members = $this->memberRepo->get_user_has_project($user->id, $project->id);
         if(empty($members)){
             return False;
@@ -66,13 +67,16 @@ class ProjectPolicy
      * @param  \App\Project  $project
      * @return mixed
      */
-    public function update(?User $user, Project $project)
+    public function update(User $user, Project $project)
     {
+        //Revisar porq creo que si le damos todo el acceso al aminstrador no ba hacer parte de todos los proyecto y aun asi podra editar los projectos
+        //y esta politica me estaba validando si ese usuario es miembro del proyecto
+
         //dd($user,$project);
-        $members = $this->memberRepo->get_user_has_project($user->id, $project->id);
-        if(empty($members)){
-            return False;
-        }
+        //$members = $this->memberRepo->get_user_has_project($user->id, $project->id);
+        //if(empty($members)){
+        //    return False;
+        //}
         return True;
     }
 

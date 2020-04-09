@@ -29,5 +29,16 @@ class ProjectRepository extends BaseRepository
         $data = DB::select('select amount from activities where project_id= ? and is_added = true and amount <> 0',[$project_id]);
         return $data;
     }
+    public function get_filter_permission_project($name, $contact_id)
+    {   //filtramos los projectos según este relacionados con usuario logueado y parametro enviado
+        $data = DB::table('projects')
+            ->select('projects.*')
+            ->distinct()
+            ->join('members', 'projects.id', '=', 'members.project_id')
+            ->where('projects.name', 'ilike', $name)
+            ->where('members.contact_id', $contact_id)
+            ->whereNotNull('projects.parent_project_id')->get();
+        return $this->getObjects($data);
+    }
 
 }

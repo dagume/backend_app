@@ -70,7 +70,8 @@ enum SortOrder {
 extend type Query
 {
     #Buscador de proyecto por nombre
-    filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
+    #filter_name_Project(name: String! @where(operator: "ilike") parent_project_id: Int @where(operator: "!=")): [Project] @all(model: "App\\Project") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
+    filter_name_Project(name: String! parent_project_id: Int): [Project] @field(resolver: "App\\GraphQL\\Queries\\FilterNameProject@resolve") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
 
     #ver proyecto en especifico
     project(id:ID! @eq): Project @find(model: "App\\Project") @can(ability: "view", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
@@ -111,7 +112,7 @@ extend type Mutation {
         association: associationProject
         consortium_name:String
         consortium_nit:Int
-    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api", "can:project.create"])
 
     #Editar Proyecto
     updateProject(
@@ -127,11 +128,10 @@ extend type Mutation {
         association: associationProject
         consortium_name:String
         consortium_nit:Int
-    ): Project @update(model: "App\\Project") @can(ability: "update", model: "App\\Project") @middleware(checks:["auth:api", "can:project.edit"]) #@can(ability: "update", model: "App\\Project")
+    ): Project @update(model: "App\\Project") @can(ability: "update", model: "App\\Project") @middleware(checks:["auth:api", "can:project.edit"])
 
     #Editar estado Proyecto
     updateStateProject(
         id: ID! @rules(apply: ["required"])
         state: state_project @rules(apply: ["required"])
-    ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
-}
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api", "can:project.destroy"])
