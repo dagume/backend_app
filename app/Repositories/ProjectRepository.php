@@ -38,7 +38,7 @@ class ProjectRepository extends BaseRepository
             ->where('projects.name', 'ilike', $name)
             ->where('members.contact_id', $contact_id)
             ->whereNotNull('projects.parent_project_id')->get();
-        return $this->getObjects($data);
+        return $data;
     }
 
 }
