@@ -4,10 +4,17 @@ namespace App\GraphQL\Queries;
 use Illuminate\Database\Query\Builder;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\Repositories\ProjectRepository;
 use DB;
 
 class ProjectsPermission
 {
+    protected $projectRepo;
+
+    public function __construct(ProjectRepository $proRepo)
+    {
+        $this->projectRepo = $proRepo;
+    }
     /**
      * Return a value for the field.
      *
@@ -23,22 +30,27 @@ class ProjectsPermission
     }
     public function visibleProjects($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Builder
     {
-        $contact_id = auth()->user()->id; //usuario logueado
-        $projects =  DB::table('projects') //Buscamos los id de los projectos permitidos por usuario
-            ->select('projects.id')
-            ->distinct()
-            ->join('members', 'projects.id', '=', 'members.project_id')
-            ->where('projects.state', $args['state'])
-            ->where('members.contact_id', $contact_id);
+        $contact = auth()->user(); //usuario logueado
+
+        foreach ($contact->roles as $rol) { //Verificacomos si este usuario tiene role administrador
+            if (trim($rol->special) === 'all-access') {
+                return $this->projectRepo->get_all_projects($args['state']);
+            }
+        }
+
+        //Buscamos los id de los projectos permitidos por usuario
+        $projects = $this->projectRepo->projects_id_permission_for_user($args['state'], $contact->id);
 
         foreach ($projects->get() as $pro) { //Ponemos los ids en un arreglo
             $projects_id[] = $pro->id;
         }
+
         if (!empty($projects_id)) {
-            $permission_projects = DB::table('projects') //creamos el Query Builder para pasar al paginador
-            ->whereIn('id', $projects_id);
+            //creamos el Query Builder para pasar al paginador
+            $permission_projects = $this->projectRepo->projects_permission_for_user($projects_id);
             return $permission_projects;
         }
+
         return $projects; //retorna el query builder vacio
     }
 }
