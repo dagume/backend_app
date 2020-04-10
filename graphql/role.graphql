@@ -20,10 +20,23 @@ extend type Query{
     roles(is_visible:Boolean! @where(operator: "=")): [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
     roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
 }
-extend type Mutation{  
+extend type Mutation{
+
+    #le asignamos documentos requeridos a un role
     role_requiredDoc(
       role_id:Int
       required_doc:[Int]
-    ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\Role_RequireDocument@resolve")
+    ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\Role_RequireDocument@resolve") @middleware(checks:["auth:api", "can:required_doc.role"])
+
+    #le asignamos permisos a un role
+    role_permissions(
+      role_id:Int
+      permissions_id:[Int]
+    ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\RoleHasPermissions@resolve") @middleware(checks:["auth:api", "can:permission.role"])
+    #le quitamos permisos a un role
+    delete_role_permissions(
+      role_id:Int
+      permissions_id:[Int]
+    ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\DeleteRoleHasPermissions@resolve") @middleware(checks:["auth:api", "can:permissions.role.destroy"])
 }
 

@@ -69,7 +69,6 @@ enum SortOrder {
     DESC
 }
 
-
 extend type Query
 {
     #Buscador de proyecto por nombre

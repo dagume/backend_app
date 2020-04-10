@@ -1,7 +1,7 @@
 #Documentos requeridos
 type Required_documents {
   id: ID!
-  name_required_documents: String    
+  name_required_documents: String
 }
 
 extend type Query{
@@ -24,20 +24,4 @@ extend type Mutation {
       id:ID!
       name_required_documents:String
     ):Required_documents @update(model: "App\\Required_documents")
-    ##Product
-    #createProduct(
-    #    category_id: Int! @rules(apply: ["required","integer"])
-    #    name: String! @rules(apply: ["required", "max:255","unique:products,name"])
-    #    description: String @rules(apply: ["max:255"])
-    #):MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") #@middleware(checks:["auth:api"])
-    #
-    #updateProduct(
-    #    id: ID! @rules(apply: ["required"])
-    #    category_id: Int! @rules(apply: ["required"])
-    #    name: String! @rules(apply: ["required", "max:255","unique:products,name"])
-    #    description: String @rules(apply: ["max:255"])
-    #): Product @update(model: "App\\Product")
-#
-    #deleteProducto(id: ID!): MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\DeleteProduct@resolve")
-
 }
