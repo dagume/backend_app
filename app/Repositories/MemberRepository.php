@@ -60,7 +60,7 @@ class MemberRepository extends BaseRepository
     }
     public function get_members_for_a_contact($contact_id)
     {
-        //Consultamos si ese contacto algun proyecto
+        //Consultamos si ese contacto es integrante de algun proyecto
         $data = DB::select('select * from members where contact_id = ?',[$contact_id]);
         //dd(empty($data[0]));
         return $data;
