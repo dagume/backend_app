@@ -15,6 +15,7 @@ class Contacts
     {
         $this->contactRepo = $conRepo;
     }
+
     /**
      * Return a value for the field.
      *
@@ -27,10 +28,13 @@ class Contacts
 
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-
     }
     public function visibleContacts($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        if (empty($args['type']) || is_null($args['type']))
+        {
+            return $this->contactRepo->get_contacts_assets_whitout_filter_type();
+        }
         return $this->contactRepo->get_contacts_assets($args['type']);
     }
 }
