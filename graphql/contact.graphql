@@ -71,7 +71,7 @@ extend type Query{
     filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")@middleware(checks:["auth:api", "can:contact.list"])
 
     #ver listado de projectos por filtro se usa para poder agregar miembros (solo si tiene permiso de hacerlo)
-    filter_contacts(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact_enable@resolve") @middleware(checks:["auth:api"]) #, "can:member.create"
+    filter_contacts(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact_enable@resolve") @middleware(checks:["auth:api", "can:member.create"])
 
     #ver detalle de un contacto(Solo si tiene el permiso de hacerlo)
     contact(id:ID! @eq): Contact @find(model: "App\\User") @middleware(checks:["auth:api", "can:project.show"])
