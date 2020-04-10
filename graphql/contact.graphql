@@ -65,17 +65,24 @@ type MessageSuccessContact {
 extend type Query{
 
     #Query documentos requerido por contacto
-    require_doc_contact(contact_id: Int! @eq): [Doc_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") #@middleware(checks:["auth:api"])
+    require_doc_contact(contact_id: Int! @eq): [Doc_contact] @field(resolver: "App\\GraphQL\\Queries\\Contact@resolve") @middleware(checks:["auth:api"])
 
     #Query Contacts
-    filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")#@middleware(checks:["auth:api"])
-    filter_contacts(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact_enable@resolve")#@middleware(checks:["auth:api"])
+    filter_name_contact(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact@resolve")@middleware(checks:["auth:api", "can:contact.list"])
+
+    #ver listado de projectos por filtro se usa para poder agregar miembros (solo si tiene permiso de hacerlo)
+    filter_contacts(searchText: String!): [Contact] @field(resolver: "App\\GraphQL\\Queries\\Filter_contact_enable@resolve") @middleware(checks:["auth:api"]) #, "can:member.create"
+
+    #ver detalle de un contacto(Solo si tiene el permiso de hacerlo)
+    contact(id:ID! @eq): Contact @find(model: "App\\User") @middleware(checks:["auth:api", "can:project.show"])
+
+    #ver detalle de mi perfil(Solo si es el mismo usuario logueado quien quiere hacerlo)
+    my_profile(id:ID! @eq): Contact @find(model: "App\\User") @can(ability: "view", model: "App\\Project") @middleware(checks:["auth:api"])
+
+    #ver listado de projectos por tipo o TODOS(type = null o vacio )(solo si tiene permiso de hacerlo)
+    contacts(type:Int): [Contact] @paginate(builder: "App\\GraphQL\\Queries\\Contacts@visibleContacts") @middleware(checks:["auth:api", "can:contact.list"])
 
     #filter_name_contact(name: String!  @where(operator: "ilike")): [Contact] @all(model: "App\\User") @middleware(checks:["auth:api"])
-    contact(name: String @eq id:ID @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
-
-    #arreglar que no salga contacto del projecto
-    contacts(type:Int): [Contact] @paginate(builder: "App\\GraphQL\\Queries\\Contacts@visibleContacts") @middleware(checks:["auth:api", "can:contact.list"])
     #contactsType(type:contactType @where(operator: "=")): [Contact!]! @all(model: "App\\User")  #@middleware(checks:["auth:api"])
     #contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") #@middleware(checks:["auth:api"])
 }

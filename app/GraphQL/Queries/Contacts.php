@@ -28,6 +28,7 @@ class Contacts
 
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+
     }
     public function visibleContacts($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {

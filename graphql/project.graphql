@@ -77,7 +77,7 @@ extend type Query
     filter_name_Project(name: String! ): [ProjectName] @field(resolver: "App\\GraphQL\\Queries\\FilterNameProject@resolve") @can(ability: "viewAny", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
 
     #ver proyecto en especifico
-    project(id:ID! @eq): Project @find(model: "App\\Project") @can(ability: "view", model: "App\\Project") @middleware(checks:["auth:api", "can:project.list"])
+    project(id:ID! @eq): Project @find(model: "App\\Project") @can(ability: "view", model: "App\\Project") @middleware(checks:["auth:api", "can:project.show"])
 
     #lista los proyectos padre para asignar al momento de crear un nuevo proyecto
     projects_parent(parent_project_id: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project")
