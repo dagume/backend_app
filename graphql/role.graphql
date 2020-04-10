@@ -24,19 +24,25 @@ extend type Mutation{
 
     #le asignamos documentos requeridos a un role
     role_requiredDoc(
-      role_id:Int
-      required_doc:[Int]
+      role_id:Int!
+      required_doc:[Int!]
     ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\Role_RequireDocument@resolve") @middleware(checks:["auth:api", "can:required_doc.role"])
+
+    #le quitamos documentos requeridos a un role
+    delete_role_requiredDoc(
+      role_id:Int!
+      required_doc:[Int!]
+    ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\DeleteRole_RequireDocument@resolve") @middleware(checks:["auth:api", "can:required_doc.role.destroy"])
 
     #le asignamos permisos a un role
     role_permissions(
-      role_id:Int
-      permissions_id:[Int]
+      role_id:Int!
+      permissions_id:[Int!]
     ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\RoleHasPermissions@resolve") @middleware(checks:["auth:api", "can:permission.role"])
     #le quitamos permisos a un role
     delete_role_permissions(
-      role_id:Int
-      permissions_id:[Int]
+      role_id:Int!
+      permissions_id:[Int!]
     ):MessageSuccessRole @field(resolver:"App\\GraphQL\\Mutations\\DeleteRoleHasPermissions@resolve") @middleware(checks:["auth:api", "can:permissions.role.destroy"])
 }
 
