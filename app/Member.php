@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-use Caffeinated\Shinobi\Models\Role;
+use App\Role;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
@@ -32,5 +32,5 @@ class Member extends Model
     {
         return $this->belongsTo(Role::class);
     }
-    
+
 }

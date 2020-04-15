@@ -3,7 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use Exception;
-use Caffeinated\Shinobi\Models\Role;
+use App\Role;
 use App\Document_reference;
 use App\Project;
 use GraphQL\Type\Definition\ResolveInfo;

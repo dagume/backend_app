@@ -19,7 +19,7 @@ class UserTest extends TestCase
         $permission = factory(Permission::class)->create();
 
         $this->assertCount(0, $user->permissions);
-        
+
         $user->givePermissionTo($permission);
 
         $this->assertCount(1, $user->fresh()->permissions);
@@ -32,7 +32,7 @@ class UserTest extends TestCase
         $permission = factory(Permission::class)->create();
 
         $this->assertCount(0, $user->permissions);
-        
+
         $user->givePermissionTo($permission->slug);
 
         $this->assertCount(1, $user->fresh()->permissions);
@@ -43,7 +43,7 @@ class UserTest extends TestCase
     {
         $user        = factory(User::class)->create();
         $permissions = factory(Permission::class, 5)->create();
-        
+
         $this->assertCount(0, $user->permissions);
 
         $user->givePermissionTo($permissions);
@@ -58,7 +58,7 @@ class UserTest extends TestCase
         $permissions = factory(Permission::class, 5)->create()->pluck('slug');
 
         $this->assertCount(0, $user->permissions);
-        
+
         $user->givePermissionTo($permissions);
 
         $this->assertCount(5, $user->fresh()->permissions);
@@ -69,9 +69,9 @@ class UserTest extends TestCase
     {
         $user       = factory(User::class)->create();
         $permission = factory(Permission::class)->create();
-        
+
         $user->givePermissionTo($permission);
-        
+
         $this->assertCount(1, $user->permissions);
 
         $user->revokePermissionTo($permission);
@@ -84,9 +84,9 @@ class UserTest extends TestCase
     {
         $user       = factory(User::class)->create();
         $permission = factory(Permission::class)->create();
-        
+
         $user->givePermissionTo($permission->slug);
-        
+
         $this->assertCount(1, $user->permissions);
 
         $user->revokePermissionTo($permission->slug);
@@ -99,9 +99,9 @@ class UserTest extends TestCase
     {
         $user        = factory(User::class)->create();
         $permissions = factory(Permission::class, 5)->create();
-        
+
         $user->givePermissionTo($permissions);
-        
+
         $this->assertCount(5, $user->permissions);
 
         $user->revokePermissionTo($permissions);
@@ -114,9 +114,9 @@ class UserTest extends TestCase
     {
         $user        = factory(User::class)->create();
         $permissions = factory(Permission::class, 5)->create()->pluck('slug');
-        
+
         $user->givePermissionTo($permissions);
-        
+
         $this->assertCount(5, $user->permissions);
 
         $user->revokePermissionTo($permissions);
@@ -131,7 +131,7 @@ class UserTest extends TestCase
         $permission = factory(Permission::class)->create();
 
         $this->assertFalse($user->hasPermissionTo($permission->slug));
-        
+
         $user->givePermissionTo($permission);
 
         $this->assertTrue($user->fresh()->hasPermissionTo($permission->slug));
@@ -153,7 +153,7 @@ class UserTest extends TestCase
         $role = factory(Role::class)->create();
 
         $this->assertCount(0, $user->roles);
-        
+
         $user->assignRoles($role);
 
         $this->assertCount(1, $user->fresh()->roles);
@@ -166,7 +166,7 @@ class UserTest extends TestCase
         $role = factory(Role::class)->create();
 
         $this->assertCount(0, $user->roles);
-        
+
         $user->assignRoles($role->slug);
 
         $this->assertCount(1, $user->fresh()->roles);
@@ -179,7 +179,7 @@ class UserTest extends TestCase
         $roles = factory(Role::class, 3)->create();
 
         $this->assertCount(0, $user->roles);
-        
+
         $user->assignRoles($roles);
 
         $this->assertCount(3, $user->fresh()->roles);
@@ -192,7 +192,7 @@ class UserTest extends TestCase
         $roles = factory(Role::class, 3)->create()->pluck('slug');
 
         $this->assertCount(0, $user->roles);
-        
+
         $user->assignRoles($roles);
 
         $this->assertCount(3, $user->fresh()->roles);
@@ -202,15 +202,15 @@ class UserTest extends TestCase
     public function it_has_a_given_permission_through_role()
     {
         $this->withoutExceptionHandling();
-        
+
         $user       = factory(User::class)->create();
         $role       = factory(Role::class)->create();
         $permission = factory(Permission::class)->create();
-        
+
         $role->givePermissionTo($permission);
 
         $this->assertFalse($user->hasPermissionTo($permission->slug));
-        
+
         $user->assignRoles($role);
 
         // dd($permission->slug);
@@ -224,11 +224,11 @@ class UserTest extends TestCase
         $user       = factory(User::class)->create();
         $role       = factory(Role::class)->create(['special' => 'no-access']);
         $permission = factory(Permission::class)->create();
-        
+
         $user->givePermissionTo($permission);
 
         $this->assertTrue($user->fresh()->hasPermissionTo($permission->slug));
-        
+
         $user->assignRoles($role);
 
         $this->assertFalse($user->fresh()->hasPermissionTo($permission->slug));
@@ -254,12 +254,12 @@ class UserTest extends TestCase
             'name' => 'Editor',
             'slug' => 'editor',
         ]);
-            
+
         $moderator = factory(Role::class)->create([
             'name' => 'Moderator',
             'slug' => 'moderator',
         ]);
-                
+
         $user = factory(User::class)->create();
 
         $this->assertFalse($user->fresh()->hasAnyRole('moderator', 'editor'));
@@ -276,12 +276,12 @@ class UserTest extends TestCase
             'name' => 'Editor',
             'slug' => 'editor',
         ]);
-            
+
         $moderator = factory(Role::class)->create([
             'name' => 'Moderator',
             'slug' => 'moderator',
         ]);
-        
+
         $user = factory(User::class)->create();
 
         $this->assertFalse($user->fresh()->hasAllRoles('moderator', 'editor'));

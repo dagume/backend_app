@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Caffeinated\Shinobi\Models\Role;
+use App\Role;
 
 class Required_documents extends Model
 {

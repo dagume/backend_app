@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use Caffeinated\Shinobi\Models\Role;
+use App\Role;
 use App\Repositories\BaseRepository;
 use DB;
 

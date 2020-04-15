@@ -4,7 +4,7 @@ namespace App;
 
 use Laravel\Passport\HasApiTokens;
 use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
-use Caffeinated\Shinobi\Models\Role;
+use App\Role;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
