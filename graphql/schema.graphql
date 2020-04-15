@@ -8,7 +8,7 @@ type Query
 
 type Mutation
 #import accounting_movement.graphql
-#import login.graphql
+#import auth.graphql
 #import role.graphql
 #import permission.graphql
 #import project.graphql

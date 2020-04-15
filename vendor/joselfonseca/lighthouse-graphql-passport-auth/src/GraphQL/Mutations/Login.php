@@ -17,11 +17,12 @@ class Login extends BaseAuthResolver
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
+
         $credentials = $this->buildCredentials($args);
         $response = $this->makeRequest($credentials);
         $model = app(config('auth.providers.users.model'));
         $user = $model->where(config('lighthouse-graphql-passport.username'), $args['data']['username'])->firstOrFail();
-        $response['contact'] = $user;
+        $response['user'] = $user;
         return $response;
     }
 
