@@ -11,21 +11,30 @@ type MessageSuccessProduct {
     message: String
 }
 extend type Query{
-    #Products
-    filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
-    product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") #@middleware(checks:["auth:api"])
-    products: [Product!]! @all(model: "App\\Product")   #@middleware(checks:["auth:api"])
-    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product") #@middleware(checks:["auth:api"])
+
+    #buscar productos por filtro de nombre
+    filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
+
+    #ver producto
+    product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") @middleware(checks:["auth:api", "can:product.show"])
+
+    #listar todos los productos
+    products: [Product!]! @all(model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
+
+    #productos paginador
+    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
 }
 
 extend type Mutation {
+
     #Crear Producto
     createProduct(
         category_id: Int @rules(apply: ["required","integer"])
         name: String @rules(apply: ["required", "max:255","unique:products,name"])
         description: String @rules(apply: ["max:255"])
         tax_id: Int @rules(apply: ["required","integer"])
-    ):MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") #@middleware(checks:["auth:api"])
+    ):MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") @middleware(checks:["auth:api", "can:product.create"])
+
     #Actualizar Producto
     updateProduct(
         id: ID! @rules(apply: ["required"])
@@ -33,7 +42,10 @@ extend type Mutation {
         name: String
         description: String @rules(apply: ["max:255"])
         tax_id: Int @rules(apply: ["integer"])
-    ): Product @update(model: "App\\Product")
+    ): Product @update(model: "App\\Product") @middleware(checks:["auth:api", "can:product.edit"])
+
     #Eliminar Producto
-    deleteProduct(id: ID!): MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\DeleteProduct@resolve")
+    deleteProduct(
+        id: ID!
+    ): MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\DeleteProduct@resolve") @middleware(checks:["auth:api", "can:product.destroy"])
 }
