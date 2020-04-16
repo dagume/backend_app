@@ -14,7 +14,8 @@ extend type Query{
     #Categories
     category(name: String! @eq id:ID @eq): Category @find(model: "App\\Category") @middleware(checks:["auth:api", "can:category.show"])
     categories: [Category!]! @all(model: "App\\Category") @middleware(checks:["auth:api", "can:category.list"])
-    categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category") @middleware(checks:["auth:api", "can:category.list"])
+
+    #categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category") @middleware(checks:["auth:api", "can:category.list"])
 }
 extend type Mutation {
     #Category
@@ -29,8 +30,8 @@ extend type Mutation {
         description: String @rules(apply: ["max:255"])
     ): Category @update(model: "App\\Category") @middleware(checks:["auth:api", "can:category.edit"])
 
-    deleteCategory(
-        id: ID!
-    ): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\DeleteCategory@resolve") @middleware(checks:["auth:api", "can:category.destroy"])
+    #deleteCategory(
+    #    id: ID!
+    #): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\DeleteCategory@resolve") @middleware(checks:["auth:api", "can:category.destroy"])
 
 }

@@ -15,14 +15,11 @@ extend type Query{
     #buscar productos por filtro de nombre
     filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
 
-    #ver producto
-    product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") @middleware(checks:["auth:api", "can:product.show"])
-
-    #listar todos los productos
-    products: [Product!]! @all(model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
-
     #productos paginador
     products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
+
+    #product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") @middleware(checks:["auth:api", "can:product.show"])
+    #products: [Product!]! @all(model: "App\\Product") @middleware(checks:["auth:api", "can:product.list"])
 }
 
 extend type Mutation {
