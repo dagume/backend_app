@@ -30,8 +30,8 @@ extend type Mutation {
         description: String @rules(apply: ["max:255"])
     ): Category @update(model: "App\\Category") @middleware(checks:["auth:api", "can:category.edit"])
 
-    #deleteCategory(
-    #    id: ID!
-    #): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\DeleteCategory@resolve") @middleware(checks:["auth:api", "can:category.destroy"])
+    deleteCategory(
+        id: ID!
+    ): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\DeleteCategory@resolve") @middleware(checks:["auth:api", "can:category.destroy"])
 
 }
