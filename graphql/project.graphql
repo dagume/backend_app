@@ -52,6 +52,9 @@ type TotalAmount{
 type ProjectName{
     id:ID
     name:String
+    contract_value: Int
+    state: state_project
+
 }
 input placeProject{
     longitud:String @rules(apply: ["required"])
