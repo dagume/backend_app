@@ -40,11 +40,13 @@ class UpdateRequiredDocument
             }, 3);
         } catch (Exception $e) {
             return [
-                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar'
+                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar',
+                'type' => 'Failed'
             ];
         }
         return [
-            'message' => $mess
+            'message' => $mess,
+            'type' => 'Successful'
         ];
     }
 }
