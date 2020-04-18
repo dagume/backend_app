@@ -9,6 +9,7 @@ type Product {#implements GlobalSearch{
 type MessageSuccessProduct {
     product:Product
     message: String
+    type:String
 }
 extend type Query{
 

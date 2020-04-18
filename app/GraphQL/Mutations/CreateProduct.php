@@ -33,7 +33,8 @@ class CreateProduct
         }, 3);
         return [
             'product' => $prod,
-            'message' => 'Producto creado exitosamente'
+            'message' => 'Producto creado exitosamente',
+            'type' => 'Successful'
         ];
     }
 }

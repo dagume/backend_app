@@ -2,11 +2,11 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Measure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Product;
 
-class DeleteProduct
+class DeleteMeasure
 {
     /**
      * Return a value for the field.
@@ -21,20 +21,20 @@ class DeleteProduct
     {
         try
 		{
-			$product = Product::find($args['id']);
-			$product->delete();
+			$measure = Measure::find($args['id']);
+			$measure->delete();
 		}
         catch (\Illuminate\Database\QueryException $e)
         {
 			return [
                 'product' => null,
-                'message' => 'Este producto no se puede eliminar, se está usando en ordenes de compra',
+                'message' => 'Esta unidad de medida no se puede eliminar, se está usando en ordenes de compra',
                 'type' => 'Failed'
             ];
         }
         return [
-            'product' => $product,
-            'message' => 'Producto eliminado exitosamente',
+            'product' => $measure,
+            'message' => 'Unidad de medida eliminada exitosamente',
             'type' => 'Successful'
         ];
     }
