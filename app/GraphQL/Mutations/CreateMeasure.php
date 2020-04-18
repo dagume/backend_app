@@ -6,6 +6,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\MeasureRepository;
 use DB;
+
 class CreateMeasure
 {
     protected $measureRepo;
@@ -28,7 +29,6 @@ class CreateMeasure
             try
             {
                 $measure = $this->measureRepo->create($args);
-                return $measure;
             }
             catch (\Illuminate\Database\QueryException $e)
             {
@@ -39,7 +39,7 @@ class CreateMeasure
                 ];
             }
         return [
-            'measure' => $mea,
+            'measure' => $measure,
             'message' => 'Unidad creada con exito',
             'type' => 'Successful'
         ];
