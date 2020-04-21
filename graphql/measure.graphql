@@ -20,13 +20,15 @@ extend type Mutation {
         name: String! @rules(apply: ["required", "max:255","unique:measures,name"])
     ):MessageSuccessMeasure @field(resolver: "App\\GraphQL\\Mutations\\CreateMeasure@resolve") #@middleware(checks:["auth:api"])
 
-    updateMeasure(
-        id: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["required", "max:255"])
-    ): Measure @update(model: "App\\Measure")
-
     #Eliminar Unidad de medida
     deleteMeasure(
         id: ID!
     ): MessageSuccessMeasure @field(resolver: "App\\GraphQL\\Mutations\\DeleteMeasure@resolve") #@middleware(checks:["auth:api", "can:product.destroy"])
+
+    ##actualizar unidad de medida
+    #updateMeasure(
+    #    id: ID! @rules(apply: ["required"])
+    #    name: String @rules(apply: ["required", "max:255"])
+    #): Measure @update(model: "App\\Measure")
+
 }
