@@ -32,7 +32,8 @@ class CreateCategory
         }, 3);
             return [
                 'category'=> $cat,
-                'message' => 'Categoria creada exitosamente'
+                'message' => 'Categoria creada exitosamente',
+                'type' => 'Successful'
             ];
     }
 }

@@ -28,12 +28,14 @@ class DeleteCategory
         {
 			return [
                 'category' => null,
-                'message' => 'Esta categoria no se puede eliminar'
+                'message' => 'Esta categoria no se puede eliminar, ya tiene productos asignados',
+                'type' => 'Failed'
             ];
         }
         return [
             'category' => $category,
-            'message' => 'Categoria eliminada exitosamente'
+            'message' => 'Categoria eliminada exitosamente',
+            'type' => 'Successful'
         ];
     }
 }
