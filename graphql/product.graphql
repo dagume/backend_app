@@ -40,7 +40,7 @@ extend type Mutation {
         name: String
         description: String @rules(apply: ["max:255"])
         tax_id: Int @rules(apply: ["integer"])
-    ): Product @update(model: "App\\Product") @middleware(checks:["auth:api", "can:product.edit"])
+    ): MessageSuccessProduct @field(resolver: "App\\GraphQL\\Mutations\\UpdateProduct@resolve") @middleware(checks:["auth:api", "can:product.edit"])
 
     #Eliminar Producto
     deleteProduct(
