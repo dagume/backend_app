@@ -12,6 +12,7 @@ type Role {
 type MessageSuccessRole{
     role:Role
     message:String
+    type:String
 }
 
 extend type Query{

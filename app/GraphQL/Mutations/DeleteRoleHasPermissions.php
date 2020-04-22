@@ -40,7 +40,8 @@ class DeleteRoleHasPermissions
 
         return[
             'role' => $rol,
-            'message' => 'Permisos del role eliminados'
+            'message' => 'Permisos del role eliminados',
+            'type' => 'Successful'
         ];
     }
 }

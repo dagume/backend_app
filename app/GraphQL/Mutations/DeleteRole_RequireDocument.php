@@ -32,7 +32,8 @@ class DeleteRole_RequireDocument
         }
         return[
             'role' => $role,
-            'message' => 'Documentos requeridos del role eliminados'
+            'message' => 'Documentos requeridos del role eliminados',
+            'type' => 'Successful'
         ];
     }
 }

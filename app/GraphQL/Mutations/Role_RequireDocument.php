@@ -31,7 +31,8 @@ class Role_RequireDocument
         }
         return[
             'role' => $role,
-            'message' => 'Documentos asignados al role'
+            'message' => 'Documentos asignados al role',
+            'type' => 'Successful'
         ];
     }
 }

@@ -39,7 +39,8 @@ class RoleHasPermissions
 
         return[
             'role' => $rol,
-            'message' => 'Permisos asignados al role'
+            'message' => 'Permisos asignados al role',
+            'type' => 'Successful'
         ];
     }
 }
