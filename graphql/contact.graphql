@@ -61,6 +61,7 @@ enum contactIdType{
 type MessageSuccessContact {
     contact:Contact
     message: String
+    type: String
 }
 extend type Query{
 
@@ -120,7 +121,7 @@ extend type Mutation {
         regime:contactRegime @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
-    ): Contact @update(model: "App\\User") @middleware(checks:["auth:api", "can:contact.edit"])
+    ): MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\UpdateContact@resolve") @middleware(checks:["auth:api", "can:contact.edit"])
 
     updateProfile(
         id: ID! @rules(apply: ["required"])
@@ -136,10 +137,10 @@ extend type Mutation {
         regime:contactRegime @rules(apply: ["max:50", "nullable"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
-    ): Contact @update(model: "App\\User") @can(ability: "update", model: "App\\User") @middleware(checks:["auth:api"])
+    ): MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\UpdateContact@resolve") @can(ability: "update", model: "App\\User") @middleware(checks:["auth:api"])
 
     updateContactState(
         id: ID! @rules(apply: ["required"])
         state:Int @rules(apply: ["required"])
-    ): Contact @update(model: "App\\User") @middleware(checks:["auth:api", "can:contact.edit"])
+    ):MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\UpdateContact@resolve") @middleware(checks:["auth:api", "can:contact.edit"])
 }

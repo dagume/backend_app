@@ -51,7 +51,8 @@ class CreateContact
         }, 3);
         return [
             'contact' => $con,
-            'message' => 'Contacto creado exitosamente'
+            'message' => 'Contacto creado exitosamente',
+            'type' => 'Successful'
         ];
     }
 }
