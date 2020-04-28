@@ -31,6 +31,7 @@ class CreateTaxe
         }, 3);
         return [
             'taxe' => $tax,
-            'message' => 'Impuesto creado exitosamente'
+            'message' => 'Impuesto creado exitosamente',
+            'type' => 'Successful'
         ];    }
 }

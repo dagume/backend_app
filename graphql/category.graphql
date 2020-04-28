@@ -34,5 +34,4 @@ extend type Mutation {
     deleteCategory(
         id: ID!
     ): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\DeleteCategory@resolve") @middleware(checks:["auth:api", "can:category.destroy"])
-
 }
