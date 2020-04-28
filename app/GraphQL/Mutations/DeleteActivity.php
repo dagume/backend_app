@@ -54,12 +54,14 @@ class DeleteActivity
         {
 			return [
                 'activity' => null,
-                'message' => 'No se puede eliminar la actividad, intente más tarde'
+                'message' => 'No se puede eliminar la actividad, vuelva a intentarlo',
+                'type' => 'Failed'
             ];
         }
         return [
             'activity' => $act,
-            'message' => 'Actividad eliminada exitosamente'
+            'message' => 'Actividad eliminada exitosamente',
+            'type' => 'Successful'
         ];
     }
 }

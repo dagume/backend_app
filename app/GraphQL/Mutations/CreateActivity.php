@@ -61,7 +61,8 @@ class CreateActivity
         }, 3);
         return [
             'activity' => $act,
-            'message' => 'Actividad creada'
+            'message' => 'Actividad creada',
+            'type' => 'Successful'
         ];
     }
 
