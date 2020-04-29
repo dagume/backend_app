@@ -6,10 +6,11 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\TaxeRepository;
 use DB;
-class CreateTaxe
-{
 
+class UpdateTaxe
+{
     protected $taxeRepo;
+
     public function __construct(TaxeRepository $taxRepo)
     {
         $this->taxeRepo = $taxRepo;
@@ -25,13 +26,21 @@ class CreateTaxe
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $tax = DB::transaction(function () use($args){
-            $taxe = $this->taxeRepo->create($args); //guarda registro del nuevo impuesto
-            return $taxe;
-        }, 3);
+        try
+		{
+            $taxe = $this->taxeRepo->update($args['id'], $args);
+		}
+        catch (\Exception $e)
+        {
+			return [
+                'taxe' => null,
+                'message' => 'Error, no se pudo editar. Vuelva a intentar',
+                'type' => 'Failed'
+            ];
+        }
         return [
-            'taxe' => $tax,
-            'message' => 'Impuesto creado exitosamente',
+            'taxe' => $taxe,
+            'message' => 'Impuesto actualizado Exitosamente',
             'type' => 'Successful'
         ];
     }

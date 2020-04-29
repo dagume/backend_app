@@ -29,5 +29,5 @@ extend type Mutation{
         id:ID! @rules(apply: ["required"])
         name:String! @rules(apply:["required"])
         percentage:Int! @rules(apply:["required","integer"])
-    ): Taxe @update(model: "App\\Taxe")  @middleware(checks:["auth:api", "can:taxe.edit"])
+    ): MessageSuccessTaxe @field(resolver: "App\\GraphQL\\Mutations\\UpdateTaxe@resolve") @middleware(checks:["auth:api", "can:taxe.edit"])
 }
