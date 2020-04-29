@@ -6,22 +6,17 @@ type Required_documents {
 
 extend type Query{
     #Documentos requeridos
-    requiredDocument:[Required_documents] @all(model:"App\\Required_documents")
-    #Products
-    #filter_name_product(name: String! @where(operator: "ilike")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
-    #product(name: String! @eq id:ID @eq): Product @find(model: "App\\Product") #@middleware(checks:["auth:api"])
-    #products: [Product!]! @all(model: "App\\Product") #@middleware(checks:["auth:api"])
-    #products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product") #@middleware(checks:["auth:api"])
+    requiredDocument:[Required_documents] @all(model:"App\\Required_documents") @middleware(checks:["auth:api", "can:required_document.list"])
 }
 
 extend type Mutation {
     #Documentos requeridos
     createRequiredDocument(
       name_required_documents:String @rules(apply:["required", "unique:required_documents,name_required_documents"])
-    ):Required_documents @create(model: "App\\Required_documents")
+    ):Required_documents @create(model: "App\\Required_documents") @middleware(checks:["auth:api", "can:required_document.create"])
 
     updateRequiredDocument(
       id:ID!
       name_required_documents:String
-    ):Required_documents @update(model: "App\\Required_documents")
+    ):Required_documents @update(model: "App\\Required_documents") @middleware(checks:["auth:api", "can:required_document.edit"])
 }

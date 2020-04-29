@@ -46,6 +46,7 @@ type Mutation {
         new_password:String!
         new_password_confirmation:String!
     ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UpdatePassword@resolve")
+
     updatePasswordAdmin(
         contact_id:ID!
         new_password:String!
