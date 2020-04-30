@@ -25,15 +25,15 @@ type MessageSuccessPaymentAgreement {
     message: String
 }
 extend type Query{
-    #Query Puc
-    PaymentAgreements: [PaymentAgreement] @all(model: "App\\PaymentAgreement") #@middleware(checks:["auth:api"])  #, "can:project.list"
+    #Query
+    PaymentAgreements: [PaymentAgreement] @all(model: "App\\PaymentAgreement") @middleware(checks:["auth:api", "can:payment_agreement.list"])
 
-    todayPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\TodayPaymentAgreement@resolve")
-    weekPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\WeekPaymentAgreements@resolve")
-    monthPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\MonthPaymentAgreements@resolve")
+    todayPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\TodayPaymentAgreement@resolve") @middleware(checks:["auth:api", "can:payment_agreement.list"])
+    weekPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\WeekPaymentAgreements@resolve") @middleware(checks:["auth:api", "can:payment_agreement.list"])
+    monthPaymentAgreement: [PaymentAgreement] @field(resolver: "App\\GraphQL\\Queries\\MonthPaymentAgreements@resolve") @middleware(checks:["auth:api", "can:payment_agreement.list"])
 
-    paymentAgreementsDate(pay_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\PaymentAgreementsDate@resolve") #@middleware(checks:["auth:api"])  #, "can:project.list"
-    projectPayAgreMonth(first_date: Date! end_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\ProjectPayAgreMonth@resolve") #@middleware(checks:["auth:api"])  #, "can:project.list"
+    paymentAgreementsDate(pay_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\PaymentAgreementsDate@resolve") @middleware(checks:["auth:api", "can:payment_agreement.list"])
+    projectPayAgreMonth(first_date: Date! end_date: Date! project_id: Int!): [payAgreDate] @field(resolver: "App\\GraphQL\\Queries\\ProjectPayAgreMonth@resolve") @middleware(checks:["auth:api", "can:payment_agreement.list"])
 
     #pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") #@middleware(checks:["auth:api"])
     #pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"])  #, "can:project.list"
@@ -41,7 +41,7 @@ extend type Query{
 }
 extend type Mutation{
     createPaymentAgreement(
-        order_id:Int @rules(apply: ["required","integer"])
+        order_id:ID! @rules(apply: ["required","integer"])
         pay_date:Date
         amount:Int @rules(apply: ["required","integer"])
         state:Boolean @rules(apply: ["required"])
@@ -52,5 +52,5 @@ extend type Mutation{
         origin_id: Int
         origin_role_id: Int
         payment_method:pay_meth
-    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") @middleware(checks:["auth:api"])
+    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") @middleware(checks:["auth:api", "can:payment_agreement.create"])
 }
