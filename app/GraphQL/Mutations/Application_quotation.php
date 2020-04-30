@@ -97,12 +97,14 @@ class Application_quotation
                 //Traemos servicio de trasnporte para agregarlo al detalle de la cotizacion
                 $producto = $this->productRepo->getTransport();
                 $detTransport['product_id'] = $producto->id;
+                $detTransport['tax_id'] = $producto->tax_id;
                 $detTransport['quo_id'] = $quotation->id;
                 $detTransport['quantity'] = 1;
                 $this->detailRepo->create($detTransport); //Registramos el servicio de transporte en la orden
 
                 foreach ($args['updetails'] as $arg) {
                     $arg['quo_id'] = $quotation->id;
+                    $arg['tax_id'] = $this->productRepo->find($arg['product_id'])->tax_id;
                     $details[] = $this->detailRepo->create($arg); //vamos guardando cada uno de los detalles de la orden
                 }
 

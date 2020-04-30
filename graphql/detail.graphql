@@ -8,6 +8,7 @@ type Detail{
     value:Int
     delivery_amount:Int
     subtotal:Int
+    tax_id:Int
 }
 
 #Mensaje exitoso de creacion

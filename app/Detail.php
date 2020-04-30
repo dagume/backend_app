@@ -19,7 +19,8 @@ class Detail extends Model
         'quantity',
         'value',
         'delivered_amount',
-        'subtotal'
+        'subtotal',
+        'tax_id'
     ];
 
     public function product()
