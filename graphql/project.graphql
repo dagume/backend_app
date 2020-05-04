@@ -45,6 +45,7 @@ enum state_project {
 type MessageSuccessProject {
     project:Project
     message: String
+    type: String
 }
 type TotalAmount{
     amount:Int
@@ -133,11 +134,11 @@ extend type Mutation {
         association: associationProject
         consortium_name:String
         consortium_nit:Int
-    ): Project @update(model: "App\\Project") @can(ability: "update", model: "App\\Project") @middleware(checks:["auth:api", "can:project.edit"])
+    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\UpdateProject@resolve") @can(ability: "update", model: "App\\Project") @middleware(checks:["auth:api", "can:project.edit"])
 
     #Editar estado Proyecto
     updateStateProject(
         id: ID! @rules(apply: ["required"])
         state: state_project @rules(apply: ["required"])
-    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api", "can:project.destroy"])
+    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\UpdateStateProject@resolve") @middleware(checks:["auth:api", "can:project.destroy"])
 }
