@@ -7,7 +7,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\RequiredDocumentRepository;
 use DB;
 
-class UpdateRequiredDocument
+class CreateRequiredDocument
 {
     protected $requiredDocumentRepo;
 
@@ -26,22 +26,13 @@ class UpdateRequiredDocument
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        try
-		{
-            $requiredDocument = $this->requiredDocumentRepo->update($args['id'], $args);
-		}
-        catch (\Exception $e)
-        {
-			return [
-                'required_documents' => null,
-                'message' => 'Error, no se pudo editar. Vuelva a intentar',
-                'type' => 'Failed'
-            ];
-        }
-        return [
-            'required_documents' => $requiredDocument,
-            'message' => 'Documento requerido actualizado Exitosamente',
-            'type' => 'Successful'
-        ];
-    }
+        $req_doc = DB::transaction(function () use($args){
+            $required_document = $this->requiredDocumentRepo->create($args); //guarda registro del nuevo documento requerido
+            return $required_document;
+        }, 3);
+            return [
+                'required_documents'=> $req_doc,
+                'message' => 'Documento requerido creado exitosamente',
+                'type' => 'Successful'
+            ];    }
 }

@@ -68,7 +68,7 @@ type Mutation {
         contact_id:Int @rules(apply: ["required", "nullable"])
         doc_id:Int @rules(apply: ["required", "nullable"])
         drive_id:String @rules(apply: ["required"])
-    ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UpdateRequiredDocument@resolve")
+    ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UploadRequiredDocument@resolve")
 }
     #uploadRequiredDocument(
     #    activity_id:Int @rules(apply: ["nullable"])
