@@ -90,7 +90,7 @@ extend type Mutation {
         date_end: Date @rules(apply: ["date"])
         is_act:Boolean
         type:typeActivity
-    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\UpdateActivity@resolve") #@middleware(checks:["auth:api"])
 
     delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
 

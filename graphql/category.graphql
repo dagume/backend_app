@@ -13,7 +13,7 @@ type MessageSuccessCategory {
 }
 extend type Query{
     #Categories
-    category(name: String! @eq id:ID @eq): Category @find(model: "App\\Category") @middleware(checks:["auth:api", "can:category.show"])
+    category(name: String @eq id:ID @eq): Category @find(model: "App\\Category") @middleware(checks:["auth:api", "can:category.show"])
     categories: [Category!]! @all(model: "App\\Category") @middleware(checks:["auth:api", "can:category.list"])
 
     #categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category") @middleware(checks:["auth:api", "can:category.list"])
