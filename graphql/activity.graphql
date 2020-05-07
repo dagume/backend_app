@@ -48,13 +48,13 @@ type MessageSuccessActivity {
 
 extend type Query{
     #Actividades
-    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
-    added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
-    activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
-    todayActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\TodayActivities@resolve")
-    weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve")
-    monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve")
-    state_activities(state: stateActivity! @where(operator: "=") project_id:Int! @where(operator: "=")): [Activity] @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    activities_parent(parent_activity_id: Int @where(operator: "=") project_id: ID @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") @middleware(checks:["auth:api", "can:activity.list"])
+    added_activities(is_added: Boolean! @where(operator: "=")): [Activity] @all(model: "App\\Activity") @middleware(checks:["auth:api", "can:activity.list"])
+    activity(name: String @eq id:ID @eq): Activity @find(model: "App\\Activity") @middleware(checks:["auth:api", "can:activity.show"])
+    todayActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\TodayActivities@resolve") @middleware(checks:["auth:api", "can:activity.list"])
+    weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve") @middleware(checks:["auth:api", "can:activity.list"])
+    monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve") @middleware(checks:["auth:api", "can:activity.list"])
+    state_activities(state: stateActivity! @where(operator: "=") project_id:Int! @where(operator: "=")): [Activity] @all(model: "App\\Activity") @middleware(checks:["auth:api", "can:activity.list"])
 }
 
 extend type Mutation {
@@ -74,7 +74,7 @@ extend type Mutation {
         is_added: Boolean @rules(apply: ["required"])
         is_act:Boolean @rules(apply: ["required"])
         type:typeActivity @rules(apply: ["required"])
-    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api", "can:activity.create"])
 
     #Editar actividad
     updateActivity(
@@ -90,8 +90,8 @@ extend type Mutation {
         date_end: Date @rules(apply: ["date"])
         is_act:Boolean
         type:typeActivity
-    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\UpdateActivity@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\UpdateActivity@resolve") @middleware(checks:["auth:api", "can:activity.edit"])
 
-    delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve")
+    delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve") @middleware(checks:["auth:api", "can:activity.destroy"])
 
 }
