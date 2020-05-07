@@ -10,11 +10,13 @@ type Member{
 type MessageSuccessMember {
     member:Member
     message: String
+    type: String
 }
 #Mensaje exitoso de eliminacion de contacto en projecto
 type MessageSuccessDelete {
     contact_id:Int
     message: String
+    type: String
 }
 type MemberRoles{
     contact_id:String

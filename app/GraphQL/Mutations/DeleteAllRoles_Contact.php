@@ -37,12 +37,14 @@ class DeleteAllRoles_Contact
         {
 			return [
                 'contact_id' => null,
-                'message' => 'Este contacto no se puede eliminar(Tiene transacciones registradas, intente eliminar por Role)'
+                'message' => 'Este contacto no se puede eliminar(Tiene transacciones registradas, intente eliminar por Role)',
+                'type' => 'Failed'
             ];
         }
         return [
             'contact_id' => $mem,
-            'message' => 'Contacto eliminado exitosamente'
+            'message' => 'Contacto eliminado exitosamente',
+            'type' => 'Successful'
         ];
     }
 }

@@ -56,7 +56,8 @@ class Member_has_project
             }
             return [
                 'member' => $member,
-                'message' => $message
+                'message' => $message,
+                'type' => 'Successful'
             ];
         }, 3);
         return $mem;

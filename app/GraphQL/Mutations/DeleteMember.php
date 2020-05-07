@@ -56,12 +56,14 @@ class DeleteMember
         {
             return [
                 'member' => null,
-                'message' => 'Error, intente eliminar de nuevo'
+                'message' => 'Error, intente eliminar de nuevo',
+                'type' => 'Failed'
             ];
         }
             return[
                 'member'=> $delete_mem,
-                'message'=> 'Integrante eliminado Exitosamente'
+                'message'=> 'Integrante eliminado Exitosamente',
+                'type' => 'Successful'
             ];
     }
 }
