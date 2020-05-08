@@ -14,6 +14,7 @@ type Detail{
 #Mensaje exitoso de creacion
 type MessageSuccessDetail {
     message: String
+    type:String
 }
 
 input DetailsOrder{

@@ -131,11 +131,17 @@ class SendBuyOrder
                     $member['role_id'] = $this->roleRepo->getRolProveedor()->id;
                     $this->memberRepo->create($member);
                 }
-                return $message = 'Orden de Compra enviada.';
+                return [
+                    'message' => 'Orden de Compra enviada.',
+                    'type' => 'Successful'
+                ];
             }else {
-                return $message = 'No han autorizado esta compra';
+                return [
+                    'message' => 'No han autorizado esta compra',
+                    'type' => 'Failed'
+                ];
             }
         }, 3);
-        return ['message' => $buy_order];
+        return $buy_order;
     }
 }
