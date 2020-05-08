@@ -23,6 +23,7 @@ type payAgreDate{
 type MessageSuccessPaymentAgreement {
     paymentAgreement:PaymentAgreement
     message: String
+    type: String
 }
 extend type Query{
     #Query

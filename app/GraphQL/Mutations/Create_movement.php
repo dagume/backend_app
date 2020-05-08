@@ -55,13 +55,15 @@ class Create_movement
             }else {
                 return [
                     'accounting_movement' => null,
-                    'message' => "Ese tipo de movimiento no se puede realizar"
+                    'message' => "Ese tipo de movimiento no se puede realizar",
+                    'type' => 'Failed'
                 ];
             }
             return [
                 'accounting_movement' => $movement,
-                'message' => "Movimiento registrado"
-            ];
+                'message' => "Movimiento registrado",
+                'type' => 'Successful'
+];
         }, 3);
         return $mov;
     }

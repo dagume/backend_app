@@ -62,7 +62,8 @@ class CreatePaymentAgreement
         }, 3);
         return [
             'paymentAgreement' => $data,
-            'message' => "Movimiento registrado"
+            'message' => "Movimiento registrado",
+            'type' => 'Successful'
         ];
         //return [
         //        'paymentAgreement' => null,

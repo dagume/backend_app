@@ -34,6 +34,7 @@ enum type_mov{
 type MessageSuccessAccountMovement {
     accounting_movement:Accounting_movement
     message: String
+    type:String
 }
 
 extend type Query{
