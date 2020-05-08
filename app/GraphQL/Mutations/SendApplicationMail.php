@@ -149,7 +149,8 @@ class SendApplicationMail
         }, 3);
         return [
             'order' => $orde,
-            'message' => 'Solicitud Enviada correctamente'
+            'message' => 'Solicitud Enviada correctamente',
+            'type' => 'Successful'
         ];
     }
 }

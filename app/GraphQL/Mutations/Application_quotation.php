@@ -163,12 +163,14 @@ class Application_quotation
         }
         return [
             'order' => null,
-            'message' => 'La solicitud de cotizacion no fue registrada, vuelva a intentarlo'
+            'message' => 'La solicitud de cotizacion no fue registrada, vuelva a intentarlo',
+            'type' => 'Failed'
         ];
     }
         return [
             'order' => $ord,
-            'message' => 'Solicitud enviada correctamente'
+            'message' => 'Solicitud enviada correctamente',
+            'type' => 'Successful'
         ];
     }
 }

@@ -47,7 +47,9 @@ class UpdateQuotation
         }, 3);
         return [
             'quotation' => $quo,
-            'message'=> 'Cotización autorizada'
+            'message'=> 'Cotización autorizada',
+            'type' => 'Successful'
+
         ];
     }
 }

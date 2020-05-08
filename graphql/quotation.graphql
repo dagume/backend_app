@@ -28,7 +28,8 @@ enum Discount_type{
 #Mensaje exitoso de creacion
 type MessageSuccessQuotation {
     quotation:Quotation
-    message: String
+    message:String
+    type:String
 }
 extend type Query{
     #Query cotizacion

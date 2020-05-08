@@ -22,6 +22,7 @@ type Order{
 type MessageSuccessOrder {
     order:Order
     message: String
+    type: String
 }
 extend type Query{
     #Orders
