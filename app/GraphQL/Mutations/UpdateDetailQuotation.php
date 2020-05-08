@@ -44,7 +44,8 @@ class UpdateDetailQuotation
             $this->quotationRepo->update($detailUpdate->quo_id, $args);
         }, 3);
         return [
-            'message' => 'Cotazación registrada'
+            'message' => 'Cotazación registrada',
+            'type' => 'Successful'
         ];
     }
 }

@@ -32,6 +32,9 @@ class UpdateDeliveryDetails
                 $this->detailRepo->update($arg['id'], $arg); //vamos actualizando cada uno de los detalles de la orden
             }
         }, 3);
-        return ['message' => 'Entrega registrada'];
+        return [
+            'message' => 'Entrega registrada',
+            'type' => 'Successful'
+        ];
     }
 }

@@ -26,8 +26,14 @@ class DeleteDetail
 		}
         catch (\Illuminate\Database\QueryException $e)
         {
-			return ['message' => 'Este producto no se puede eliminar'];
+			return [
+                'message' => 'Este producto no se puede eliminar',
+                'type' => 'Failed'
+            ];
         }
-        return ['message' => 'Producto descartado'];
+        return [
+            'message' => 'Producto descartado',
+            'type' => 'Successful'
+        ];
     }
 }
