@@ -12,7 +12,7 @@
     </ul>
     <p>Favor enviar su cotizacion en el siguente link:</p>
     <ul>
-        <a href="http://3.12.84.161:8080/suppliers/{{$quotation->hash_id}}">Cargar Cotizacion, aquí</a>
+        <a href="http://ideasoft.com.co:3000/suppliers/{{$quotation->hash_id}}">Cargar Cotizacion, aquí</a>
     </ul>
     <br>
     <p>Gracias,</p>
