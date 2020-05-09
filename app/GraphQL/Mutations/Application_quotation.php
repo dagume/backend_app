@@ -99,6 +99,7 @@ class Application_quotation
                 $detTransport['product_id'] = $producto->id;
                 $detTransport['tax_id'] = $producto->tax_id;
                 $detTransport['quo_id'] = $quotation->id;
+                $detTransport['mea_id'] = 3;
                 $detTransport['quantity'] = 1;
                 $this->detailRepo->create($detTransport); //Registramos el servicio de transporte en la orden
 
