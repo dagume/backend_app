@@ -92,6 +92,8 @@ extend type Mutation {
         type:typeActivity
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\UpdateActivity@resolve") @middleware(checks:["auth:api", "can:activity.edit"])
 
-    delete_activity(id: ID!): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve") @middleware(checks:["auth:api", "can:activity.destroy"])
+    delete_activity(
+        id: ID!
+    ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\DeleteActivity@resolve") @middleware(checks:["auth:api", "can:activity.destroy"])
 
 }

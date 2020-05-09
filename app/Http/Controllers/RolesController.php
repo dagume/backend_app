@@ -35,7 +35,8 @@ class RolesController extends Controller
 
     public function index(Request $request)
     {
-        dd(User::find(3));
+        phpinfo();
+        //dd(User::find(3));
        // $project = DB::select('select p.association from quotations as q
        // inner join orders as o on q.order_id = o.id
        // inner join projects as p on p.id = o.project_id
