@@ -34,36 +34,59 @@ class CreateActivity
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $act = DB::transaction(function () use($args){
-            //verifica si la actividad es padre o hija para asi saber donde crear el folder
-            if ($args['parent_activity_id'] == null) {
-                //hace conexion con el drive y crea el folder. Metodos en Helper.php
-                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
-                $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
-                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
-                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
-                $args['drive_id']           = $activity_folder->id;
-                $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
-                $args['activity_id']        = $activity->id;
-            }else {
-                //hace conexion con el drive y crea el folder. Metodos en Helper.php y
-                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
-                $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
-                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
-                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
-                $args['drive_id']           = $activity_folder->id;
-                $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
-                $args['activity_id']        = $activity->id;
+        $start_date_project = $this->projectRepo->find($args['project_id'])->start_date;
+        $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
+        $start_date_activity = $args['date_start'];
+        $end_date_activity = $args['date_end'];
+        //dd($end_date_project, $end_date_activity);
+        if($start_date_activity > $start_date_project)
+        {
+            if($end_date_project > $end_date_activity)
+            {
+                $act = DB::transaction(function () use($args){
+                    //verifica si la actividad es padre o hija para asi saber donde crear el folder
+                    if ($args['parent_activity_id'] == null) {
+                        //hace conexion con el drive y crea el folder. Metodos en Helper.php
+                        $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
+                        $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
+                        $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
+                        $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                        $args['drive_id']           = $activity_folder->id;
+                        $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
+                        $args['activity_id']        = $activity->id;
+                    }else {
+                        //hace conexion con el drive y crea el folder. Metodos en Helper.php y
+                        $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
+                        $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
+                        $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
+                        $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                        $args['drive_id']           = $activity_folder->id;
+                        $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
+                        $args['activity_id']        = $activity->id;
+                    }
+                    $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
+                    $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
+                    return $activity;
+                }, 3);
+                return [
+                    'activity' => $act,
+                    'message' => 'Actividad creada',
+                    'type' => 'Successful'
+                ];
+            }else{
+                return [
+                    'activity' => null,
+                    'message' => 'La fecha final de la actividad es mayor a la fecha de terminacion del proyecto.',
+                    'type' => 'Failed'
+                ];
             }
-            $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
-            $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
-            return $activity;
-        }, 3);
-        return [
-            'activity' => $act,
-            'message' => 'Actividad creada',
-            'type' => 'Successful'
-        ];
+        }else{
+            return [
+                'activity' => null,
+                'message' => 'La fecha inicial de la actividad es menor a la de inicio del proyecto.',
+                'type' => 'Failed'
+            ];
+        }
     }
 
     public function Progress($is_act, $project_id){

@@ -47,6 +47,8 @@ extend type Mutation{
     ):MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\UpdatePuc@resolve") @middleware(checks:["auth:api", "can:puc.edit"])
 
     #Eliminar PUC
-    deletePuc(id: ID!): MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\DeletePuc@resolve") @middleware(checks:["auth:api", "can:puc.delete"])
+    deletePuc(
+        id: ID!
+    ): MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\DeletePuc@resolve") @middleware(checks:["auth:api", "can:puc.delete"])
 
 }
