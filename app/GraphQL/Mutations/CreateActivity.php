@@ -33,7 +33,7 @@ class CreateActivity
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
+    { 
         $start_date_project = $this->projectRepo->find($args['project_id'])->start_date;
         $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
         $start_date_activity = $args['date_start'];
