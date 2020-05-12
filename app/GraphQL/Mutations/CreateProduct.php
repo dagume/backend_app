@@ -28,6 +28,7 @@ class CreateProduct
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $prod = DB::transaction(function () use($args){
+            //$args['name'] = trim(strtolower($args['name']));
             $product = $this->productRepo->create($args); //guarda registro del nuevo Producto
             return $product;
         }, 3);
