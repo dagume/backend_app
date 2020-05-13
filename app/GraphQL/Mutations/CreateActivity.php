@@ -33,7 +33,7 @@ class CreateActivity
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    { 
+    {
         $start_date_project = $this->projectRepo->find($args['project_id'])->start_date;
         $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
         $start_date_activity = $args['date_start'];
@@ -66,6 +66,7 @@ class CreateActivity
                     }
                     $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
                     $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
+                    //
                     return $activity;
                 }, 3);
                 return [
@@ -87,6 +88,11 @@ class CreateActivity
                 'type' => 'Failed'
             ];
         }
+    }
+
+    public function ActivityAccountMovement($movement){
+
+
     }
 
     public function Progress($is_act, $project_id){
