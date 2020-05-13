@@ -39,9 +39,9 @@ class CreateActivity
         $start_date_activity = $args['date_start'];
         $end_date_activity = $args['date_end'];
         //dd($end_date_project, $end_date_activity);
-        if($start_date_activity > $start_date_project)
+        if($start_date_activity > $start_date_project || $args['is_added'] === True || $args['is_act'] === True)
         {
-            if($end_date_project > $end_date_activity)
+            if($end_date_project > $end_date_activity || $args['is_added'] === True || $args['is_act'] === True)
             {
                 $act = DB::transaction(function () use($args){
                     //verifica si la actividad es padre o hija para asi saber donde crear el folder
