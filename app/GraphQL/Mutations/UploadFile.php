@@ -43,7 +43,8 @@ class UploadFile
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $doc_ref_file = new Document_reference;
-        if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] == null && $args['accounting_movements_id'] == null) {
+        if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
+        {
             //Para subir documento de actividad
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
@@ -54,7 +55,8 @@ class UploadFile
             $doc_ref_file->drive_id = $args['drive_id'];
             $doc_ref_file->save();
         }else{
-            if ($args['activity_id'] == null && $args['project_id'] == null && $args['con_id'] != null && $args['doc_id'] != null && $args['order_id'] == null && $args['accounting_movements_id'] == null) {
+            if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] != null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
+            {
                 //Para subir documento requerido
                 $document_contact = $this->document_contactRepo->create($args);     // le asignamos el mismos drive_id al file_id que es el que usa doc_member
                 $doc_ref['parent_document_id'] = $this->document_referenceRepo->getContactFolder($args['con_id'])->id;
@@ -66,7 +68,8 @@ class UploadFile
                 $doc_ref['drive_id'] = $args['drive_id'];
                 $this->document_referenceRepo->create($doc_ref);
             }else{
-                if ($args['activity_id'] == null && $args['project_id'] == null && $args['con_id'] != null && $args['doc_id'] == null && $args['order_id'] != null && $args['accounting_movements_id'] == null) {
+                if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] === null && $args['order_id'] != null && $args['accounting_movements_id'] === null)
+                {
                     //Consultamos cotizacion a actualizar
                     $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
                     $quo['file_id'] = $args['drive_id'];
@@ -74,7 +77,8 @@ class UploadFile
                     $this->quotationRepo->update($quotation->id, $quo);
                     //actualizamos la cotizacion con su nuevo archivo cargado
                 }else{
-                    if ($args['activity_id'] == null && $args['project_id'] != null && $args['con_id'] == null && $args['doc_id'] == null && $args['order_id'] == null && $args['accounting_movements_id'] != null) {
+                    if ($args['activity_id'] === null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] != null)
+                    {
                         //subir soporte cuentas
                         $account['parent_document_id'] = $this->document_referenceRepo->getFolderAccounting($args['project_id'])->id;
                         $account['name'] = $args['name'];
@@ -109,7 +113,7 @@ class UploadFile
             //$members_id = array_column($mem_rol_id, 'id');              //Ordenamos ids de rol en un array
             //foreach ($doc_req as $doc) {                                //recorremos los documentos requeridos del contacto
             //    foreach ($mem_rol_id as $mr_id) {                       //recorremos los roles y mimebros del contacto
-            //        if ($doc->required_document_id == $id_doc && $mr_id->role_id == $doc->role_id) {
+            //        if ($doc->required_document_id === $id_doc && $mr_id->role_id === $doc->role_id) {
 
                         //$args['doc_id'] = $doc->id;
                         //$this->document_contactRepo->create($args);      //Guardamos el registro del Document_member
