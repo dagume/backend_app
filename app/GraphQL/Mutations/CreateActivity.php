@@ -68,23 +68,23 @@ class CreateActivity
                     }
                     $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
 
-                    if($args['is_act'] === True)
-                    {
-                        $movement['puc_id'] = 'poner el puc que se va utilizar para guardar registros de actas';
-                        $movement['project_id'] = $args['project_idwe'];
-                        $movement['destination_id'] = $args['destination_id'];
-                        $movement['destination_role_id'] = $args['destination_role_id'];
-                        $movement['origin_id'] = $args['origin_id'];
-                        $movement['origin_role_id'] = $args['origin_role_id'];
-                        $movement['movement_date'] = now();
-                        $movement['payment_method'] = $args['payment_method'];
-                        $movement['value'] = $args['amount'];
-                        $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
-                        $movement['state_movement'] = True;
-                        $movement['registration_date'] = now();
-                        $movement['sender_id'] = auth()->user()->id;
-                        $account_movement = $this->accountRepo->create($movement);
-                    }
+                    //if($args['is_act'] === True)
+                    //{
+                    //    $movement['puc_id'] = 'poner el puc que se va utilizar para guardar registros de actas';
+                    //    $movement['project_id'] = $args['project_idwe'];
+                    //    $movement['destination_id'] = $args['destination_id'];
+                    //    $movement['destination_role_id'] = $args['destination_role_id'];
+                    //    $movement['origin_id'] = $args['origin_id'];
+                    //    $movement['origin_role_id'] = $args['origin_role_id'];
+                    //    $movement['movement_date'] = now();
+                    //    $movement['payment_method'] = $args['payment_method'];
+                    //    $movement['value'] = $args['amount'];
+                    //    $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
+                    //    $movement['state_movement'] = True;
+                    //    $movement['registration_date'] = now();
+                    //    $movement['sender_id'] = auth()->user()->id;
+                    //    $account_movement = $this->accountRepo->create($movement);
+                    //}
 
                     $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
                     //
