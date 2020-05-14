@@ -40,6 +40,8 @@ class Activity extends Model
     {
         return $this->hasMany('App\Activity', 'parent_activity_id');
     }
-
-
+    public function document_references()
+    {
+        return $this->hasMany('App\Document_reference', 'activity_id');
+    }
 }

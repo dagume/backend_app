@@ -67,6 +67,7 @@ extend type Mutation {
         value:Int @rules(apply: ["required","integer"])
         code:String
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
+
     #Transaciones entre cuentas
     #create_transaction(
     #    project_id: Int @rules(apply: ["required","integer"])

@@ -9,6 +9,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Document_referenceRepository;
 use App\Repositories\ActivityRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\Accounting_movementRepository;
 use DB;
 
 class CreateActivity
@@ -16,12 +17,13 @@ class CreateActivity
     protected $documentRepo;
     protected $activityRepo;
     protected $projectRepo;
+    protected $accountRepo;
 
-
-    public function __construct(Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo){
+    public function __construct(Accounting_movementRepository $acoRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo){
         $this->documentRepo = $docRepo;
         $this->activityRepo = $actRepo;
         $this->projectRepo = $proRepo;
+        $this->accountRepo = $acoRepo;
     }
     /**
      * Return a value for the field.
@@ -65,6 +67,25 @@ class CreateActivity
                         $args['activity_id']        = $activity->id;
                     }
                     $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
+
+                    if($args['is_act'] === True)
+                    {
+                        $movement['puc_id'] = 'poner el puc que se va utilizar para guardar registros de actas';
+                        $movement['project_id'] = $args['project_idwe'];
+                        $movement['destination_id'] = $args['destination_id'];
+                        $movement['destination_role_id'] = $args['destination_role_id'];
+                        $movement['origin_id'] = $args['origin_id'];
+                        $movement['origin_role_id'] = $args['origin_role_id'];
+                        $movement['movement_date'] = now();
+                        $movement['payment_method'] = $args['payment_method'];
+                        $movement['value'] = $args['amount'];
+                        $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
+                        $movement['state_movement'] = True;
+                        $movement['registration_date'] = now();
+                        $movement['sender_id'] = auth()->user()->id;
+                        $account_movement = $this->accountRepo->create($movement);
+                    }
+
                     $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
                     //
                     return $activity;
