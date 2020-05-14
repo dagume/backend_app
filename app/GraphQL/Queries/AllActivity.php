@@ -26,9 +26,6 @@ class AllActivity
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $activity = $this->activityRepo->find($args['id']);
-        $activity['activityDocuments'] = $this->activityRepo->documents_activity($args['id']);
-        //dd($activity);
-        //return $this->activityRepo->getObjects($activity);
         return $activity;
     }
 }

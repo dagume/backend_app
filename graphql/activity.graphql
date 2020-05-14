@@ -17,7 +17,6 @@ type Activity { #implements GlobalSearch{
     is_act:Boolean
     type:typeActivity
     document_references:[Document_reference]
-    activityDocuments: [Document_reference]
 }
 #estados de actividad
 enum stateActivity{

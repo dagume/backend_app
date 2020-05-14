@@ -34,9 +34,5 @@ class ActivityRepository extends BaseRepository
         $added = DB::select('select amount from activities where project_id = ? and is_added = true',[$project_id]);
         return $added;
     }
-    public function documents_activity($activity_id){
-        //trae todos los documentos guadados dentro de dicha actividad
-        $documents = DB::select('SELECT * FROM public.document_reference where activity_id = ? and is_folder = false;',[$activity_id]);
-        return $this->getObjects($documents);
-    }
+    
 }
