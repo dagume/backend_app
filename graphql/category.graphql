@@ -21,14 +21,14 @@ extend type Query{
 extend type Mutation {
     #Category
     createCategory(
-        name: String @rules(apply: ["required", "max:255","unique:category,name"])
-        description: String @rules(apply: ["max:255"])
+        name: String @rules(apply: ["required", "max:200","unique:category,name"])
+        description: String @rules(apply: ["max:700"])
     ):MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\CreateCategory@resolve") @middleware(checks:["auth:api", "can:category.create"])
 
     updateCategory(
         id: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["max:255"])
-        description: String @rules(apply: ["max:255"])
+        name: String @rules(apply: ["max:200"])
+        description: String @rules(apply: ["max:700"])
     ): MessageSuccessCategory @field(resolver: "App\\GraphQL\\Mutations\\UpdateCategory@resolve") @middleware(checks:["auth:api", "can:category.edit"])
 
     deleteCategory(

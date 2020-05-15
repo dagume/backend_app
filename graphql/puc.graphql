@@ -34,16 +34,16 @@ extend type Mutation{
     create_puc(
         id:Int! @rules(apply: ["required","unique:puc,id"])
         parent_puc_id:Int @rules(apply: ["required"])
-        name:String @rules(apply: ["required"])
-        description:String
+        name:String @rules(apply: ["required", "max:300"])
+        description:String @rules(apply: ["max:500"])
     ):MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\CreatePuc@resolve") @middleware(checks:["auth:api", "can:puc.create"])
 
     #Editar PUC
     update_puc(
         id:ID! @rules(apply: ["required"])
         parent_puc_id:Int
-        name:String
-        description:String
+        name:String @rules(apply: ["max:300"])
+        description:String @rules(apply: ["max:500"])
     ):MessageSuccessPuc @field(resolver: "App\\GraphQL\\Mutations\\UpdatePuc@resolve") @middleware(checks:["auth:api", "can:puc.edit"])
 
     #Eliminar PUC

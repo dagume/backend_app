@@ -52,9 +52,9 @@ extend type Mutation {
     #GuardarYEnviarSolicitudCotizacon
     createApplication(
         project_id:Int! @rules(apply: ["required","integer"])
-        name: String! @rules(apply: ["required", "max:255"])
-        description: String @rules(apply: ["max:255"])
-        delivery_site: String @rules(apply: ["max:255"])
+        name: String! @rules(apply: ["required", "max:200"])
+        description: String @rules(apply: ["max:700"])
+        delivery_site: String @rules(apply: ["max:300"])
         lat: Float
         lon: Float
         updetails:[UploadDetails!]

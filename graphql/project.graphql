@@ -58,8 +58,8 @@ type ProjectName{
 
 }
 input placeProject{
-    longitud:String @rules(apply: ["required"])
-    latitud: String @rules(apply: ["required"])
+    longitud:String @rules(apply: ["required", "max:300"])
+    latitud: String @rules(apply: ["required", "max:300"])
 
 }
 
@@ -106,33 +106,33 @@ extend type Mutation {
     createProject(
         project_type_id: Int @rules(apply: ["integer","required"])
         parent_project_id: Int
-        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        name: String @rules(apply: ["required", "max:100","unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
         end_date: Date @rules(apply: ["nullable","date"])
-        description: String @rules(apply: ["nullable"])
+        description: String @rules(apply: ["nullable", "max:500"])
         contract_value: Int
         state: state_project
         place: [placeProject]
-        address: String
+        address: String @rules(apply: ["nullable", "max:300"])
         type: typeProject @rules(apply: ["nullable"])
         association: associationProject
-        consortium_name:String
+        consortium_name:String @rules(apply: ["nullable", "max:750"])
         consortium_nit:Int
     ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") @middleware(checks:["auth:api", "can:project.create"])
 
     #Editar Proyecto
     updateProject(
         id: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["max:255"])
+        name: String @rules(apply: ["max:100", "unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
         end_date: Date @rules(apply: ["nullable","date"])
-        description: String @rules(apply: ["nullable", "max:255"])
+        description: String @rules(apply: ["nullable", "max:500"])
         contract_value: Int
         state: state_project
         place: [placeProject]
-        address: String
+        address: String @rules(apply: ["nullable", "max:300"])
         association: associationProject
-        consortium_name:String
+        consortium_name:String @rules(apply: ["nullable", "max:750"])
         consortium_nit:Int
     ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\UpdateProject@resolve") @can(ability: "update", model: "App\\Project") @middleware(checks:["auth:api", "can:project.edit"])
 

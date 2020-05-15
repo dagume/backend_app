@@ -62,14 +62,14 @@ extend type Mutation {
     createActivity(
         project_id: Int @rules(apply: ["integer", "required"])
         parent_activity_id: Int @rules(apply: ["integer", "nullable"])
-        name: String @rules(apply: ["required", "max:255"])
-        description: String @rules(apply: ["nullable", "max:255"])
+        name: String @rules(apply: ["required", "max:300"])
+        description: String @rules(apply: ["nullable", "max:700"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
         state: stateActivity
         completed:Boolean
         priority:priorityActivity
-        notes:String @rules(apply: ["nullable", "max:255"])
+        notes:String @rules(apply: ["nullable", "max:1024"])
         amount: Int @rules(apply: ["nullable", "integer"])
         is_added: Boolean @rules(apply: ["required"])
         is_act:Boolean @rules(apply: ["required"])
@@ -79,16 +79,15 @@ extend type Mutation {
     #Editar actividad
     updateActivity(
         id:ID! @rules(apply: ["required"])
-        name:String
+        name:String @rules(apply: ["required", "max:300"])
         completed:Boolean
-        description:String @rules(apply: ["nullable"])
+        description:String @rules(apply: ["nullable", "max:700"])
         priority:String
-        notes:String
+        notes:String @rules(apply: ["nullable", "max:1024"])
         state:stateActivity
         amount:Int @rules(apply: ["nullable", "integer"])
         date_start:Date @rules(apply: ["date"])
         date_end:Date @rules(apply: ["date"])
-        is_act:Boolean
         type:typeActivity
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\UpdateActivity@resolve") @middleware(checks:["auth:api", "can:activity.edit"])
 

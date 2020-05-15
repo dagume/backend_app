@@ -65,7 +65,7 @@ extend type Mutation {
         movement_date:Date @rules(apply: ["date"])
         payment_method:pay_meth
         value:Int @rules(apply: ["required","integer"])
-        code:String
+        code:String @rules(apply: ["nullable", "max:100"])
     ):MessageSuccessAccountMovement @field(resolver: "App\\GraphQL\\Mutations\\Create_movement@resolve") @middleware(checks:["auth:api"])
 
     #Transaciones entre cuentas
