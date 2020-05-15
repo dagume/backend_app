@@ -20,14 +20,14 @@ extend type Query{
 extend type Mutation{
     #crear impuesto
     createTaxe(
-        name:String @rules(apply:["required", "unique:taxes,name"])
+        name:String @rules(apply:["required", "max:50", "unique:taxes,name"])
         percentage:Int @rules(apply:["required","integer"])
     ):MessageSuccessTaxe @field(resolver: "App\\GraphQL\\Mutations\\CreateTaxe@resolve")  @middleware(checks:["auth:api", "can:taxe.create"])
 
     #actualizar impuesto
     updateTaxe(
         id:ID! @rules(apply: ["required"])
-        name:String! @rules(apply:["required"])
-        percentage:Int! @rules(apply:["required","integer"])
+        name:String! @rules(apply:["max:50"])
+        percentage:Int! @rules(apply:["integer"])
     ): MessageSuccessTaxe @field(resolver: "App\\GraphQL\\Mutations\\UpdateTaxe@resolve") @middleware(checks:["auth:api", "can:taxe.edit"])
 }

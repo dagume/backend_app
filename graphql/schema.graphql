@@ -54,7 +54,7 @@ type Mutation {
     ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UpdatePasswordAdmin@resolve")
     #upload drive
     uploadFile(
-        name:String @rules(apply: ["max:255"])
+        name:String @rules(apply: ["max:250"])
         activity_id:Int @rules(apply: ["nullable"])
         project_id:Int @rules(apply: ["nullable"])
         con_id:Int @rules(apply: ["nullable"])

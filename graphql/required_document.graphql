@@ -18,11 +18,11 @@ extend type Query{
 extend type Mutation {
     #Documentos requeridos
     createRequiredDocument(
-      name_required_documents:String @rules(apply:["required", "unique:required_documents,name_required_documents"])
+      name_required_documents:String @rules(apply:["required", "unique:required_documents,name_required_documents", "max:50"])
     ):MessageSuccessRequired_documents @field(resolver: "App\\GraphQL\\Mutations\\CreateRequiredDocument@resolve") @middleware(checks:["auth:api", "can:required_document.create"])
 
     updateRequiredDocument(
       id:ID!
-      name_required_documents:String
+      name_required_documents:String @rules(apply:["unique:required_documents,name_required_documents", "max:50"])
     ):MessageSuccessRequired_documents @field(resolver: "App\\GraphQL\\Mutations\\UpdateRequiredDocument@resolve") @middleware(checks:["auth:api", "can:required_document.edit"])
 }
