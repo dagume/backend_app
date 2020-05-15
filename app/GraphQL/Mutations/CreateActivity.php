@@ -40,7 +40,6 @@ class CreateActivity
         $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
         $start_date_activity = $args['date_start'];
         $end_date_activity = $args['date_end'];
-        //dd($end_date_project, $end_date_activity);
         if($start_date_activity > $start_date_project || $args['is_added'] === True || $args['is_act'] === True)
         {
             if($end_date_project > $end_date_activity || $args['is_added'] === True || $args['is_act'] === True)

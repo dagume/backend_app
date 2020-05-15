@@ -62,10 +62,10 @@ extend type Mutation {
     createActivity(
         project_id: Int @rules(apply: ["integer", "required"])
         parent_activity_id: Int @rules(apply: ["integer", "nullable"])
-        name: String @rules(apply: ["required", "max:300"])
+        name: String @rules(apply: ["required" ])
         description: String @rules(apply: ["nullable", "max:700"])
-        date_start: Date @rules(apply: ["date"])
-        date_end: Date @rules(apply: ["date"])
+        date_start: Date @rules(apply: ["date","required"])
+        date_end: Date @rules(apply: ["date","required"])
         state: stateActivity
         completed:Boolean
         priority:priorityActivity
