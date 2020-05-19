@@ -36,6 +36,12 @@ class MemberRepository extends BaseRepository
         where m.id = ?', [$member_id]);
         return $data[0];
     }
+    public function getClientMemberProject($role_id, $project_id)
+    {
+        //Traemos el cliente asignado al proyecto
+        $data = DB::select('select contact_id from members where role_id = ? and project_id = ?', [$role_id, $project_id]);
+        return $data[0];
+    }
     //PENDIENTE////////////////////////////////////
     //public function create_member()
     //{

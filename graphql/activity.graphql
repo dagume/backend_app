@@ -74,6 +74,7 @@ extend type Mutation {
         is_added: Boolean @rules(apply: ["required"])
         is_act:Boolean @rules(apply: ["required"])
         type:typeActivity @rules(apply: ["required"])
+        payment_method:pay_meth
     ): MessageSuccessActivity @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") @middleware(checks:["auth:api", "can:activity.create"])
 
     #Editar actividad

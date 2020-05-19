@@ -10,6 +10,9 @@ use App\Repositories\Document_referenceRepository;
 use App\Repositories\ActivityRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\Accounting_movementRepository;
+use App\Repositories\ContactRepository;
+use App\Repositories\RoleRepository;
+use App\Repositories\MemberRepository;
 use DB;
 
 class CreateActivity
@@ -18,12 +21,18 @@ class CreateActivity
     protected $activityRepo;
     protected $projectRepo;
     protected $accountRepo;
+    protected $contactRepo;
+    protected $roleRepo;
+    protected $memberRepo;
 
-    public function __construct(Accounting_movementRepository $acoRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo){
+    public function __construct(MemberRepository $memRepo, RoleRepository $rolRepo, ContactRepository $conRepo, Accounting_movementRepository $acoRepo, Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo){
         $this->documentRepo = $docRepo;
         $this->activityRepo = $actRepo;
         $this->projectRepo = $proRepo;
         $this->accountRepo = $acoRepo;
+        $this->contactRepo = $conRepo;
+        $this->roleRepo = $rolRepo;
+        $this->memberRepo = $memRepo;
     }
     /**
      * Return a value for the field.
@@ -67,26 +76,25 @@ class CreateActivity
                     }
                     $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
 
-                    //if($args['is_act'] === True)
-                    //{
-                    //    $movement['puc_id'] = 'poner el puc que se va utilizar para guardar registros de actas';
-                    //    $movement['project_id'] = $args['project_idwe'];
-                    //    $movement['destination_id'] = $args['destination_id'];
-                    //    $movement['destination_role_id'] = $args['destination_role_id'];
-                    //    $movement['origin_id'] = $args['origin_id'];
-                    //    $movement['origin_role_id'] = $args['origin_role_id'];
-                    //    $movement['movement_date'] = now();
-                    //    $movement['payment_method'] = $args['payment_method'];
-                    //    $movement['value'] = $args['amount'];
-                    //    $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
-                    //    $movement['state_movement'] = True;
-                    //    $movement['registration_date'] = now();
-                    //    $movement['sender_id'] = auth()->user()->id;
-                    //    $account_movement = $this->accountRepo->create($movement);
-                    //}
+                    //Si es una acta registramo el movimeinto de el dinero que ingresa
+                    if($args['is_act'] === True)
+                    {
+                        $movement['puc_id'] = 110505;
+                        $movement['project_id'] = $args['project_id'];
+                        $movement['destination_id'] = $this->contactRepo->getContactIdentificatioNumber($args['project_id'])->id;
+                        $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;
+                        $movement['origin_id'] = $this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])->contact_id;
+                        $movement['origin_role_id'] = $this->roleRepo->getRolCliente()->id;
+                        $movement['movement_date'] = now();
+                        $movement['payment_method'] = $args['payment_method'];
+                        $movement['value'] = $args['amount'];
+                        $movement['state_movement'] = True;
+                        $movement['registration_date'] = now();
+                        $movement['sender_id'] = auth()->user()->id;
+                        $account_movement = $this->accountRepo->create($movement);
+                    }
 
                     $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
-                    //
                     return $activity;
                 }, 3);
                 return [
