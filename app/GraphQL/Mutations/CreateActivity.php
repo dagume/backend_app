@@ -79,29 +79,45 @@ class CreateActivity
                     //Si es una acta registramo el movimeinto de el dinero que ingresa
                     if($args['is_act'] === True)
                     {
-                        $movement['puc_id'] = 110505;
-                        $movement['project_id'] = $args['project_id'];
-                        $movement['destination_id'] = $this->contactRepo->getContactIdentificatioNumber($args['project_id'])->id;
-                        $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;
-                        $movement['origin_id'] = $this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])->contact_id;
-                        $movement['origin_role_id'] = $this->roleRepo->getRolCliente()->id;
-                        $movement['movement_date'] = now();
-                        $movement['payment_method'] = $args['payment_method'];
-                        $movement['value'] = $args['amount'];
-                        $movement['state_movement'] = True;
-                        $movement['registration_date'] = now();
-                        $movement['sender_id'] = auth()->user()->id;
-                        $account_movement = $this->accountRepo->create($movement);
+                        // Si no existe un integrante con rol de cliente en el proyecto no podemos registrar el acta, ni el moviento
+                        if (!is_null($this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])))
+                        {
+                            $movement['puc_id'] = 110505;
+                            $movement['project_id'] = $args['project_id'];
+                            $movement['destination_id'] = $this->contactRepo->getContactIdentificatioNumber($args['project_id'])->id;
+                            $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;
+                            $movement['origin_id'] = $this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])->contact_id;
+                            $movement['origin_role_id'] = $this->roleRepo->getRolCliente()->id;
+                            $movement['movement_date'] = now();
+                            if (empty($args['amount']) || is_null($args['amount'])) {
+                                $movement['value'] = 0;
+                            }else $movement['value'] = $args['amount'];
+                            $movement['state_movement'] = True;
+                            $movement['registration_date'] = now();
+                            $movement['sender_id'] = auth()->user()->id;
+                            if (empty($args['payment_method']) || is_null($args['payment_method'])) {
+                                $movement['payment_method'] = null;
+                            }else $movement['payment_method'] = $args['payment_method'];
+                            $account_movement = $this->accountRepo->create($movement); // Creamos el moviento de ingreso de dinero del acta
+                        }else {
+                            return [
+                                'activity' => null,
+                                'message' => 'Asigne un Cliente a su proyecto, no podemos registrar este moviento en sus cuentas',
+                                'type' => 'Failed'
+                            ];
+                        }
                     }
 
                     $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
-                    return $activity;
+                    return [
+                        'activity' => $activity,
+                        'message' => 'Actividad creada',
+                        'type' => 'Successful'
+                    ];
+
                 }, 3);
-                return [
-                    'activity' => $act,
-                    'message' => 'Actividad creada',
-                    'type' => 'Successful'
-                ];
+                //dd($act);
+                return $act;
             }else{
                 return [
                     'activity' => null,

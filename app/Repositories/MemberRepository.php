@@ -40,6 +40,9 @@ class MemberRepository extends BaseRepository
     {
         //Traemos el cliente asignado al proyecto
         $data = DB::select('select contact_id from members where role_id = ? and project_id = ?', [$role_id, $project_id]);
+        if (empty($data)) {
+            return null;
+        }
         return $data[0];
     }
     //PENDIENTE////////////////////////////////////
