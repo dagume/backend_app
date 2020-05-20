@@ -49,9 +49,9 @@ class CreateActivity
         $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
         $start_date_activity = $args['date_start'];
         $end_date_activity = $args['date_end'];
-        if($start_date_activity > $start_date_project || $args['is_added'] === True || $args['is_act'] === True)
+        if($start_date_activity >= $start_date_project || $args['is_added'] === True || $args['is_act'] === True)
         {
-            if($end_date_project > $end_date_activity || $args['is_added'] === True || $args['is_act'] === True)
+            if($end_date_project >= $end_date_activity || $args['is_added'] === True || $args['is_act'] === True)
             {
                 $act = DB::transaction(function () use($args){
                     //verifica si la actividad es padre o hija para asi saber donde crear el folder
@@ -95,6 +95,7 @@ class CreateActivity
                             $movement['state_movement'] = True;
                             $movement['registration_date'] = now();
                             $movement['sender_id'] = auth()->user()->id;
+                            $movement['activity_id'] = $activity->id;
                             if (empty($args['payment_method']) || is_null($args['payment_method'])) {
                                 $movement['payment_method'] = null;
                             }else $movement['payment_method'] = $args['payment_method'];
@@ -132,11 +133,6 @@ class CreateActivity
                 'type' => 'Failed'
             ];
         }
-    }
-
-    public function ActivityAccountMovement($movement){
-
-
     }
 
     public function Progress($is_act, $project_id){

@@ -42,7 +42,7 @@ class DeleteActivity
                 $doc_ref = $this->document_referenceRepo->getFolderSubActivity($activity->project_id, $activity->id);
                 $this->activityRepo->delete($activity); // Eliminamos actividad en DB
 
-////////////////////////REvisar esta linea (Es la que actualiza el avance del proyecto segun actas)
+                ////////////////////////REvisar esta linea (Es la que actualiza el avance del proyecto segun actas)
                 $this->progress->Progress($activity->is_act, $activity->project_id);
 
                 //Eliminamos carpeta raiz de dicha actividad(Se elimina todo lo que este dentro de esa carpeta)

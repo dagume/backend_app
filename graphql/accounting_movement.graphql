@@ -15,7 +15,7 @@ type Accounting_movement {
     sender_id:Int
     code:String
     document_references:[Document_reference]
-    #exist_code:Boolean
+    activity_id:Int
 }
 enum pay_meth{
     Efectivo @enum(value: 0)

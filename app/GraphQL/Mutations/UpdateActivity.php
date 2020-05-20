@@ -6,18 +6,26 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\ActivityRepository;
 use App\Repositories\ProjectRepository;
+use App\GraphQL\Mutations\CreateActivity;
+use App\Repositories\Accounting_movementRepository;
 use DB;
 
 class UpdateActivity
 {
     protected $activityRepo;
     protected $projectRepo;
+    protected $progress;
+    protected $accountRepo;
 
 
-    public function __construct(ActivityRepository $actRepo, ProjectRepository $proRepo)
+
+
+    public function __construct(Accounting_movementRepository $acoRepo, ActivityRepository $actRepo, ProjectRepository $proRepo, CreateActivity $actProg)
     {
         $this->activityRepo = $actRepo;
         $this->projectRepo = $proRepo;
+        $this->progress = $actProg;
+        $this->accountRepo = $acoRepo;
     }
 
     /**
@@ -35,6 +43,7 @@ class UpdateActivity
         $start_date_project = $this->projectRepo->find($act->project_id)->start_date;
         $end_date_project = $this->projectRepo->find($act->project_id)->end_date;
 
+        //Valida si envian fechas o no para que no se estalle
         if (empty($args['date_start']) || is_null($args['date_start']))
         {
             $start_date_activity = $act->date_start;
@@ -47,20 +56,27 @@ class UpdateActivity
         }else {
             $end_date_activity = $args['date_end'];
         }
-
-        if($start_date_activity > $start_date_project || $args['is_added'] === True || $args['is_act'] === True)
+        // Validacion de fechas que no se salgan de los rangos del ejecucion del proyecto
+        if($start_date_activity >= $start_date_project || $act->is_act === True || $act->is_added === True)
         {
-            if($end_date_project > $end_date_activity || $args['is_added'] === True || $args['is_act'] === True)
+            if($end_date_project >= $end_date_activity || $act->is_act === True || $act->is_added === True)
             {
                 try
 		        {
+                    //actualizamos los datos de la actividad
                     $activity = $this->activityRepo->update($args['id'], $args);
+                    //actualizamos el progreso del proyecto segun cantad de dinero ingresado por actas
+                    if (!empty($args['amount'])) {
+                        $movement['value'] = $args['amount'];
+                        $this->progress->Progress($act->is_act, $act->project_id); //actualizamos el progrso del proyecto
+                        $this->accountRepo->update($this->accountRepo->getMovementAct($args['id'])->id, $movement);//Actualizamos el amount del movimiento
+                    }
 		        }
                 catch (\Exception $e)
                 {
 		        	return [
                         'activity' => null,
-                        'message' => 'Error, no se pudo editar. Vuelva a intentar',
+                        'message' => $e, 'Error, no se pudo editar. Vuelva a intentar',
                         'type' => 'Failed'
                     ];
                 }

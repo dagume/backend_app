@@ -70,7 +70,7 @@ extend type Mutation {
         completed:Boolean
         priority:priorityActivity
         notes:String @rules(apply: ["nullable", "max:1024"])
-        amount: Int @rules(apply: ["nullable", "integer"])
+        amount: Int @rules(apply: ["integer"])
         is_added: Boolean @rules(apply: ["required"])
         is_act:Boolean @rules(apply: ["required"])
         type:typeActivity @rules(apply: ["required"])
@@ -80,13 +80,13 @@ extend type Mutation {
     #Editar actividad
     updateActivity(
         id:ID! @rules(apply: ["required"])
-        name:String @rules(apply: ["required", "max:300"])
+        name:String @rules(apply: ["max:300"])
         completed:Boolean
         description:String @rules(apply: ["nullable", "max:700"])
         priority:String
         notes:String @rules(apply: ["nullable", "max:1024"])
         state:stateActivity
-        amount:Int @rules(apply: ["nullable", "integer"])
+        amount:Int @rules(apply: ["integer"])
         date_start:Date @rules(apply: ["date"])
         date_end:Date @rules(apply: ["date"])
         type:typeActivity

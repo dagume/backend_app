@@ -26,7 +26,7 @@ class Accounting_movement extends Model
         'state_movement',
         'sender_id',
         'code', //
-        //'exist_code'
+        'activity_id'
     ];
 
     public function document_references()
