@@ -42,33 +42,43 @@ class ReadyPaymentAgreement
                 $getPayment = $this->paymentRepo->find($args['id']);//Buscamos el acueerdo de pago
                 $order = $this->orderRepo->find($getPayment->order_id);//Buscamos la orden a la que correspode le acueerdo de pago
 
-                $pending['pending_debt'] = $order->pending_debt - $args['amount'];//Rsta de cuanto de debe a esa comprae
-                $this->orderRepo->update($order->id, $pending);
+                $pending['pending_debt'] = $order->pending_debt - $args['amount'];//Resta de cuanto de debe a esa comprae
 
-                $movement['puc_id'] = $args['puc_id'];
-                $movement['project_id'] = $order->project_id;
-                $movement['destination_id'] = $args['destination_id'];
-                $movement['destination_role_id'] = $args['destination_role_id'];
-                $movement['origin_id'] = $args['origin_id'];
-                $movement['origin_role_id'] = $args['origin_role_id'];
-                $movement['movement_date'] = now();
-                $movement['payment_method'] = $args['payment_method'];
-                $movement['value'] = $args['amount'];
-                $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($order->id)->code;
-                $movement['state_movement'] = True;
-                $movement['registration_date'] = now();
-                $movement['sender_id'] = auth()->user()->id;
-                $account_movement = $this->accountRepo->create($movement);
+                if ($pending['pending_debt'] >= 0) { //Validar que no de valor negativo
 
-                $pay['state'] = True;
-                $pay['amount'] = $args['amount'];
-                $payment = $this->paymentRepo->update($args['id'],$pay);
-                return [
-                    'paymentAgreement' => $payment,
-                    'accounting_movement' => $account_movement,
-                    'message' => "Pago realizado con exito",
-                    'type' => 'Successful'
-                ];
+                    $this->orderRepo->update($order->id, $pending);
+                    $movement['puc_id'] = $args['puc_id'];
+                    $movement['project_id'] = $order->project_id;
+                    $movement['destination_id'] = $args['destination_id'];
+                    $movement['destination_role_id'] = $args['destination_role_id'];
+                    $movement['origin_id'] = $args['origin_id'];
+                    $movement['origin_role_id'] = $args['origin_role_id'];
+                    $movement['movement_date'] = now();
+                    $movement['payment_method'] = $args['payment_method'];
+                    $movement['value'] = $args['amount'];
+                    $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($order->id)->code;
+                    $movement['state_movement'] = True;
+                    $movement['registration_date'] = now();
+                    $movement['sender_id'] = auth()->user()->id;
+                    $account_movement = $this->accountRepo->create($movement);
+
+                    $pay['state'] = True;
+                    $pay['amount'] = $args['amount'];
+                    $payment = $this->paymentRepo->update($args['id'],$pay);
+                    return [
+                        'paymentAgreement' => $payment,
+                        'accounting_movement' => $account_movement,
+                        'message' => "Pago realizado con exito",
+                        'type' => 'Successful'
+                    ];
+                }else {
+                    return [
+                        'paymentAgreement' => null,
+                        'accounting_movement' => null,
+                        'message' => "El valor a pagar no puede ser superior al valor de la deuda",
+                        'type' => 'Failed'
+                    ];
+                }
             }, 3);
             return $data;
         }else {

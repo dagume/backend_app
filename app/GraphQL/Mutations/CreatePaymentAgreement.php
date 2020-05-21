@@ -71,7 +71,7 @@ class CreatePaymentAgreement
                     return [
                         'paymentAgreement' => null,
                         'accounting_movement' => null,
-                        'message' => "El valor a pagar no puede ser superior a la deuda",
+                        'message' => "El valor a pagar no puede ser superior al valor de la deuda",
                         'type' => 'Failed'
                     ];
                 }
