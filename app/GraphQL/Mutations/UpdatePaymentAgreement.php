@@ -5,14 +5,19 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\PaymentAgreementRepository;
+use App\Repositories\OrderRepository;
 use DB;
 
 class UpdatePaymentAgreement
 {
     protected $paymentRepo;
+    protected $orderRepo;
 
-    public function __construct(PaymentAgreementRepository $payRepo){
+
+    public function __construct(PaymentAgreementRepository $payRepo, OrderRepository $ordRepo)
+    {
         $this->paymentRepo = $payRepo;
+        $this->orderRepo = $ordRepo;
     }
     /**
      * Return a value for the field.
@@ -26,36 +31,47 @@ class UpdatePaymentAgreement
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         //dd($this->paymentRepo->find($args['id'])->state);
-        if ($this->paymentRepo->find($args['id'])->state === false) {
+        $payment = $this->paymentRepo->find($args['id']);
+        $order = $this->orderRepo->find($payment->order_id);
+        $pending['pending_debt'] = $order->pending_debt - $args['amount']; //calculo de valor pendiente por pagar
+        if ($pending['pending_debt'] >= 0) { //Validar que no de valor negativo
 
-            try
-		    {
-                $paymentAgrement = $this->paymentRepo->update($args['id'], $args);
-		    }
-            catch (\Exception $e)
-            {
-		    	return [
+            if ($this->paymentRepo->find($args['id'])->state === false) {
+                try
+                {
+                    $paymentAgrement = $this->paymentRepo->update($args['id'], $args);
+                }
+                catch (\Exception $e)
+                {
+                    return [
+                        'paymentAgreement' => null,
+                        'accounting_movement' => null,
+                        'message' => 'Error, no se pudo editar. Vuelva a intentar',
+                        'type' => 'Failed'
+                    ];
+                }
+                return [
+                    'paymentAgreement' => $paymentAgrement,
+                    'accounting_movement' => null,
+                    'message' => 'Acuerdo de pago actualizado Exitosamente',
+                    'type' => 'Successful'
+                ];
+
+            }else {
+                return [
                     'paymentAgreement' => null,
                     'accounting_movement' => null,
-                    'message' => 'Error, no se pudo editar. Vuelva a intentar',
+                    'message' => 'EL pago ya fue registrado no se puede modificar',
                     'type' => 'Failed'
                 ];
             }
-            return [
-                'paymentAgreement' => $paymentAgrement,
-                'accounting_movement' => null,
-                'message' => 'Acuerdo de pago actualizado Exitosamente',
-                'type' => 'Successful'
-            ];
-
         }else {
             return [
                 'paymentAgreement' => null,
                 'accounting_movement' => null,
-                'message' => 'EL pago ya fue registrado no se puede modificar',
+                'message' => "El valor a pagar no puede ser superior a la deuda",
                 'type' => 'Failed'
             ];
         }
-
     }
 }

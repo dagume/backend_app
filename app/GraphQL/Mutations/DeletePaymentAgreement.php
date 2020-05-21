@@ -39,7 +39,7 @@ class DeletePaymentAgreement
             return [
                 'paymentAgreement' => $paymentAgreement,
                 'accounting_movement' => null,
-                'message' => 'Cuenta eliminada exitosamente',
+                'message' => 'Acuerdo de pago eliminado exitosamente',
                 'type' =>'Successful'
             ];
         }else {

@@ -39,7 +39,8 @@ class CreatePaymentAgreement
             $account_movement = null;
             $order = $this->orderRepo->find($args['order_id']); //consultamos la orden
             $pending['pending_debt'] = $order->pending_debt - $args['amount']; //calculo de valor pendiente por pagar
-            if ($order->state === 2) {
+            //dd($order->state);
+            if ($order->state == 2) {
                 if ($pending['pending_debt'] >= 0) { //Validar que no de valor negativo
                     if ($args['state'] != false) { // validar si se paga de o solo se registra el acuerdo de pago
                         $this->orderRepo->update($order->id, $pending); //actualizamos deuda pendiente de la orden
