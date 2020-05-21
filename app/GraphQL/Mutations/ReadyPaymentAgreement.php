@@ -10,7 +10,7 @@ use App\Repositories\Order_documentRepository;
 use App\Repositories\Accounting_movementRepository;
 use DB;
 
-class CreatePaymentAgreement
+class ReadyPaymentAgreement
 {
     protected $paymentRepo;
     protected $orderRepo;
@@ -24,6 +24,7 @@ class CreatePaymentAgreement
         $this->ord_documentRepo = $ord_docRepo;
         $this->accountRepo = $acoRepo;
     }
+
     /**
      * Return a value for the field.
      *
@@ -36,40 +37,35 @@ class CreatePaymentAgreement
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $data = DB::transaction(function () use($args){  //se crea la transacion
-            $account_movement = null;
-            if ($args['state'] != false) {
-                $order = $this->orderRepo->find($args['order_id']);
 
-                $pending['pending_debt'] = $order->pending_debt - $args['amount'];
-                $this->orderRepo->update($order->id, $pending);
+            $order = $this->orderRepo->find($args['order_id']);//Buscamos la orden a la que correspode le acueerdo de pago
+            $pending['pending_debt'] = $order->pending_debt - $args['amount'];//Rsta de cuanto de debe a esa comprae
+            $this->orderRepo->update($order->id, $pending);
 
-                $movement['puc_id'] = $args['puc_id'];
-                $movement['project_id'] = $order->project_id;
-                $movement['destination_id'] = $args['destination_id'];
-                $movement['destination_role_id'] = $args['destination_role_id'];
-                $movement['origin_id'] = $args['origin_id'];
-                $movement['origin_role_id'] = $args['origin_role_id'];
-                $movement['movement_date'] = now();
-                $movement['payment_method'] = $args['payment_method'];
-                $movement['value'] = $args['amount'];
-                $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
-                $movement['state_movement'] = True;
-                $movement['registration_date'] = now();
-                $movement['sender_id'] = auth()->user()->id;
-                $account_movement = $this->accountRepo->create($movement);
-            }
-            $payment = $this->paymentRepo->create($args);
+            $movement['puc_id'] = $args['puc_id'];
+            $movement['project_id'] = $order->project_id;
+            $movement['destination_id'] = $args['destination_id'];
+            $movement['destination_role_id'] = $args['destination_role_id'];
+            $movement['origin_id'] = $args['origin_id'];
+            $movement['origin_role_id'] = $args['origin_role_id'];
+            $movement['movement_date'] = now();
+            $movement['payment_method'] = $args['payment_method'];
+            $movement['value'] = $args['amount'];
+            $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
+            $movement['state_movement'] = True;
+            $movement['registration_date'] = now();
+            $movement['sender_id'] = auth()->user()->id;
+            $account_movement = $this->accountRepo->create($movement);
+
+            $pay['state'] = True;
+            $payment = $this->paymentRepo->update($args['id'],$pay);
             return [
                 'paymentAgreement' => $payment,
                 'accounting_movement' => $account_movement,
-                'message' => "Movimiento registrado",
+                'message' => "Pago realizado con exito",
                 'type' => 'Successful'
             ];
         }, 3);
         return $data;
-        //return [
-        //        'paymentAgreement' => null,
-        //        'message' => "En construccion"
-        //];
     }
 }

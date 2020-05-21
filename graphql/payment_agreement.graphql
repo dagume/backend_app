@@ -22,6 +22,7 @@ type payAgreDate{
 #Mensaje exitoso de creacion
 type MessageSuccessPaymentAgreement {
     paymentAgreement:PaymentAgreement
+    accounting_movement:Accounting_movement
     message: String
     type: String
 }
@@ -54,4 +55,24 @@ extend type Mutation{
         origin_role_id: Int
         payment_method:pay_meth
     ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\CreatePaymentAgreement@resolve") @middleware(checks:["auth:api", "can:payment_agreement.create"])
+
+    readyPaymentAgreement(
+        id:ID! @rules(apply: ["required"])
+        order_id:ID! @rules(apply: ["required","integer"])
+        pay_date:Date @rules(apply: ["required","date"])
+        amount:Int @rules(apply: ["required","integer"])
+
+        puc_id:Int @rules(apply: ["required"])
+        destination_id:Int @rules(apply: ["required"])
+        destination_role_id:Int @rules(apply: ["required"])
+        origin_id: Int @rules(apply: ["required"])
+        origin_role_id: Int @rules(apply: ["required"])
+        payment_method:pay_meth @rules(apply: ["required"])
+    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\ReadyPaymentAgreement@resolve") @middleware(checks:["auth:api", "can:payment_agreement.create"])
+
+    updatePaymentAgreement(
+        id:ID! @rules(apply: ["required"])
+        pay_date:Date @rules(apply: ["date"])
+        amount:Int @rules(apply: ["integer"])
+    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\UpdatePaymentAgreement@resolve") @middleware(checks:["auth:api", "can:payment_agreement.edit"])
 }
