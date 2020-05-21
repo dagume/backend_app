@@ -38,7 +38,9 @@ class ReadyPaymentAgreement
     {
         $data = DB::transaction(function () use($args){  //se crea la transacion
 
-            $order = $this->orderRepo->find($args['order_id']);//Buscamos la orden a la que correspode le acueerdo de pago
+            $getPayment = $this->paymentRepo->find($args['id']);//Buscamos el acueerdo de pago
+            $order = $this->orderRepo->find($getPayment->order_id);//Buscamos la orden a la que correspode le acueerdo de pago
+//dd($order);
             $pending['pending_debt'] = $order->pending_debt - $args['amount'];//Rsta de cuanto de debe a esa comprae
             $this->orderRepo->update($order->id, $pending);
 
@@ -51,7 +53,7 @@ class ReadyPaymentAgreement
             $movement['movement_date'] = now();
             $movement['payment_method'] = $args['payment_method'];
             $movement['value'] = $args['amount'];
-            $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
+            $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($order->id)->code;
             $movement['state_movement'] = True;
             $movement['registration_date'] = now();
             $movement['sender_id'] = auth()->user()->id;

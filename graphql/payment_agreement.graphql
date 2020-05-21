@@ -58,7 +58,7 @@ extend type Mutation{
 
     readyPaymentAgreement(
         id:ID! @rules(apply: ["required"])
-        order_id:ID! @rules(apply: ["required","integer"])
+        #order_id:ID! @rules(apply: ["required","integer"])
         pay_date:Date @rules(apply: ["required","date"])
         amount:Int @rules(apply: ["required","integer"])
 
