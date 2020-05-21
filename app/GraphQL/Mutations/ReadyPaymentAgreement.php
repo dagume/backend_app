@@ -58,6 +58,7 @@ class ReadyPaymentAgreement
             $account_movement = $this->accountRepo->create($movement);
 
             $pay['state'] = True;
+            $pay['amount'] = $args['amount'];
             $payment = $this->paymentRepo->update($args['id'],$pay);
             return [
                 'paymentAgreement' => $payment,
