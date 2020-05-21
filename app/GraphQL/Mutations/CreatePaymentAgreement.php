@@ -40,7 +40,7 @@ class CreatePaymentAgreement
             if ($args['state'] != false) {
                 $order = $this->orderRepo->find($args['order_id']);
 
-                //PENDIENTEValidar para que no de valores negativos al hacer la operacion
+                //PENDIENTE Validar para que no de valores negativos al hacer la operacion
                 $pending['pending_debt'] = $order->pending_debt - $args['amount'];
                 $this->orderRepo->update($order->id, $pending);
 

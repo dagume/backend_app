@@ -4,16 +4,11 @@ namespace App\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use App\Repositories\PaymentAgreementRepository;
+use App\PaymentAgreement;
 use DB;
 
-class UpdatePaymentAgreement
+class DeletePaymentAgreement
 {
-    protected $paymentRepo;
-
-    public function __construct(PaymentAgreementRepository $payRepo){
-        $this->paymentRepo = $payRepo;
-    }
     /**
      * Return a value for the field.
      *
@@ -25,37 +20,34 @@ class UpdatePaymentAgreement
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //dd($this->paymentRepo->find($args['id'])->state);
-        if ($this->paymentRepo->find($args['id'])->state === false) {
-
+        //dd(PaymentAgreement::find($args['id'])->state);
+        if (PaymentAgreement::find($args['id'])->state === false) {
             try
 		    {
-                $paymentAgrement = $this->paymentRepo->update($args['id'], $args);
+		    	$paymentAgreement = PaymentAgreement::find($args['id']);
+		    	$paymentAgreement->delete();
 		    }
-            catch (\Exception $e)
+            catch (\Illuminate\Database\QueryException $e)
             {
 		    	return [
-                    'paymentAgreement' => null,
-                    'accounting_movement' => null,
-                    'message' => 'Error, no se pudo editar. Vuelva a intentar',
+                    'puc' => null,
+                    'message' => 'Esta cuenta no se puede eliminar',
                     'type' => 'Failed'
                 ];
             }
             return [
-                'paymentAgreement' => $paymentAgrement,
-                'accounting_movement' => null,
-                'message' => 'Acuerdo de pago actualizado Exitosamente',
-                'type' => 'Successful'
+                'puc' => $puc,
+                'message' => 'Cuenta eliminada exitosamente',
+                'type' =>'Successful'
             ];
-
         }else {
             return [
                 'paymentAgreement' => null,
                 'accounting_movement' => null,
-                'message' => 'EL pago ya fue registrado no se puede modificar',
+                'message' => 'El acuerdo de pago no se puede eliminar. ya fue pagado',
                 'type' => 'Failed'
             ];
-        }
 
+        }
     }
 }

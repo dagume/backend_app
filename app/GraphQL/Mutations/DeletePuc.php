@@ -36,5 +36,6 @@ class DeletePuc
             'puc' => $puc,
             'message' => 'Cuenta eliminada exitosamente',
             'type' =>'Successful'
-        ];    }
+        ];
+    }
 }

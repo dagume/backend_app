@@ -45,7 +45,7 @@ extend type Mutation{
     createPaymentAgreement(
         order_id:ID! @rules(apply: ["required","integer"])
         pay_date:Date
-        amount:Int @rules(apply: ["required","integer"])
+        amount:Int @rules(apply: ["required","integer","gte:0"])
         state:Boolean @rules(apply: ["required"])
 
         puc_id:Int
@@ -58,9 +58,8 @@ extend type Mutation{
 
     readyPaymentAgreement(
         id:ID! @rules(apply: ["required"])
-        #order_id:ID! @rules(apply: ["required","integer"])
         pay_date:Date @rules(apply: ["required","date"])
-        amount:Int @rules(apply: ["required","integer"])
+        amount:Int @rules(apply: ["required","integer","gte:0"])
 
         puc_id:Int @rules(apply: ["required"])
         destination_id:Int @rules(apply: ["required"])
@@ -73,6 +72,11 @@ extend type Mutation{
     updatePaymentAgreement(
         id:ID! @rules(apply: ["required"])
         pay_date:Date @rules(apply: ["date"])
-        amount:Int @rules(apply: ["integer"])
+        amount:Int @rules(apply: ["integer","gte:0"])
     ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\UpdatePaymentAgreement@resolve") @middleware(checks:["auth:api", "can:payment_agreement.edit"])
+
+    deletePaymentAgreement(
+        id: ID!
+    ):MessageSuccessPaymentAgreement @field(resolver: "App\\GraphQL\\Mutations\\DeletePaymentAgreement@resolve") @middleware(checks:["auth:api", "can:activity.destroy"])
+
 }
