@@ -8,6 +8,8 @@ use App\Repositories\PaymentAgreementRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\Order_documentRepository;
 use App\Repositories\Accounting_movementRepository;
+use App\Repositories\RoleRepository;
+use App\Repositories\ContactRepository;
 use DB;
 
 class CreatePaymentAgreement
@@ -16,14 +18,18 @@ class CreatePaymentAgreement
     protected $orderRepo;
     protected $ord_documentRepo;
     protected $accountRepo;
+    protected $roleRepo;
+    protected $contactRepo;
 
-    public function __construct(Accounting_movementRepository $acoRepo, Order_documentRepository $ord_docRepo, PaymentAgreementRepository $payRepo, OrderRepository $ordRepo)
+    public function __construct(ContactRepository $conRepo, RoleRepository $rolRepo, Accounting_movementRepository $acoRepo, Order_documentRepository $ord_docRepo, PaymentAgreementRepository $payRepo, OrderRepository $ordRepo)
     {
         $this->paymentRepo = $payRepo;
         $this->orderRepo = $ordRepo;
         $this->ord_documentRepo = $ord_docRepo;
         $this->accountRepo = $acoRepo;
-    }
+        $this->roleRepo = $rolRepo;
+        $this->contactRepo = $conRepo;
+}
     /**
      * Return a value for the field.
      *
@@ -45,12 +51,12 @@ class CreatePaymentAgreement
                     if ($args['state'] != false) { // validar si se paga de o solo se registra el acuerdo de pago
                         $this->orderRepo->update($order->id, $pending); //actualizamos deuda pendiente de la orden
 
-                        $movement['puc_id'] = $args['puc_id'];
+                        $movement['puc_id'] = 110505;
                         $movement['project_id'] = $order->project_id;
-                        $movement['destination_id'] = $args['destination_id'];
-                        $movement['destination_role_id'] = $args['destination_role_id'];
-                        $movement['origin_id'] = $args['origin_id'];
-                        $movement['origin_role_id'] = $args['origin_role_id'];
+                        $movement['destination_id'] = $order->contact_id;
+                        $movement['destination_role_id'] = $this->roleRepo->getRolProveedor()->id;
+                        $movement['origin_id'] = $this->contactRepo->getContactIdentificatioNumber($order->project_id)->id;
+                        $movement['origin_role_id'] = $this->roleRepo->getRolProject()->id;
                         $movement['movement_date'] = now();
                         $movement['payment_method'] = $args['payment_method'];
                         $movement['value'] = $args['amount'];
