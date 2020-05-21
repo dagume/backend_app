@@ -37,40 +37,52 @@ class CreatePaymentAgreement
     {
         $data = DB::transaction(function () use($args){  //se crea la transacion
             $account_movement = null;
-            if ($args['state'] != false) {
-                $order = $this->orderRepo->find($args['order_id']);
+            $order = $this->orderRepo->find($args['order_id']); //consultamos la orden
+            $pending['pending_debt'] = $order->pending_debt - $args['amount']; //calculo de valor pendiente por pagar
+            if ($order->state === 2) {
+                if ($pending['pending_debt'] >= 0) { //Validar que no de valor negativo
+                    if ($args['state'] != false) { // validar si se paga de o solo se registra el acuerdo de pago
+                        $this->orderRepo->update($order->id, $pending); //actualizamos deuda pendiente de la orden
 
-                //PENDIENTE Validar para que no de valores negativos al hacer la operacion
-                $pending['pending_debt'] = $order->pending_debt - $args['amount'];
-                $this->orderRepo->update($order->id, $pending);
-
-                $movement['puc_id'] = $args['puc_id'];
-                $movement['project_id'] = $order->project_id;
-                $movement['destination_id'] = $args['destination_id'];
-                $movement['destination_role_id'] = $args['destination_role_id'];
-                $movement['origin_id'] = $args['origin_id'];
-                $movement['origin_role_id'] = $args['origin_role_id'];
-                $movement['movement_date'] = now();
-                $movement['payment_method'] = $args['payment_method'];
-                $movement['value'] = $args['amount'];
-                $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
-                $movement['state_movement'] = True;
-                $movement['registration_date'] = now();
-                $movement['sender_id'] = auth()->user()->id;
-                $account_movement = $this->accountRepo->create($movement);
+                        $movement['puc_id'] = $args['puc_id'];
+                        $movement['project_id'] = $order->project_id;
+                        $movement['destination_id'] = $args['destination_id'];
+                        $movement['destination_role_id'] = $args['destination_role_id'];
+                        $movement['origin_id'] = $args['origin_id'];
+                        $movement['origin_role_id'] = $args['origin_role_id'];
+                        $movement['movement_date'] = now();
+                        $movement['payment_method'] = $args['payment_method'];
+                        $movement['value'] = $args['amount'];
+                        $movement['code'] = $this->ord_documentRepo->getCodeOrderBuy($args['order_id'])->code;
+                        $movement['state_movement'] = True;
+                        $movement['registration_date'] = now();
+                        $movement['sender_id'] = auth()->user()->id;
+                        $account_movement = $this->accountRepo->create($movement);
+                    }
+                    $payment = $this->paymentRepo->create($args);
+                    return [
+                        'paymentAgreement' => $payment,
+                        'accounting_movement' => $account_movement,
+                        'message' => "Movimiento registrado",
+                        'type' => 'Successful'
+                    ];
+                }else {
+                    return [
+                        'paymentAgreement' => null,
+                        'accounting_movement' => null,
+                        'message' => "El valor a pagar no puede ser superior a la deuda",
+                        'type' => 'Failed'
+                    ];
+                }
+            }else {
+                return [
+                    'paymentAgreement' => null,
+                    'accounting_movement' => null,
+                    'message' => "Esta orden de compra no tiene asignado proveedor, primero debe ser autorizada y enviada ",
+                    'type' => 'Failed'
+                ];
             }
-            $payment = $this->paymentRepo->create($args);
-            return [
-                'paymentAgreement' => $payment,
-                'accounting_movement' => $account_movement,
-                'message' => "Movimiento registrado",
-                'type' => 'Successful'
-            ];
         }, 3);
         return $data;
-        //return [
-        //        'paymentAgreement' => null,
-        //        'message' => "En construccion"
-        //];
     }
 }

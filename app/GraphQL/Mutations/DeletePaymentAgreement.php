@@ -30,13 +30,15 @@ class DeletePaymentAgreement
             catch (\Illuminate\Database\QueryException $e)
             {
 		    	return [
-                    'puc' => null,
+                    'paymentAgreement' => null,
+                    'accounting_movement' => null,
                     'message' => 'Esta cuenta no se puede eliminar',
                     'type' => 'Failed'
                 ];
             }
             return [
-                'puc' => $puc,
+                'paymentAgreement' => $paymentAgreement,
+                'accounting_movement' => null,
                 'message' => 'Cuenta eliminada exitosamente',
                 'type' =>'Successful'
             ];
