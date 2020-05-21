@@ -70,7 +70,7 @@ class CreatePaymentAgreement
                     return [
                         'paymentAgreement' => $payment,
                         'accounting_movement' => $account_movement,
-                        'message' => "Movimiento registrado",
+                        'message' => "Pago registrado",
                         'type' => 'Successful'
                     ];
                 }else {
