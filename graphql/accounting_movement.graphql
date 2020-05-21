@@ -48,7 +48,7 @@ extend type Query{
     ): [Accounting_movement] @all(model: "App\\Accounting_movement") #@middleware(checks:["auth:api"])
     #histórico de movimientos entre el proyecto y un contacto
     movements_project_contact(
-        #project_id:Int! @where(operator: "=")
+        project_id:Int! @where(operator: "=")
         origin_id:Int! @where(operator: "=")
         origin_role_id:Int!  @where(operator: "=")
         destination_id:Int! @where(operator: "=")
