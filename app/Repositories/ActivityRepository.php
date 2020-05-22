@@ -14,7 +14,7 @@ class ActivityRepository extends BaseRepository
     }
     public function todayActivity($date){
         //Traemos las actividades que vencen hoy
-        $reference = DB::select('select * from activities where date_end = ? and  is_act = false',[$date]);
+        $reference = DB::select('select * from activities where date_end = ? and  is_act = false and  is_added = false',[$date]);
         return $this->getObjects($reference);
     }
     public function betweenActivity($first_day, $last_day){
@@ -26,13 +26,13 @@ class ActivityRepository extends BaseRepository
     }
     public function act_activity($project_id){
         //Traemos las actividades que son acta
-        $acts = DB::select('select amount from activities where project_id = ? and is_act = true',[$project_id]);
+        $acts = DB::select('select amount from activities where project_id = ? and is_act = true and  is_added = false',[$project_id]);
         return $acts;
     }
     public function added_activity($project_id){
         //Traemos las actividades que son adicional
-        $added = DB::select('select amount from activities where project_id = ? and is_added = true',[$project_id]);
+        $added = DB::select('select amount from activities where project_id = ? and is_added = true and  is_added = false',[$project_id]);
         return $added;
     }
-    
+
 }
