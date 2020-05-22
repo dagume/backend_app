@@ -49,10 +49,10 @@ extend type Query{
     #histórico de movimientos entre el proyecto y un contacto
     movements_project_contact(
         project_id:Int! @where(operator: "=")
-        origin_id:Int! @where(operator: "=")
-        origin_role_id:Int!  @where(operator: "=")
-        destination_id:Int! @where(operator: "=")
-        destination_role_id:Int!  @where(operator: "=")
+        origin_id:Int @where(operator: "=")
+        origin_role_id:Int  @where(operator: "=")
+        destination_id:Int @where(operator: "=")
+        destination_role_id:Int  @where(operator: "=")
     ):[Accounting_movement] @all(model: "App\\Accounting_movement")
 }
 extend type Mutation {
