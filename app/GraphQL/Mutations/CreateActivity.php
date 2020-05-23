@@ -88,7 +88,7 @@ class CreateActivity
                             $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;
                             $movement['origin_id'] = $this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])->contact_id;
                             $movement['origin_role_id'] = $this->roleRepo->getRolCliente()->id;
-                            $movement['movement_date'] = now();
+                            $movement['movement_date'] = $args['date_end'];
                             if (empty($args['amount']) || is_null($args['amount'])) {
                                 $movement['value'] = 0;
                             }else $movement['value'] = $args['amount'];

@@ -28,14 +28,15 @@ class RolesController extends Controller
 {
 
     //private $cacheFileObjects = [];
-    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
+    protected $folder_id    = '1NemxPUDtGlfMAzoFgz-6SAMJcsw9b8Jz';
+    //protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u'; //GUECHA
     public function __construct()
     {}
 
 
     public function index(Request $request)
     {
-        phpinfo();
+        //phpinfo();
         //dd(User::find(3));
        // $project = DB::select('select p.association from quotations as q
        // inner join orders as o on q.order_id = o.id
@@ -150,34 +151,34 @@ class RolesController extends Controller
         //$module4->save();
 
 //
-        //$doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-        //$doc_ref_project->name = 'Proyectos';
-        //$doc_ref_project->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-        //$project_folder = Conection_Drive()->files->create(Create_Folder('Proyectos', $this->folder_id), ['fields' => 'id']);
-        //$doc_ref_project->drive_id = $project_folder->id;
-        //$doc_ref_project->save();
-//
-        //$doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-        //$doc_ref_account->name = 'Cuentas';
-        //$doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-        //$account_folder = Conection_Drive()->files->create(Create_Folder('Cuentas', $this->folder_id), ['fields' => 'id']);
-        //$doc_ref_account->drive_id = $account_folder->id;
-        //$doc_ref_account->save();
-//
-        //$doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-        //$doc_ref_contact->name = 'Contactos';
-        //$doc_ref_contact->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-        //$contact_folder = Conection_Drive()->files->create(Create_Folder('Contactos', $this->folder_id), ['fields' => 'id']);
-        //$doc_ref_contact->drive_id = $contact_folder->id;
-        //$doc_ref_contact->save();
-//
-        //$doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
-        //$doc_ref_2019->parent_document_id = DB::table('document_reference')->where('name', 'Proyectos')->first()->id;
-        //$doc_ref_2019->name = '2020';
-        //$doc_ref_2019->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
-        //$year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
-        //$doc_ref_2019->drive_id = $year_folder->id;
-        //$doc_ref_2019->save();
+        $doc_ref_project = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        $doc_ref_project->name = 'Proyectos';
+        $doc_ref_project->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
+        $project_folder = Conection_Drive()->files->create(Create_Folder('Proyectos', $this->folder_id), ['fields' => 'id']);
+        $doc_ref_project->drive_id = $project_folder->id;
+        $doc_ref_project->save();
+
+        $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        $doc_ref_account->name = 'Cuentas';
+        $doc_ref_account->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
+        $account_folder = Conection_Drive()->files->create(Create_Folder('Cuentas', $this->folder_id), ['fields' => 'id']);
+        $doc_ref_account->drive_id = $account_folder->id;
+        $doc_ref_account->save();
+
+        $doc_ref_contact = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        $doc_ref_contact->name = 'Contactos';
+        $doc_ref_contact->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
+        $contact_folder = Conection_Drive()->files->create(Create_Folder('Contactos', $this->folder_id), ['fields' => 'id']);
+        $doc_ref_contact->drive_id = $contact_folder->id;
+        $doc_ref_contact->save();
+
+        $doc_ref_2019 = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
+        $doc_ref_2019->parent_document_id = DB::table('document_reference')->where('name', 'Proyectos')->first()->id;
+        $doc_ref_2019->name = '2020';
+        $doc_ref_2019->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
+        $year_folder = Conection_Drive()->files->create(Create_Folder(date("Y"), $project_folder->id), ['fields' => 'id']);
+        $doc_ref_2019->drive_id = $year_folder->id;
+        $doc_ref_2019->save();
 
         //$document = new Document_reference;
         //$document_reference = DB::table('document_reference')->where('name', date("Y"))->first();
