@@ -82,7 +82,7 @@ class CreateActivity
                         // Si no existe un integrante con rol de cliente en el proyecto no podemos registrar el acta, ni el moviento
                         if (!is_null($this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])))
                         {
-                            $movement['puc_id'] = 110505;
+                            $movement['puc_id'] = 4130;
                             $movement['project_id'] = $args['project_id'];
                             $movement['destination_id'] = $this->contactRepo->getContactIdentificatioNumber($args['project_id'])->id;
                             $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;

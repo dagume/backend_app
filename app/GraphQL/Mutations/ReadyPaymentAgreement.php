@@ -53,7 +53,7 @@ class ReadyPaymentAgreement
                 if ($pending['pending_debt'] >= 0) { //Validar que no de valor negativo
                     $this->orderRepo->update($order->id, $pending);
 
-                    $movement['puc_id'] = 110505;
+                    $movement['puc_id'] = 6205;
                     $movement['project_id'] = $order->project_id;
                     $movement['destination_id'] = $order->contact_id;
                     $movement['destination_role_id'] = $this->roleRepo->getRolProveedor()->id;
