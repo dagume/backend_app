@@ -35,5 +35,10 @@ class ActivityRepository extends BaseRepository
         $added = DB::select('select amount from activities where project_id = ? and is_added = true',[$project_id]);
         return $added;
     }
+    public function totalActsProject($project_id){
+        //Reporte de Total de ingresos del proyecto
+        $acts = DB::select('select amount from Activities where is_act = true and project_id = ?',[$project_id]);
+        return $acts;
+    }
 
 }

@@ -118,6 +118,7 @@ function Conection_Drive()
         $activity['completed'] = false;
         $activity['priority'] = 'Media';
         $activity['is_added'] = false;
+        $activity['is_act'] = false;
         $activity['drive_id'] = $drive_id;
         $activity['type'] = 0;
         return $activity;
