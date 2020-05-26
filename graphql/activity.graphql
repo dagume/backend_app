@@ -47,7 +47,7 @@ type MessageSuccessActivity {
 }
 #Reporte de Total de ingresos del proyecto
 type MessageTotalActsProject {
-    totalActs:Activity
+    totalActs:Int
 }
 
 extend type Query{

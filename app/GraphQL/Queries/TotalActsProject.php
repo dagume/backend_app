@@ -29,8 +29,9 @@ class TotalActsProject
         $total = 0;
         $acts = $this->activityRepo->totalActsProject($args['project_id']);
         foreach ($acts as $act) {
-            $total += $act['amount'];
+            $total += $act->amount;
         }
+
         return[
             'totalActs' => $total
         ];
