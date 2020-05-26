@@ -51,7 +51,7 @@ class CreatePaymentAgreement
                     if ($args['state'] != false) { // validar si se paga de o solo se registra el acuerdo de pago
                         $this->orderRepo->update($order->id, $pending); //actualizamos deuda pendiente de la orden
 
-                        $movement['puc_id'] = 6205;
+                        $movement['puc_id'] = 61005;
                         $movement['project_id'] = $order->project_id;
                         $movement['destination_id'] = $order->contact_id;
                         $movement['destination_role_id'] = $this->roleRepo->getRolProveedor()->id;
