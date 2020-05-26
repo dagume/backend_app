@@ -54,6 +54,9 @@ extend type Query{
         destination_id:Int @where(operator: "=")
         destination_role_id:Int  @where(operator: "=")
     ):[Accounting_movement] @all(model: "App\\Accounting_movement")
+
+    partner_contributions(project_id: Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+
 }
 extend type Mutation {
     #movimientos (Gastos e ingresos)
