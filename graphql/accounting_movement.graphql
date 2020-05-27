@@ -55,7 +55,12 @@ extend type Query{
         destination_role_id:Int  @where(operator: "=")
     ):[Accounting_movement] @all(model: "App\\Accounting_movement")
 
+    #Aportes de socios en un proyecto
     partner_contributions(project_id: Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+    #Aportes de un socio
+    a_partner_contributions(project_id: Int! contact_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+    #Aportes y reembolsos de socio o prestamista en un proyecto
+    partner_contributions_and_refunds(project_id: Int! contact_id:Int! role_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions_and_refunds@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
 
 }
 extend type Mutation {
