@@ -37,8 +37,13 @@ class Accounting_movementRepository extends BaseRepository
         return $data;
     }
     public function project_expenses($project_id, $origin_id, $role_id)
-    {   //reporte de aportes de un socio al proyecto
+    {   //reporte de Registro de egresos en general del proyecto
         $data = DB::select('select * from accounting_movements where project_id = ? and origin_id = ? and origin_role_id = ?', [$project_id, $origin_id, $role_id]);
+        return $data;
+    }
+    public function project_expenses_for_concept($project_id, $origin_id, $role_id, $puc_id)
+    {   //reporte de Registro de egresos por concepto del proyecto
+        $data = DB::select('select * from accounting_movements where project_id = ? and origin_id = ? and origin_role_id = ? and puc_id = ?', [$project_id, $origin_id, $role_id, $puc_id]);
         return $data;
     }
 }
