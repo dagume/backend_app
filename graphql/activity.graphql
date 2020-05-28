@@ -59,7 +59,7 @@ extend type Query{
     weekActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\WeekActivities@resolve") @middleware(checks:["auth:api", "can:activity.list"])
     monthActivities: [Activity] @field(resolver: "App\\GraphQL\\Queries\\MonthActivities@resolve") @middleware(checks:["auth:api", "can:activity.list"])
     state_activities(state: stateActivity! @where(operator: "=") project_id:Int! @where(operator: "=")): [Activity] @all(model: "App\\Activity") @middleware(checks:["auth:api", "can:activity.list"])
-    totalActsProject(project_id: Int!): MessageTotalActsProject @field(resolver: "App\\GraphQL\\Queries\\TotalActsProject@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+    totalActsProject(project_id: Int): MessageTotalActsProject @field(resolver: "App\\GraphQL\\Queries\\TotalActsProject@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
 }
 
 extend type Mutation {

@@ -6,19 +6,21 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Accounting_movementRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\ContactRepository;
 use DB;
 
-class Partner_contributions
+class Project_expenses
 {
     protected $accountingRepo;
     protected $roleRepo;
+    protected $contactRepo;
 
-    public function __construct(RoleRepository $rolRepo, Accounting_movementRepository $acoRepo)
+    public function __construct(ContactRepository $conRepo, RoleRepository $rolRepo, Accounting_movementRepository $acoRepo)
     {
         $this->accountingRepo = $acoRepo;
         $this->roleRepo = $rolRepo;
+        $this->contactRepo = $conRepo;
     }
-
     /**
      * Return a value for the field.
      *
@@ -30,8 +32,9 @@ class Partner_contributions
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //$role_socio = $this->roleRepo->getRolSocio()->id;
-        $movements = $this->accountingRepo->partner_contributions($args['project_id'], $args['role_id']);
+        $role_project = $this->roleRepo->getRolProject();
+        $contact_project = $this->contactRepo->getContactIdentificatioNumber($args['project_id']);
+        $movements = $this->accountingRepo->project_expenses($args['project_id'], $contact_project->id, $role_project->id);
         return $movements;
     }
 }
