@@ -65,6 +65,8 @@ extend type Query{
     project_expenses(project_id: Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Project_expenses@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
     #Registro de egresos por concepto del proyecto
     project_expenses_for_concept(project_id: Int! puc_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Project_expenses_for_concept@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+    #Registro de ingresos del proyecto
+    project_income(project_id: Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\project_income@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
 
 }
 extend type Mutation {
