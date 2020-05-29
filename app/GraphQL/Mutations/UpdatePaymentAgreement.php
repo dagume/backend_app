@@ -30,7 +30,6 @@ class UpdatePaymentAgreement
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //dd($this->paymentRepo->find($args['id'])->state);
         $payment = $this->paymentRepo->find($args['id']);
         $order = $this->orderRepo->find($payment->order_id);
         $pending['pending_debt'] = $order->pending_debt - $args['amount']; //calculo de valor pendiente por pagar
