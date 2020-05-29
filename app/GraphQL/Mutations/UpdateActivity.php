@@ -40,6 +40,7 @@ class UpdateActivity
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $act = $this->activityRepo->find($args['id']);
+        //dd($this->progress->missing_project_money($act->project_id));
         $start_date_project = $this->projectRepo->find($act->project_id)->start_date;
         $end_date_project = $this->projectRepo->find($act->project_id)->end_date;
 
@@ -61,30 +62,39 @@ class UpdateActivity
         {
             if($end_date_project >= $end_date_activity || $act->is_act === True || $act->is_added === True)
             {
-                try
-		        {
-                    //actualizamos los datos de la actividad
-                    $activity = $this->activityRepo->update($args['id'], $args);
-                    //actualizamos el progreso del proyecto segun cantad de dinero ingresado por actas
-                    if (!empty($args['amount'])) {
-                        $movement['value'] = $args['amount'];
-                        $this->progress->Progress($act->is_act, $act->project_id); //actualizamos el progrso del proyecto
-                        $this->accountRepo->update($this->accountRepo->getMovementAct($args['id'])->id, $movement);//Actualizamos el amount del movimiento
-                    }
-		        }
-                catch (\Exception $e)
+                if ($args['amount'] <= $this->progress->missing_project_money($act->project_id)) //Validar que no exceda el faltante de recibir por el cliente, no puede entrar mas dinero del registrado en contrato
                 {
-		        	return [
+                    try
+    		        {
+                        //actualizamos los datos de la actividad
+                        $activity = $this->activityRepo->update($args['id'], $args);
+                        //actualizamos el progreso del proyecto segun cantad de dinero ingresado por actas
+                        if (!empty($args['amount'])) {
+                                $movement['value'] = $args['amount'];
+                                $this->progress->Progress($act->is_act, $act->project_id); //actualizamos el progrso del proyecto
+                                $this->accountRepo->update($this->accountRepo->getMovementAct($args['id'])->id, $movement);//Actualizamos el amount del movimiento
+                        }
+                    }
+                    catch (\Exception $e)
+                    {
+                        return [
+                            'activity' => null,
+                            'message' => $e, 'Error, no se pudo editar. Vuelva a intentar',
+                            'type' => 'Failed'
+                        ];
+                    }
+                    return [
+                        'activity' => $activity,
+                        'message' => 'Actividad actualizada Exitosamente',
+                    'type' => 'Successful'
+                    ];
+                }else {
+                    return [
                         'activity' => null,
-                        'message' => $e, 'Error, no se pudo editar. Vuelva a intentar',
+                        'message' => 'No puede ingresar más dinero del contratado en el proyecto, la sumatoria de las actas excede el valor total del contrato',
                         'type' => 'Failed'
                     ];
                 }
-                return [
-                    'activity' => $activity,
-                    'message' => 'Actividad actualizada Exitosamente',
-                    'type' => 'Successful'
-                ];
             }else{
                 return [
                     'activity' => null,
