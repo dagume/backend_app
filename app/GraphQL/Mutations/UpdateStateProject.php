@@ -5,15 +5,21 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\ProjectRepository;
+use App\Repositories\ActivityRepository;
+use App\Repositories\Document_referenceRepository;
 use DB;
 
 class UpdateStateProject
 {
     protected $projectRepo;
+    protected $activityRepo;
+    protected $documentRepo;
 
-    public function __construct(ProjectRepository $proRepo)
+    public function __construct(Document_referenceRepository $docRepo, ActivityRepository $actRepo, ProjectRepository $proRepo)
     {
         $this->projectRepo = $proRepo;
+        $this->activityRepo = $actRepo;
+        $this->documentRepo = $docRepo;
     }
     /**
      * Return a value for the field.
@@ -26,8 +32,30 @@ class UpdateStateProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        //dd($this->projectRepo->find($args['id'])->state == 4);
         try
 		{
+            //Folder de actividades dentro del proyecto
+            $activity_folder = $this->documentRepo->getFolderParentActivity($args['id']);
+            if ($this->projectRepo->find($args['id'])->state == 4 && $args['state'] !== 4) {
+                //Hacemos conexion con el drive y creamos el folder de Actividad. Metodos en Helper.php
+                $again_Act_folder = Conection_Drive()->files->create(Create_Folder('Acta de reinicio '.date("d-m-Y"), $activity_folder->drive_id), ['fields' => 'id']);
+                //guarda registro de la nueva actividad
+                $activity_again = $this->activityRepo->create(StoreActivity($args['id'], 'Acta de reinicio '.date("d-m-Y"), $again_Act_folder->id));
+
+                //Hacemos conexion con el drive y creamos el folder de Actividad. Metodos en Helper.php
+                $poliza_Act_folder = Conection_Drive()->files->create(Create_Folder('Polizas de reinicio '.date("d-m-Y"), $activity_folder->drive_id), ['fields' => 'id']);
+                //guarda registro de la nueva actividad
+                $activity_poliza = $this->activityRepo->create(StoreActivity($args['id'], 'Polizas de reinicio '.date("d-m-Y"), $poliza_Act_folder->id));
+            }
+
+            if ($args['state'] === 4 && $this->projectRepo->find($args['id'])->state != 4) {
+                //Hacemos conexion con el drive y creamos el folder de Actividad. Metodos en Helper.php
+                $suspensionAct_folder = Conection_Drive()->files->create(Create_Folder('Acta de suspensión '.date("d-m-Y"), $activity_folder->drive_id), ['fields' => 'id']);
+                //guarda registro de la nueva actividad
+                $activity = $this->activityRepo->create(StoreActivity($args['id'], 'Acta de suspensión '.date("d-m-Y"), $suspensionAct_folder->id));
+            }
+
             $project = $this->projectRepo->update($args['id'], $args);
 		}
         catch (\Exception $e)
