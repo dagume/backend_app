@@ -31,7 +31,7 @@ class A_partner_contributions
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $role_socio = $this->roleRepo->getRolSocio()->id;
-        $movements = $this->accountingRepo->partner_contributions ($args['project_id'], $args['contact_id'], $role_socio);
+        $movements = $this->accountingRepo->a_partner_contributions($args['project_id'], $args['contact_id'], $role_socio);
         return $movements;
     }
 }
