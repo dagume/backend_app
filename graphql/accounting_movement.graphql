@@ -58,7 +58,7 @@ extend type Query{
     #Aportes de socios en un proyecto
     partner_contributions(project_id: Int! role_id: Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
     #Aportes de un socio
-    a_partner_contributions(project_id: Int! contact_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+    a_partner_contributions(project_id: Int! contact_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\A_partner_contributions@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
     #Aportes y reembolsos de socio o prestamista en un proyecto
     partner_contributions_and_refunds(project_id: Int! contact_id:Int! role_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Partner_contributions_and_refunds@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
     #Registro de egresos en general del proyecto
