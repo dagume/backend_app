@@ -54,40 +54,42 @@ class CreateActivity
         {
             if($end_date_project >= $end_date_activity || $args['is_added'] === True || $args['is_act'] === True)
             {
-                $act = DB::transaction(function () use($args){
-                    //verifica si la actividad es padre o hija para asi saber donde crear el folder
-                    if ($args['parent_activity_id'] == null) {
-                        //hace conexion con el drive y crea el folder. Metodos en Helper.php
-                        $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
-                        $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
-                        $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
-                        $args['module_id']          = 1; //id 1 pertenece al modulo Activity
-                        $args['drive_id']           = $activity_folder->id;
-                        $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
-                        $args['activity_id']        = $activity->id;
-                    }else {
-                        //hace conexion con el drive y crea el folder. Metodos en Helper.php y
-                        $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
-                        $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
-                        $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
-                        $args['module_id']          = 1; //id 1 pertenece al modulo Activity
-                        $args['drive_id']           = $activity_folder->id;
-                        $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
-                        $args['activity_id']        = $activity->id;
-                    }
-                    $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
+                // Si no existe un integrante con rol de cliente en el proyecto no podemos registrar el acta, ni el moviento
+                if (!is_null($this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])))
+                {
+                    if (empty($args['amount']) || is_null($args['amount']))
+                    { //Validar si Amount viene vacio para dejarlo en 0
+                        $movement['value'] = 0;
+                    }else $movement['value'] = $args['amount'];
 
-                    //Si es una acta registramo el movimeinto de el dinero que ingresa
-                    if($args['is_act'] === True)
+                    if ($movement['value'] <= $this->missing_project_money($args['project_id']))//Validar que no exceda el faltante de recibir por el cliente, no puede entrar mas dinero del registrado en contrato
                     {
-                        // Si no existe un integrante con rol de cliente en el proyecto no podemos registrar el acta, ni el moviento
-                        if (!is_null($this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])))
-                        {
-                            if (empty($args['amount']) || is_null($args['amount'])) { //Validar si Amount viene vacio para dejarlo en 0
-                                $movement['value'] = 0;
-                            }else $movement['value'] = $args['amount'];
-                            if ($movement['value'] <= $this->missing_project_money($args['project_id'])){//Validar que no exceda el faltante de recibir por el cliente, no puede entrar mas dinero del registrado en contrato
+                        $act = DB::transaction(function () use($args){
+                            //verifica si la actividad es padre o hija para asi saber donde crear el folder
+                            if ($args['parent_activity_id'] == null) {
+                                //hace conexion con el drive y crea el folder. Metodos en Helper.php
+                                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderParentActivity($args['project_id'])->drive_id), ['fields' => 'id']);
+                                $args['parent_document_id'] = $this->documentRepo->getFolderParentActivity($args['project_id'])->id;
+                                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
+                                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                                $args['drive_id']           = $activity_folder->id;
+                                $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
+                                $args['activity_id']        = $activity->id;
+                            }else {
+                                //hace conexion con el drive y crea el folder. Metodos en Helper.php y
+                                $activity_folder = Conection_Drive()->files->create(Create_Folder($args['name'], $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->drive_id), ['fields' => 'id']);
+                                $args['parent_document_id'] = $this->documentRepo->getFolderSubActivity($args['project_id'], $args['parent_activity_id'])->id;
+                                $args['is_folder']          = 1; // 0 = Tipo File, 1 = Tipo Folder
+                                $args['module_id']          = 1; //id 1 pertenece al modulo Activity
+                                $args['drive_id']           = $activity_folder->id;
+                                $activity = $this->activityRepo->create($args); //guarda registro de la nueva actividad
+                                $args['activity_id']        = $activity->id;
+                            }
+                            $doc_reference = $this->documentRepo->create($args); //guarda registro del nuevo documentReference
 
+                            //Si es una acta registramo el movimeinto de el dinero que ingresa
+                            if($args['is_act'] === True)
+                            {
                                 switch ($this->projectRepo->find($args['project_id'])->project_type_id) {
                                     case 1:
                                         $movement['puc_id'] = 40510;
@@ -113,32 +115,32 @@ class CreateActivity
                                     $movement['payment_method'] = null;
                                 }else $movement['payment_method'] = $args['payment_method'];
                                 $account_movement = $this->accountRepo->create($movement); // Creamos el moviento de ingreso de dinero del acta
-                            }else {
-                                return [
-                                    'activity' => null,
-                                    'message' => 'No puede ingresar más dinero del contratado en el proyecto, la sumatoria de las actas excede el valor total del contrato',
-                                    'type' => 'Failed'
-                                ];
                             }
-                        }else {
+
+                            $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
                             return [
-                                'activity' => null,
-                                'message' => 'Asigne un Cliente a su proyecto, no podemos registrar este moviento en sus cuentas',
-                                'type' => 'Failed'
+                                'activity' => $activity,
+                                'message' => 'Actividad creada',
+                                'type' => 'Successful'
                             ];
-                        }
+
+                        }, 3);
+                        //dd($act);
+                        return $act;
+                    }else {
+                        return [
+                            'activity' => null,
+                            'message' => 'No puede ingresar más dinero del contratado en el proyecto, la sumatoria de las actas excede el valor total del contrato',
+                            'type' => 'Failed'
+                        ];
                     }
-
-                    $this->Progress($args['is_act'], $args['project_id']); //actualizamos el porcentaje de progreso del proyecto
+                }else {
                     return [
-                        'activity' => $activity,
-                        'message' => 'Actividad creada',
-                        'type' => 'Successful'
+                        'activity' => null,
+                        'message' => 'Asigne un Cliente a su proyecto, no podemos registrar este moviento en sus cuentas',
+                        'type' => 'Failed'
                     ];
-
-                }, 3);
-                //dd($act);
-                return $act;
+                }
             }else{
                 return [
                     'activity' => null,
