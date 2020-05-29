@@ -5,15 +5,18 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\ProjectRepository;
+use App\Repositories\ContactRepository;
 use DB;
 
 class UpdateProject
 {
     protected $projectRepo;
+    protected $contactRepo;
 
-    public function __construct(ProjectRepository $proRepo)
+    public function __construct(ContactRepository $conRepo, ProjectRepository $proRepo)
     {
         $this->projectRepo = $proRepo;
+        $this->contactRepo = $conRepo;
     }
 
     /**
@@ -29,6 +32,11 @@ class UpdateProject
     {
         try
 		{
+            if (!empty($args['name']) || !is_null($args['name'])){
+                $contact = $this->contactRepo->getContactIdentificatioNumber($args['id']);
+                $cont['name'] = $args['name'];
+                $this->contactRepo->update($contact->id, $cont);
+            }
             $project = $this->projectRepo->update($args['id'], $args);
 		}
         catch (\Exception $e)
