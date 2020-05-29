@@ -8,6 +8,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\MemberRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\ProjectRepository;
 use DB;
 
 class Member_has_project
@@ -15,12 +16,14 @@ class Member_has_project
     protected $memberRepo;
     protected $contactRepo;
     protected $roleRepo;
+    protected $projectRepo;
 
-    public function __construct(RoleRepository $rolRepo, ContactRepository $conRepo, MemberRepository $memRepo)
+    public function __construct(ProjectRepository $proRepo, RoleRepository $rolRepo, ContactRepository $conRepo, MemberRepository $memRepo)
     {
         $this->memberRepo = $memRepo;
         $this->contactRepo = $conRepo;
         $this->roleRepo = $rolRepo;
+        $this->projectRepo = $proRepo;
     }
     /**
      * Return a value for the field.
@@ -33,34 +36,41 @@ class Member_has_project
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //dd($this->memberRepo->create_member());
-        $mem = DB::transaction(function () use($args){
-            $role_id = $this->roleRepo->getRolProject()->id;
-            $contact = $this->contactRepo->find($args['contact_id']);
-            if($contact->type != 0){
-                $args['state'] = 1;
-                $member = $this->memberRepo->create($args);
-                $message = 'Integrante agregado exitosamente';
-            }elseif ($args['role_id'] == $role_id) {
-                $args['state'] = 1;
-                $member = $this->memberRepo->create($args);
+        if ($this->projectRepo->find($args['project_id'])->state !== '5') {
+            $mem = DB::transaction(function () use($args){
+                $role_id = $this->roleRepo->getRolProject()->id;
+                $contact = $this->contactRepo->find($args['contact_id']);
+                if($contact->type != 0){
+                    $args['state'] = 1;
+                    $member = $this->memberRepo->create($args);
+                    $message = 'Integrante agregado exitosamente';
+                }elseif ($args['role_id'] == $role_id) {
+                    $args['state'] = 1;
+                    $member = $this->memberRepo->create($args);
 
-                $mem['project_id'] = $contact->identification_number;
-                $mem['contact_id'] = $this->memberRepo->getMemberProject($args['project_id'])->contact_id;
-                $mem['role_id'] = $this->roleRepo->getRolProject()->id;
-                $mem['state'] = 1;
-                $memberDos = $this->memberRepo->create($mem);
-                $message = 'Integrante agregado exitosamente';
-            }else{
-                $message = 'El contacto no puede ser agregado como Integrante';
-            }
+                    $mem['project_id'] = $contact->identification_number;
+                    $mem['contact_id'] = $this->memberRepo->getMemberProject($args['project_id'])->contact_id;
+                    $mem['role_id'] = $this->roleRepo->getRolProject()->id;
+                    $mem['state'] = 1;
+                    $memberDos = $this->memberRepo->create($mem);
+                    $message = 'Integrante agregado exitosamente';
+                }else{
+                    $message = 'El contacto no puede ser agregado como Integrante';
+                }
+                return [
+                    'member' => $member,
+                    'message' => $message,
+                    'type' => 'Successful'
+                ];
+            }, 3);
+            return $mem;
+        }else {
             return [
-                'member' => $member,
-                'message' => $message,
-                'type' => 'Successful'
+                'member' => null,
+                'message' => 'Este proyecto esta archivado, no es posible agregar un nuevo integrante.',
+                'type' => 'Failed'
             ];
-        }, 3);
-        return $mem;
+        }
 
     }
 }
