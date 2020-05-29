@@ -45,6 +45,7 @@ class CreateActivity
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        //dd($this->missing_project_money($args['project_id']));
         $start_date_project = $this->projectRepo->find($args['project_id'])->start_date;
         $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
         $start_date_activity = $args['date_start'];
@@ -82,34 +83,43 @@ class CreateActivity
                         // Si no existe un integrante con rol de cliente en el proyecto no podemos registrar el acta, ni el moviento
                         if (!is_null($this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])))
                         {
-                            switch ($this->projectRepo->find($args['project_id'])->project_type_id) {
-                                case 1:
-                                    $movement['puc_id'] = 40510;
-                                break;
-                                case 2:
-                                    $movement['puc_id'] = 41505;
-                                break;
-                                case 3:
-                                    $movement['puc_id'] = 41005;
-                                break;
-                            }
-                            $movement['project_id'] = $args['project_id'];
-                            $movement['destination_id'] = $this->contactRepo->getContactIdentificatioNumber($args['project_id'])->id;
-                            $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;
-                            $movement['origin_id'] = $this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])->contact_id;
-                            $movement['origin_role_id'] = $this->roleRepo->getRolCliente()->id;
-                            $movement['movement_date'] = $args['date_end'];
-                            if (empty($args['amount']) || is_null($args['amount'])) {
+                            if (empty($args['amount']) || is_null($args['amount'])) { //Validar si Amount viene vacio para dejarlo en 0
                                 $movement['value'] = 0;
                             }else $movement['value'] = $args['amount'];
-                            $movement['state_movement'] = True;
-                            $movement['registration_date'] = now();
-                            $movement['sender_id'] = auth()->user()->id;
-                            $movement['activity_id'] = $activity->id;
-                            if (empty($args['payment_method']) || is_null($args['payment_method'])) {
-                                $movement['payment_method'] = null;
-                            }else $movement['payment_method'] = $args['payment_method'];
-                            $account_movement = $this->accountRepo->create($movement); // Creamos el moviento de ingreso de dinero del acta
+                            if ($movement['value'] <= $this->missing_project_money($args['project_id'])){//Validar que no exceda el faltante de recibir por el cliente, no puede entrar mas dinero del registrado en contrato
+
+                                switch ($this->projectRepo->find($args['project_id'])->project_type_id) {
+                                    case 1:
+                                        $movement['puc_id'] = 40510;
+                                    break;
+                                    case 2:
+                                        $movement['puc_id'] = 41505;
+                                    break;
+                                    case 3:
+                                        $movement['puc_id'] = 41005;
+                                    break;
+                                }
+                                $movement['project_id'] = $args['project_id'];
+                                $movement['destination_id'] = $this->contactRepo->getContactIdentificatioNumber($args['project_id'])->id;
+                                $movement['destination_role_id'] = $this->roleRepo->getRolProject()->id;
+                                $movement['origin_id'] = $this->memberRepo->getClientMemberProject($this->roleRepo->getRolCliente()->id, $args['project_id'])->contact_id;
+                                $movement['origin_role_id'] = $this->roleRepo->getRolCliente()->id;
+                                $movement['movement_date'] = $args['date_end'];
+                                $movement['state_movement'] = True;
+                                $movement['registration_date'] = now();
+                                $movement['sender_id'] = auth()->user()->id;
+                                $movement['activity_id'] = $activity->id;
+                                if (empty($args['payment_method']) || is_null($args['payment_method'])) {
+                                    $movement['payment_method'] = null;
+                                }else $movement['payment_method'] = $args['payment_method'];
+                                $account_movement = $this->accountRepo->create($movement); // Creamos el moviento de ingreso de dinero del acta
+                            }else {
+                                return [
+                                    'activity' => null,
+                                    'message' => 'No puede ingresar más dinero del contratado en el proyecto, la sumatoria de las actas excede el valor total del contrato',
+                                    'type' => 'Failed'
+                                ];
+                            }
                         }else {
                             return [
                                 'activity' => null,
@@ -170,6 +180,23 @@ class CreateActivity
                 $this->projectRepo->update($project_id, $proj);
             }
         }
+    }
+    public function missing_project_money($project_id){
+        $acts_total = 0;
+            $added_total = 0;
+            $project = $this->projectRepo->find($project_id); //consultamos el proyecto
+            $added_amount = $this->activityRepo->added_activity($project_id); //traemos todos los amount de los adicionales
+            foreach ($added_amount as $add) {
+                $added_total += $add->amount; //hacemos una sumatoria de los adicionales
+            }
+            $project_total = $added_total + $project->contract_value;
+
+            $acts_amount = $this->activityRepo->act_activity($project_id); //consultamos amount de todas las actas recibidas en el proyecto
+            foreach ($acts_amount as $amo) {
+                $acts_total += $amo->amount; //Sumatoria de actas recibidas
+            }
+            $missing = $project_total - $acts_total;
+            return $missing;
     }
 }
 

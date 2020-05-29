@@ -74,7 +74,7 @@ class Create_movement
                 'accounting_movement' => $movement,
                 'message' => "Movimiento registrado",
                 'type' => 'Successful'
-];
+            ];
         }, 3);
         return $mov;
     }
