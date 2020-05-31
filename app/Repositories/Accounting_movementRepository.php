@@ -36,6 +36,11 @@ class Accounting_movementRepository extends BaseRepository
         [$project_id, $contact_id, $projectContact_id, $role_id, $projectContact_id, $contact_id, $role_id]);
         return $this->getObjects($data);
     }
+    public function project_income_refunds($project_id)
+    {   //reporte de Registro de ingresos y egresos en general del proyecto
+        $data = DB::select('select * from accounting_movements where project_id = ?', [$project_id]);
+        return $this->getObjects($data);
+    }
     public function project_expenses($project_id, $origin_id, $role_id)
     {   //reporte de Registro de egresos en general del proyecto
         $data = DB::select('select * from accounting_movements where project_id = ? and origin_id = ? and origin_role_id = ?', [$project_id, $origin_id, $role_id]);

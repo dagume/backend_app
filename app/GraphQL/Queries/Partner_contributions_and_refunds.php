@@ -35,7 +35,11 @@ class Partner_contributions_and_refunds
     {
         $role_socio = $this->roleRepo->getRolSocio()->id;
         $contact_project = $this->contactRepo->getContactIdentificatioNumber($args['project_id']);
-        $movements = $this->accountingRepo->partner_contributions_and_refunds ($args['project_id'], $args['contact_id'], $args['role_id'], $contact_project->id);
+        if ($contact_project->id == $args['contact_id']) {
+            $movements = $this->accountingRepo->project_income_refunds($args['project_id']);
+            return $movements;
+        }
+        $movements = $this->accountingRepo->partner_contributions_and_refunds($args['project_id'], $args['contact_id'], $args['role_id'], $contact_project->id);
         return $movements;
     }
 }

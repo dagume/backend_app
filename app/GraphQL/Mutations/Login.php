@@ -38,7 +38,6 @@ class Login extends BaseAuthResolver
         $model = app(config('auth.providers.users.model'));
         $credentials = $this->buildCredentials($args);
         $response = $this->makeRequest($credentials);
-        //dd();
         $member_contact = $this->memberRepo->get_members_for_a_contact($model->where(config('lighthouse-graphql-passport.username'), $args['data']['username'])->firstOrFail()->id);
         foreach ($member_contact as $mem) { //Verificacomos si este usuario tiene role administrador
             if ($this->contactRepo->find($mem->contact_id)->state !== 0) {
