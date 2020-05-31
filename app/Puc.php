@@ -24,6 +24,10 @@ class Puc extends Model
     {
         return $this->hasMany('App\Puc','parent_puc_id');
     }
+    public function parent_pucs()
+    {
+        return $this->belongsTo('App\Puc','parent_puc_id');
+    }
     public function accounting_movements()
     {
         return $this->hasMany('App\Accounting_movement','puc_id');

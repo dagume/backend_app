@@ -2,6 +2,7 @@
 type Puc{
     id: ID!
     son_pucs: [Puc]
+    parent_pucs:Puc
     name: String
     description: String
     accounting_movements:[Accounting_movement]
