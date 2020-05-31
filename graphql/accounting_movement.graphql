@@ -23,6 +23,10 @@ enum pay_meth{
     PSE @enum(value: 2)
     Transferencia @enum(value: 3)
 }
+enum expense_cost{
+    gasto @enum(value: 5)
+    costo @enum(value: 6)
+}
 
 enum type_mov{
     Ingreso @enum(value: 0)
@@ -67,6 +71,8 @@ extend type Query{
     project_expenses_for_concept(project_id: Int! puc_id:Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Project_expenses_for_concept@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
     #Registro de ingresos del proyecto
     project_income(project_id: Int!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Project_income@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
+    #reporte de gastos o costos(cuenta 5 y 6)
+    project_expense_cost_report(project_id: Int! puc:expense_cost!): [Accounting_movement] @field(resolver: "App\\GraphQL\\Queries\\Project_expense_cost_report@resolve") #@middleware(checks:["auth:api", "can:activity.list"])
 
 }
 extend type Mutation {

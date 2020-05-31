@@ -61,7 +61,6 @@ class CreateActivity
                     { //Validar si Amount viene vacio para dejarlo en 0
                         $movement['value'] = 0;
                     }else $movement['value'] = $args['amount'];
-
                     if ($movement['value'] <= $this->missing_project_money($args['project_id']))//Validar que no exceda el faltante de recibir por el cliente, no puede entrar mas dinero del registrado en contrato
                     {
                         $act = DB::transaction(function () use($args){
@@ -111,6 +110,10 @@ class CreateActivity
                                 $movement['registration_date'] = now();
                                 $movement['sender_id'] = auth()->user()->id;
                                 $movement['activity_id'] = $activity->id;
+                                if (empty($args['amount']) || is_null($args['amount']))
+                                { //Validar si Amount viene vacio para dejarlo en 0
+                                    $movement['value'] = 0;
+                                }else $movement['value'] = $args['amount'];
                                 if (empty($args['payment_method']) || is_null($args['payment_method'])) {
                                     $movement['payment_method'] = null;
                                 }else $movement['payment_method'] = $args['payment_method'];

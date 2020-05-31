@@ -56,5 +56,14 @@ class Accounting_movementRepository extends BaseRepository
         $data = DB::select('select * from accounting_movements where project_id = ? and destination_id = ? and destination_role_id = ?', [$project_id, $destination_id, $role_id]);
         return $this->getObjects($data);
     }
+    public function project_expense_cost_report($project_id, $origin_id, $role_id, $puc_id)
+    {   //reporte de Registro de egresos o costos en general del proyecto
+        $data = DB::select('select * from accounting_movements
+		where project_id = ?
+		and origin_id = ?
+		and origin_role_id = ?
+		and CAST(puc_id AS CHAR) LIKE \''.$puc_id.'\';', [$project_id, $origin_id, $role_id]);
+        return $this->getObjects($data);
+    }
 }
 
