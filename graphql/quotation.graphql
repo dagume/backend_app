@@ -16,7 +16,7 @@ type Quotation{
 }
 
 type Subscription {
-    authorizationUpdated(authorized: Boolean): Quotation
+    authorizationUpdated(authorized: Boolean): Quotation #@subscription
 }
 
 #Tipo de descuento
@@ -41,5 +41,8 @@ extend type Mutation{
     updateQuotation(
         id: ID! @rules(apply: ["required"])
         #authorized: Boolean @rules(apply: ["required"])
-    ): MessageSuccessQuotation @field(resolver: "App\\GraphQL\\Mutations\\UpdateQuotation@resolve") @broadcast(subscription: "authorizationUpdated")#@middleware(checks:["auth:api"])
+    ): MessageSuccessQuotation
+    @field(resolver: "App\\GraphQL\\Mutations\\UpdateQuotation@resolve")
+    @broadcast(subscription: "authorizationUpdated")
+    #@middleware(checks:["auth:api"])
 }

@@ -45,6 +45,8 @@ class UpdateQuotation
             $this->orderRepo->update($order->id, $ord); //actializamos estado de la orden a Approved
             return $update_quo;
         }, 3);
+
+        
         return [
             'quotation' => $quo,
             'message'=> 'Cotización autorizada',
