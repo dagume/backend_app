@@ -15,9 +15,9 @@ type Quotation{
     received:Boolean
 }
 
-type Subscription {
-    authorizationUpdated(authorized: Boolean): Quotation #@subscription
-}
+#type Subscription {
+#    authorizationUpdated(authorized: Boolean): Quotation #@subscription
+#}
 
 #Tipo de descuento
 enum Discount_type{
@@ -43,6 +43,6 @@ extend type Mutation{
         #authorized: Boolean @rules(apply: ["required"])
     ): MessageSuccessQuotation
     @field(resolver: "App\\GraphQL\\Mutations\\UpdateQuotation@resolve")
-    @broadcast(subscription: "authorizationUpdated")
-    #@middleware(checks:["auth:api"])
+    #@broadcast(subscription: "authorizationUpdated")
+    @middleware(checks:["auth:api"])
 }
