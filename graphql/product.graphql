@@ -6,9 +6,9 @@ type Product {#implements GlobalSearch{
     description:String
     taxe:Taxe
 }
-extend type Subscription {
-    productCreate(author: ID): Product #@subscription(class: "App\\GraphQL\\Subscriptions\\ProductCreate")
-}
+##extend type Subscription {
+##    productCreate(author: ID): Product #@subscription(class: "App\\GraphQL\\Subscriptions\\ProductCreate")
+##}
 
 type MessageSuccessProduct {
     product:Product
@@ -37,7 +37,7 @@ extend type Mutation {
         tax_id: Int @rules(apply: ["required","integer"])
     ):MessageSuccessProduct
     @field(resolver: "App\\GraphQL\\Mutations\\CreateProduct@resolve") @middleware(checks:["auth:api", "can:product.create"])
-    @broadcast(subscription: "productCreate")
+    #@broadcast(subscription: "productCreate")
 
     #Actualizar Producto
     updateProduct(

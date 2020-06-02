@@ -5,6 +5,8 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\ProductRepository;
+use App\Events\StatusLiked;
+
 use DB;
 
 class CreateProduct
@@ -32,6 +34,8 @@ class CreateProduct
             $product = $this->productRepo->create($args); //guarda registro del nuevo Producto
             return $product;
         }, 3);
+        event(new StatusLiked($prod));
+
         //\Nuwave\Lighthouse\Execution\Utils\Subscription::broadcast('productCreate', $product);
         return [
             'product' => $prod,
