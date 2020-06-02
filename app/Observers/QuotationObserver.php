@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Quotation;
+use App\Events\authorize_quote;
 
 class QuotationObserver
 {
