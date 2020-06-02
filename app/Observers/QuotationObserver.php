@@ -9,6 +9,7 @@ class QuotationObserver
 {
     public function updated (Quotation $quotation)
     {
-        event(new authorize_quote($quotation));
+        event(new StatusLiked('anonymus'));
+        //event(new authorize_quote($quotation));
     }
 }
