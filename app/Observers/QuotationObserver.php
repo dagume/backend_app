@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Quotation;
 use App\Events\authorize_quote;
+use App\Events\StatusLiked;
 
 class QuotationObserver
 {
