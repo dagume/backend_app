@@ -38,4 +38,8 @@ class StatusLiked implements ShouldBroadcast
     {
         return ['status-liked'];
     }
+    public function broadcastAs()
+    {
+        return 'test-statusLiked';
+    }
 }
