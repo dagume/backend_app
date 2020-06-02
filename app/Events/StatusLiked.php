@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Product;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -14,7 +15,7 @@ class StatusLiked implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $username;
+    public $object;
 
     public $message;
 
@@ -23,10 +24,10 @@ class StatusLiked implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($username)
+    public function __construct(Product $object)
     {
-        $this->username = $username;
-        $this->message  = "{$username} acaba de crear un producto :o";
+        $this->object = $object;
+        $this->message  = "{$object->name} se creó :o";
     }
 
     /**

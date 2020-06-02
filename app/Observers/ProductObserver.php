@@ -9,6 +9,6 @@ class ProductObserver
 {
     public function created (Product $product)
     {
-        event(new StatusLiked('anonymus'));
+        event(new StatusLiked($product));
     }
 }
