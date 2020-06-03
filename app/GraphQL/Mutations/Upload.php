@@ -63,7 +63,7 @@ class Upload
                 $read = Storage::get($file);                    // leemos el contenido del PDF
                 //$archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
                 //$file_id = $filesystem->getMetadata($file);     // get data de file en Drive
-                Storage::delete('files/'.$args['name']);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                Storage::delete('files');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
             }
             //Para subir documento de actividad
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
