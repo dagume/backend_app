@@ -35,9 +35,9 @@ class authorize_quote
         $order = Order::where('id', $object->order_id)->first();
         $project = Project::where('id', $order->project_id)->first();
         $provider = User::where('id', $object->contact_id)->first();
-        $this->title = $project->name;
+        //$this->title = $project->name;
         $this->message = "{$user->name} a autorizado comprar al proveedor {$provider->name}, {$order->name}.";
-        $this->type = 'supplier';
+        //$this->type = 'supplier';
     }
 
     /**
