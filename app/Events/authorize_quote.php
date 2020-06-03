@@ -33,11 +33,11 @@ class authorize_quote
         $user = auth()->user();
         //dd($object, $user);
         $this->object = $object;
-        $order = Order::where('id', $object->order_id)->first();
-        $project = Project::where('id', $order->project_id)->first();
-        $provider = User::where('id', $object->contact_id)->first();
+        //$order = Order::where('id', $object->order_id)->first();
+        //$project = Project::where('id', $order->project_id)->first();
+        //$provider = User::where('id', $object->contact_id)->first();
         //$this->title = $project->name;
-        $this->message = "{$user->name} a autorizado comprar al proveedor {$provider->name}, {$order->name}.";
+        $this->message = "{$user->name} a autorizado comprar al proveedor{$object->order_id}";
         //$this->message = "{$user->name} a autorizado comprar al proveedor {$provider->name}, {$order->name}.";
         //$this->type = 'supplier';
     }
