@@ -60,11 +60,11 @@ class Upload
             ); //Guardamos archivo en el Storage
             $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
-                $read = Storage::get($file);                    // leemos el contenido del PDF
+                //$read = Storage::get($file);                    // leemos el contenido del PDF
                 //$archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
                 //$file_id = $filesystem->getMetadata($file);     // get data de file en Drive
-                Storage::delete('files');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
             }
+            Storage::delete('files');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
             //Para subir documento de actividad
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
             $doc_ref_file->name = $args['name'];
