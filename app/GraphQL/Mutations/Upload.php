@@ -15,7 +15,7 @@ class Upload
     {
         /** @var \Illuminate\Http\UploadedFile $file */
         $file = $args['file'];
-
+        $file->save(storage_path('pdf').'/'.'por_graphql');
         return $file->storePublicly('uploads');
     }
 }
