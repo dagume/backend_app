@@ -61,8 +61,8 @@ class Upload
             $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
                 $read = Storage::get($file);                    // leemos el contenido del PDF
-                //$archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
-                //$file_id = $filesystem->getMetadata($file);     // get data de file en Drive
+                $archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
+                $file_id = $filesystem->getMetadata($file);     // get data de file en Drive
                 Storage::delete('files/'.$args['name']);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
             }
             //Para subir documento de actividad
@@ -72,8 +72,8 @@ class Upload
             $doc_ref_file->activity_id = $args['activity_id'];
             $doc_ref_file->project_id = $args['project_id'];
             $doc_ref_file->module_id = 1; //id 1 pertenece al modulo activity
-            //$doc_ref_file->drive_id =  $file_id['path'];
-            $doc_ref_file->drive_id =  'rtyfgggggg';
+            $doc_ref_file->drive_id =  $file_id['path'];
+            //$doc_ref_file->drive_id =  'rtyfgggggg';
             $doc_ref_file->save();
         }else{
             return [
