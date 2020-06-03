@@ -42,10 +42,10 @@ type MessageSuccessGeneral {
 
 type Mutation {
 
-    file_upload(
-        file: Upload!
-        name: String!
-    ): String @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
+    #file_upload(
+    #    file: Upload!
+    #    name: String!
+    #): String @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
 
     updatePassword(
         contact_id:ID!
@@ -61,13 +61,14 @@ type Mutation {
     ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UpdatePasswordAdmin@resolve")
     #upload drive
     uploadFile(
-        name:String @rules(apply: ["max:250"])
+        file: Upload @rules(apply: ["required"])
+        name:String @rules(apply: ["max:250", "required"])
         activity_id:Int @rules(apply: ["nullable"])
         project_id:Int @rules(apply: ["nullable"])
         con_id:Int @rules(apply: ["nullable"])
         doc_id:Int @rules(apply: ["nullable"])
         order_id:Int @rules(apply: ["nullable"])
-        drive_id:String @rules(apply: ["required"])
+        #drive_id:String @rules(apply: ["nullable"])
         accounting_movements_id: Int @rules(apply: ["nullable"])
     ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UploadFile@resolve")
 
