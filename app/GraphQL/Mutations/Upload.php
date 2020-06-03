@@ -46,7 +46,8 @@ class Upload
     public function resolve($root, array $args)
     {
         /** @var \Illuminate\Http\UploadedFile $file */
-
+        //Storage::delete('files/jwt.txt');
+        //dd(Storage::files('files'));
         $doc_ref_file = new Document_reference;
         if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
         {
@@ -57,7 +58,7 @@ class Upload
             $path = Storage::putFileAs(
                'files', $file_graphql, $args['name']
             ); //Guardamos archivo en el Storage
-            $files = Storage::files();      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
+            $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
                 $read = Storage::get($file);                    // leemos el contenido del PDF
                 //$archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
