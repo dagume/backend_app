@@ -9,7 +9,6 @@ class QuotationObserver
 {
     public function updated (Quotation $update_quo)
     {
-        dd($update_quo);
         event(new authorize_quote($update_quo));
         //event(new authorize_quote($quotation));
     }

@@ -31,6 +31,7 @@ class authorize_quote
     public function __construct(Quotation $object)
     {
         $user = auth()->user();
+        dd($object, $user);
         $this->object = $object;
         $order = Order::where('id', $object->order_id)->first();
         $project = Project::where('id', $order->project_id)->first();
