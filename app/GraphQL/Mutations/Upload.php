@@ -75,17 +75,10 @@ class Upload
             $doc_ref_file->drive_id =  'rtyfgggggg';
             $doc_ref_file->save();
         }else{
-            return [
-                'message' => 'No se pudo cargar ningun archivo, intente de nuevo',
-                'type' => 'Failed'
-            ];
+            return 'no se pudo';
         }
 
-        return [
-            'message' => 'Archivo cargado',
-            'type' => 'Successful'
-        ];
-
+        return $path;
         //$file = $args['file'];
         ////Storage::put('files', $file);
         //$path = Storage::putFileAs(
