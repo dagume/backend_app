@@ -51,18 +51,18 @@ class Upload
         if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
         {
             //dd($this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id);
-            $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
-            $filesystem = new Filesystem($adapter);
+            //$adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+            //$filesystem = new Filesystem($adapter);
             $file_graphql = $args['file'];//Archivo enviado
             $path = Storage::putFileAs(
-                'files', $file_graphql, $args['name']
+                storage_path('pdf'), $file_graphql, $args['name']
             ); //Guardamos archivo en el Storage
-            $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
+            $files = Storage::files();      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
                 $read = Storage::get($file);                    // leemos el contenido del PDF
                 //$archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
                 //$file_id = $filesystem->getMetadata($file);     // get data de file en Drive
-                Storage::delete('files'.$args['name']);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                Storage::delete($args['name']);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
             }
             //Para subir documento de actividad
             $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
