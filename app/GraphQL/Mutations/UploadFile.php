@@ -15,6 +15,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
+use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
 
 class UploadFile
 {
