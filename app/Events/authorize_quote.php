@@ -19,8 +19,8 @@ class authorize_quote
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $object;
-    //public $type;
-    //public $title;
+    public $type;
+    public $title;
     public $message;
 
     /**
@@ -37,7 +37,7 @@ class authorize_quote
         $project = Project::where('id', $order->project_id)->first();
         $provider = User::where('id', $object->contact_id)->first();
         //$this->title = $project->name;
-        $this->message = "XXXXXX a autorizado comprar al proveedor.";
+        $this->message = "{$user->name} a autorizado comprar al proveedor {$provider->name}, {$order->name}.";
         //$this->message = "{$user->name} a autorizado comprar al proveedor {$provider->name}, {$order->name}.";
         //$this->type = 'supplier';
     }
