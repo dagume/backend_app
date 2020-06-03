@@ -2,13 +2,40 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Document_reference;
+use App\Document_contact;
+use GraphQL\Type\Definition\ResolveInfo;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\Repositories\MemberRepository;
+use App\Repositories\Document_referenceRepository;
+use App\Repositories\Document_contactRepository;
+use App\Repositories\ContactRepository;
+use App\Repositories\Document_rolRepository;
+use App\Repositories\QuotationRepository;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
-
+use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+use DB;
 
 class Upload
 {
+    protected $memberRepo;
+    protected $document_referenceRepo;
+    protected $document_contactRepo;
+    protected $contactRepo;
+    protected $document_rolRepo;
+    protected $quotationRepo;
+
+    public function __construct(MemberRepository $memRepo, Document_referenceRepository $doc_refRepo, Document_contactRepository $doc_conRepo, ContactRepository $conRepo, Document_rolRepository $doc_rolRepo, QuotationRepository $quoRepo)
+    {
+        $this->memberRepo = $memRepo;
+        $this->document_referenceRepo = $doc_refRepo;
+        $this->document_contactRepo = $doc_conRepo;
+        $this->contactRepo = $conRepo;
+        $this->document_rolRepo = $doc_rolRepo;
+        $this->quotationRepo = $quoRepo;
+    }
     /**
      * Upload a file, store it on the server and return the path.
      *
