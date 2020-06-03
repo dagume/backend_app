@@ -20,8 +20,12 @@ class Upload
     {
         /** @var \Illuminate\Http\UploadedFile $file */
         $file = $args['file'];
+        //Storage::put('files', $file);
+        $path = Storage::putFileAs(
+            'files', $file, 'nombrePrueba'
+        );
         //$file->save(storage_path('pdf').'/'.'por_graphql');
-        return Storage::put('file.*', $file);
+        return $path;
         //return $file->storePublicly('uploads');
     }
 }
