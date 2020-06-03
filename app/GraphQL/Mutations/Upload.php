@@ -2,6 +2,11 @@
 
 namespace App\GraphQL\Mutations;
 
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Filesystem;
+use Illuminate\Support\Facades\Cache;
+
+
 class Upload
 {
     /**
@@ -15,7 +20,7 @@ class Upload
     {
         /** @var \Illuminate\Http\UploadedFile $file */
         $file = $args['file'];
-        $file->save(storage_path('pdf').'/'.'por_graphql');
+        //$file->save(storage_path('pdf').'/'.'por_graphql');
         return $file->storePublicly('uploads');
     }
 }
