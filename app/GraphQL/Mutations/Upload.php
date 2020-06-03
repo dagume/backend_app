@@ -22,7 +22,7 @@ class Upload
         $file = $args['file'];
         //Storage::put('files', $file);
         $path = Storage::putFileAs(
-            '../files', $file, $args['name']
+            '/files', $file, $args['name']
         );
         //$file->save(storage_path('pdf').'/'.'por_graphql');
         return $path;
