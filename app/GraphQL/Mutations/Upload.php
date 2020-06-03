@@ -44,7 +44,7 @@ class Upload
      * @return string|null
      */
     public function resolve($root, array $args)
-    {
+    { 
         /** @var \Illuminate\Http\UploadedFile $file */
         //Storage::delete('files/jwt.txt');
         //dd(Storage::files('files'));
@@ -60,9 +60,10 @@ class Upload
             ); //Guardamos archivo en el Storage
             $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
+                $name_file = explode( '/', $file);
                 $read = Storage::get($file);                    // leemos el contenido del PDF
-                $archivo = $filesystem->write($file, $read);    // Guarda el archivo en el drive
-                $file_id = $filesystem->getMetadata($file);     // get data de file en Drive
+                $archivo = $filesystem->write(end($name_file), $read);    // Guarda el archivo en el drive
+                $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
                 Storage::delete('files/'.$args['name']);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
             }
             //Para subir documento de actividad
