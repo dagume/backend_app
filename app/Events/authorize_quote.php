@@ -19,8 +19,8 @@ class authorize_quote
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $object;
-    public $type;
-    public $title;
+    //public $type;
+    //public $title;
     public $message;
 
     /**
