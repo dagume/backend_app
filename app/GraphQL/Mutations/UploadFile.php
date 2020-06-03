@@ -1,21 +1,22 @@
 <?php
 
 namespace App\GraphQL\Mutations;
+
 use App\Document_reference;
 use App\Document_contact;
-use DB;
+use GraphQL\Type\Definition\ResolveInfo;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\MemberRepository;
 use App\Repositories\Document_referenceRepository;
 use App\Repositories\Document_contactRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\Document_rolRepository;
 use App\Repositories\QuotationRepository;
-use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+use DB;
 
 class UploadFile
 {
@@ -49,12 +50,12 @@ class UploadFile
         $doc_ref_file = new Document_reference;
         if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
         {
+            $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+            $filesystem = new Filesystem($adapter);
             $file_graphql = $args['file'];//Archivo enviado
             $path = Storage::putFileAs(
                 'files', $file_graphql, $args['name']
             ); //Guardamos archivo en el Storage
-            $adapter    = new Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
-            $filesystem = new Filesystem($adapter);
             $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
                 $read = Storage::get($file);                    // leemos el contenido del PDF
