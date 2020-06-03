@@ -55,7 +55,7 @@ class Upload
             //$filesystem = new Filesystem($adapter);
             $file_graphql = $args['file'];//Archivo enviado
             $path = Storage::putFileAs(
-                $file_graphql, $args['name']
+                '', $file_graphql, $args['name']
             ); //Guardamos archivo en el Storage
             $files = Storage::files();      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
@@ -78,7 +78,7 @@ class Upload
             return 'no se pudo';
         }
 
-        return $path;
+        return 'si pasó';
         //$file = $args['file'];
         ////Storage::put('files', $file);
         //$path = Storage::putFileAs(
