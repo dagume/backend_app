@@ -4,6 +4,7 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
 type Query
 
 type Mutation
@@ -40,6 +41,11 @@ type MessageSuccessGeneral {
 }
 
 type Mutation {
+
+    file_upload(
+        file: Upload!
+    ): String @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
+
     updatePassword(
         contact_id:ID!
         present_password:String!
