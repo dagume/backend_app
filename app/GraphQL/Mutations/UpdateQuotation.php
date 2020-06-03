@@ -44,7 +44,7 @@ class UpdateQuotation
             $ord['state'] = 1; //cambiamos el estado de la orden
             $update_quo = $this->quotationRepo->update($args['id'], $quo); //actualizamos cotizacion a aprovada
             $this->orderRepo->update($order->id, $ord); //actializamos estado de la orden a Approved
-            event(new authorize_quote($quotation));
+            //event(new authorize_quote($quotation));
             return $update_quo;
         }, 3);
         return [
