@@ -53,7 +53,7 @@ class UploadFile
             $path = Storage::putFileAs(
                 'files', $file_graphql, $args['name']
             ); //Guardamos archivo en el Storage
-            $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+            $adapter    = new Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
             $filesystem = new Filesystem($adapter);
             $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
