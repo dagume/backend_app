@@ -43,7 +43,7 @@ class Upload
      * @param  mixed[]  $args
      * @return string|null
      */
-    public function resolve($root, array $args): ?string
+    public function resolve($root, array $args)
     {
         /** @var \Illuminate\Http\UploadedFile $file */
 
@@ -55,7 +55,7 @@ class Upload
             //$filesystem = new Filesystem($adapter);
             $file_graphql = $args['file'];//Archivo enviado
             $path = Storage::putFileAs(
-                'pdf', $file_graphql, $args['name']
+               $file_graphql, $args['name']
             ); //Guardamos archivo en el Storage
             $files = Storage::files();      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
             foreach ($files as $file) {     // recorremos cada uno de los file encontrados
@@ -75,10 +75,17 @@ class Upload
             $doc_ref_file->drive_id =  'rtyfgggggg';
             $doc_ref_file->save();
         }else{
-            return 'no se pudo';
+            return [
+                'message' => 'No se pudo cargar ningun archivo, intente de nuevo',
+                'type' => 'Failed'
+            ];
         }
 
-        return 'si pasó';
+        return [
+            'message' => 'Archivo cargado',
+            'type' => 'Successful'
+        ];
+
         //$file = $args['file'];
         ////Storage::put('files', $file);
         //$path = Storage::putFileAs(

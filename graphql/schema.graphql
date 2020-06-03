@@ -70,7 +70,7 @@ type Mutation {
         order_id:Int @rules(apply: ["nullable"])
         #drive_id:String @rules(apply: ["nullable"])
         accounting_movements_id: Int @rules(apply: ["nullable"])
-    ): String @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
+    ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
 
     uploadRequiredDocument(
         contact_id:Int @rules(apply: ["required", "nullable"])
