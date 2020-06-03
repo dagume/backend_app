@@ -34,8 +34,7 @@ class CreateProduct
             $product = $this->productRepo->create($args); //guarda registro del nuevo Producto
             return $product;
         }, 3);
-        event(new StatusLiked($prod));
-
+        //event(new StatusLiked($prod));
         //\Nuwave\Lighthouse\Execution\Utils\Subscription::broadcast('productCreate', $product);
         return [
             'product' => $prod,

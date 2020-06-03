@@ -7,8 +7,8 @@ use App\Events\StatusLiked;
 
 class ProductObserver
 {
-    //public function created (Product $product)
-    //{
-    //    event(new StatusLiked($product));
-    //}
+    public function created (Product $product)
+    {
+        event(new StatusLiked($product));
+    }
 }

@@ -26,8 +26,9 @@ class StatusLiked implements ShouldBroadcast
      */
     public function __construct(Product $object)
     {
+        $user = auth()->user();
         $this->object = $object;
-        $this->message  = "{$object->name} se creó :o";
+        $this->message = "{$user->name} creó un {$object->name}";
     }
 
     /**

@@ -2,6 +2,10 @@
 
 namespace App\Events;
 
+use App\Quotation;
+use App\Order;
+use App\Project;
+use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -16,6 +20,7 @@ class authorize_quote
 
     public $object;
     public $type;
+    public $title;
     public $message;
 
     /**
@@ -23,10 +28,15 @@ class authorize_quote
      *
      * @return void
      */
-    public function __construct($object)
+    public function __construct(Quotation $object)
     {
+        $user = auth()->user();
         $this->object = $object;
-        $this->message = 'XXXX a autorizado la compra de la cotizacion xxxx';
+        $order = Order::where('id', $object->order_id)->first();
+        $project = Project::where('id', $order->project_id)->first();
+        $provider = User::where('id', $objet->contact_id)->first();
+        $this->title = $project->name;
+        $this->message = "{$user->name} a autorizado comprar al proveedor {$provider->name}, {$order->name}.";
         $this->type = 'supplier';
     }
 

@@ -33,6 +33,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
         Product::observe(new ProductObserver());
-        Quotation::observe(new QuotationObserver());
+        //Quotation::observe(new QuotationObserver());
     }
 }
