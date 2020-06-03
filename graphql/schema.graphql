@@ -44,6 +44,7 @@ type Mutation {
 
     file_upload(
         file: Upload!
+        name: String!
     ): String @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
 
     updatePassword(
