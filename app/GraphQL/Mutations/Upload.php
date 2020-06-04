@@ -139,10 +139,38 @@ class Upload
                         }
                     }
                 }else {
-                    return [
-                        'message' => 'No se pudo cargar ningun archivo, intente de nuevo',
-                        'type' => 'Failed'
-                    ];
+                    if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] === null && $args['order_id'] != null && $args['accounting_movements_id'] === null)
+                    {
+                        $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->documentRepo->getFolderOrderCurrent($args['order_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+                        $filesystem = new Filesystem($adapter);
+                        $files_graphql = $args['files'];//Archivos enviados
+                        foreach ($files_graphql as $key1 => $files_gra) {
+                            Storage::deleteDirectory('files');
+                            Storage::putFileAs(
+                               'files', $files_gra, $args['names'][$key1]
+                            ); //Guardamos archivo en el Storage
+                            $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
+                            foreach ($files as $file) {     // recorremos cada uno de los file encontrados
+                                $name_file = explode( '/', $file);
+                                $read = Storage::get($file);                    // leemos el contenido del PDF
+                                $archivo = $filesystem->write(end($name_file), $read);    // Guarda el archivo en el drive
+                                $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
+                                Storage::delete('files/'.$args['names'][$key1]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+
+                                //Consultamos cotizacion a actualizar
+                                $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
+                                $quo['file_id'] = $file_id['path'];
+                                $quo['file_date'] = now();
+                                $this->quotationRepo->update($quotation->id, $quo);
+                                //actualizamos la cotizacion con su nuevo archivo cargado
+                            }
+                        }
+                    }else{
+                        return [
+                            'message' => 'No se pudo cargar ningun archivo, intente de nuevo',
+                            'type' => 'Failed'
+                        ];
+                    }
                 }
             }
         }
