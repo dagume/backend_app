@@ -55,21 +55,21 @@ class Upload
             $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
             $filesystem = new Filesystem($adapter);
             $files_graphql = $args['files'];//Archivos enviados
-            foreach ($files_graphql as $key => $files_gra) {
+            foreach ($files_graphql as $key1 => $files_gra) {
                 Storage::putFileAs(
-                   'files', $files_gra, $args['names'][$key]
+                   'files', $files_gra, $args['names'][$key1]
                 ); //Guardamos archivo en el Storage
                 $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
-                foreach ($files as $key => $file) {     // recorremos cada uno de los file encontrados
+                foreach ($files as $key2 => $file) {     // recorremos cada uno de los file encontrados
                     $name_file = explode( '/', $file);
                     $read = Storage::get($file);                    // leemos el contenido del PDF
                     $archivo = $filesystem->write(end($name_file), $read);    // Guarda el archivo en el drive
                     $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
-                    Storage::delete('files/'.$args['names'][$key]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                    Storage::delete('files/'.$args['names'][$key2]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
 
                     //Para subir documento de actividad
                     $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
-                    $doc_ref_file->name = $args['names'][$key];
+                    $doc_ref_file->name = $args['names'][$key2];
                     $doc_ref_file->is_folder = 0; // 0 = Tipo File, 1 = Tipo Folder
                     $doc_ref_file->activity_id = $args['activity_id'];
                     $doc_ref_file->project_id = $args['project_id'];
