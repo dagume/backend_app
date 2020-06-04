@@ -50,14 +50,6 @@ class UploadRequiredDocument
                             $documentReference['drive_id'] = $file_id['path'];
                             $this->document_referenceRepo->update($docReference->id, $documentReference); //Guardamos el nuevo drive_id
                             Conection_Drive()->files->delete($docReference->drive_id); //eliminamos el archivo en el drive
-
-
-                            //Consultamos cotizacion
-                            $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
-                            $quo['file_id'] = $file_id['path'];
-                            $quo['file_date'] = now();
-                            $this->quotationRepo->update($quotation->id, $quo);
-                            //cotizacion con su nuevo archivo cargado
                         }
                     }
                     return $message = 'Documento actualizado exitosamente';
