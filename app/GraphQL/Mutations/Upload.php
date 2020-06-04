@@ -57,7 +57,7 @@ class Upload
             $files_graphql = $args['files'];//Archivos enviados
             foreach ($files_graphql as $key => $files_gra) {
                 Storage::putFileAs(
-                   'files', $file_graphql, $args['names'][$key]
+                   'files', $files_gra, $args['names'][$key]
                 ); //Guardamos archivo en el Storage
             }
             $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
@@ -76,7 +76,6 @@ class Upload
                 $doc_ref_file->project_id = $args['project_id'];
                 $doc_ref_file->module_id = 1; //id 1 pertenece al modulo activity
                 $doc_ref_file->drive_id =  $file_id['path'];
-                //$doc_ref_file->drive_id =  'rtyfgggggg';
                 $doc_ref_file->save();
             }
         }else{
