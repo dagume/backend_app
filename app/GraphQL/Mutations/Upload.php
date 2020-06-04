@@ -129,7 +129,7 @@ class Upload
 
                             //subir soporte cuentas
                             $account['parent_document_id'] = $this->document_referenceRepo->getFolderAccounting($args['project_id'])->id;
-                            $account['name'] = $args['name'][$key1];
+                            $account['name'] = $args['names'][$key1];
                             $account['is_folder'] = 0; // 0 = Tipo File, 1 = Tipo Folder
                             $account['project_id'] = $args['project_id'];
                             $account['accounting_movements_id'] = $args['accounting_movements_id'];
