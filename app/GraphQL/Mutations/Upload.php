@@ -46,11 +46,8 @@ class Upload
     public function resolve($root, array $args)
     {
         /** @var \Illuminate\Http\UploadedFile $file */
-        //Storage::delete('files/jwt.txt');
-        //dd(Storage::files('files'));
         if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
         {
-            //dd($this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id);
             $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
             $filesystem = new Filesystem($adapter);
             $files_graphql = $args['files'];//Archivos enviados
@@ -79,10 +76,44 @@ class Upload
                 }
             }
         }else{
-            return [
-                'message' => 'No se pudo cargar ningun archivo, intente de nuevo',
-                'type' => 'Failed'
-            ];
+            if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] != null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
+            {
+                $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getContactFolder($args['con_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+                $filesystem = new Filesystem($adapter);
+                $files_graphql = $args['files'];//Archivos enviados
+                foreach ($files_graphql as $key1 => $files_gra) {
+                    Storage::deleteDirectory('files');
+                    Storage::putFileAs(
+                       'files', $files_gra, $args['names'][$key1]
+                    ); //Guardamos archivo en el Storage
+                    $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
+                    foreach ($files as $file) {     // recorremos cada uno de los file encontrados
+                        $name_file = explode( '/', $file);
+                        $read = Storage::get($file);                    // leemos el contenido del PDF
+                        $archivo = $filesystem->write(end($name_file), $read);    // Guarda el archivo en el drive
+                        $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
+                        Storage::delete('files/'.$args['names'][$key1]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+
+                        //Para subir documento requerido
+                        $document_contact = $this->document_contactRepo->create($args);     // le asignamos el mismos drive_id al file_id que es el que usa doc_member
+                        $doc_ref['parent_document_id'] = $this->document_referenceRepo->getContactFolder($args['con_id'])->id;
+                        //$doc_ref['name'] = $this->document_rolRepo->getDocUpload($args['doc_id'])->name_required_documents;
+                        $doc_ref['name'] = $args['names'][$key1];
+                        $doc_ref['is_folder'] = false;
+                        $doc_ref['module_id'] = 3; // 3 = modulo de contacto
+                        $doc_ref['doc_id'] = $document_contact->id; // doc_id del  document_contact recien agregado
+                        $doc_ref['contact_id'] = $args['con_id']; // id del contacto
+                        $doc_ref['drive_id'] = $file_id['path'];
+                        $this->document_referenceRepo->create($doc_ref);
+                    }
+                }
+
+            }else{
+                return [
+                    'message' => 'No se pudo cargar ningun archivo, intente de nuevo',
+                    'type' => 'Failed'
+                ];
+            }
         }
 
         return [
@@ -90,35 +121,5 @@ class Upload
             'type' => 'Successful'
         ];
 
-        //$file = $args['file'];
-        ////Storage::put('files', $file);
-        //$path = Storage::putFileAs(
-        //    'files', $file, $args['name']
-        //);
-        ////$file->save(storage_path('pdf').'/'.'por_graphql');
-        //return $path;
-        //return $file->storePublicly('uploads');
     }
 }
-//
-//namespace App\GraphQL\Mutations;
-//
-//use GraphQL\Type\Definition\ResolveInfo;
-//use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-//
-//class Upload
-//{
-//    /**
-//     * Return a value for the field.
-//     *
-//     * @param  null  $rootValue Usually contains the result returned from the parent field. In this case, it is always `null`.
-//     * @param  mixed[]  $args The arguments that were passed into the field.
-//     * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context Arbitrary data that is shared between all fields of a single query.
-//     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo Information about the query itself, such as the execution state, the field name, path to the field from the root, and more.
-//     * @return mixed
-//     */
-//    public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-//    {
-//        // TODO implement the resolver
-//    }
-//}
