@@ -48,7 +48,6 @@ class Upload
         /** @var \Illuminate\Http\UploadedFile $file */
         //Storage::delete('files/jwt.txt');
         //dd(Storage::files('files'));
-        $doc_ref_file = new Document_reference;
         if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
         {
             //dd($this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id);
@@ -67,7 +66,7 @@ class Upload
                     $archivo = $filesystem->write(end($name_file), $read);    // Guarda el archivo en el drive
                     $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
                     Storage::delete('files/'.$args['names'][$key1]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
-
+                    $doc_ref_file = new Document_reference;
                     //Para subir documento de actividad
                     $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
                     $doc_ref_file->name = $args['names'][$key1];
