@@ -42,11 +42,6 @@ type MessageSuccessGeneral {
 
 type Mutation {
 
-    #file_upload(
-    #    file: Upload!
-    #    name: String!
-    #): String @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
-
     updatePassword(
         contact_id:ID!
         present_password:String!
@@ -73,6 +68,8 @@ type Mutation {
     ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\Upload@resolve")
 
     uploadRequiredDocument(
+        name:String @rules(apply: ["max:250", "required"]) #NO eliminarlo, lo nesecito para encontrar el aarchivo en el storage
+        file: Upload @rules(apply: ["required"])
         contact_id:Int @rules(apply: ["required", "nullable"])
         doc_id:Int @rules(apply: ["required", "nullable"])
         drive_id:String @rules(apply: ["required"])

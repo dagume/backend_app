@@ -47,7 +47,7 @@ class Upload
     {
         /** @var \Illuminate\Http\UploadedFile $file */
         if ($args['activity_id'] != null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
-        {
+        {//documento de actividad
             $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
             $filesystem = new Filesystem($adapter);
             $files_graphql = $args['files'];//Archivos enviados
@@ -77,7 +77,7 @@ class Upload
             }
         }else{
             if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] != null && $args['order_id'] === null && $args['accounting_movements_id'] === null)
-            {
+            {//documento requerido
                 $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getContactFolder($args['con_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
                 $filesystem = new Filesystem($adapter);
                 $files_graphql = $args['files'];//Archivos enviados
@@ -110,7 +110,7 @@ class Upload
 
             }else{
                 if ($args['activity_id'] === null && $args['project_id'] != null && $args['con_id'] === null && $args['doc_id'] === null && $args['order_id'] === null && $args['accounting_movements_id'] != null)
-                {
+                {//soporte cuentas
                     $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderAccounting($args['project_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
                     $filesystem = new Filesystem($adapter);
                     $files_graphql = $args['files'];//Archivos enviados
@@ -140,7 +140,7 @@ class Upload
                     }
                 }else {
                     if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] === null && $args['order_id'] != null && $args['accounting_movements_id'] === null)
-                    {
+                    {//documentos de cotizacion
                         $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderOrderCurrent($args['order_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
                         $filesystem = new Filesystem($adapter);
                         $files_graphql = $args['files'];//Archivos enviados
@@ -157,12 +157,12 @@ class Upload
                                 $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
                                 Storage::delete('files/'.$args['names'][$key1]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
 
-                                //Consultamos cotizacion a actualizar
+                                //Consultamos cotizacion
                                 $quotation = $this->quotationRepo->getQuotation($args['order_id'], $args['con_id']);
                                 $quo['file_id'] = $file_id['path'];
                                 $quo['file_date'] = now();
                                 $this->quotationRepo->update($quotation->id, $quo);
-                                //actualizamos la cotizacion con su nuevo archivo cargado
+                                //cotizacion con su nuevo archivo cargado
                             }
                         }
                     }else{
@@ -176,7 +176,7 @@ class Upload
         }
 
         return [
-            'message' => 'Archivo cargado',
+            'message' => 'Archivo cargado exitosamente',
             'type' => 'Successful'
         ];
 
