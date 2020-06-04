@@ -55,8 +55,6 @@ class Upload
             $adapter    = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderSubActivity($args['project_id'], $args['activity_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
             $filesystem = new Filesystem($adapter);
             $files_graphql = $args['files'];//Archivos enviados
-            echo($args['names']);
-            echo($args['files']);
             foreach ($files_graphql as $key1 => $files_gra) {
                 Storage::putFileAs(
                    'files', $files_gra, $args['names'][$key1]
@@ -67,7 +65,8 @@ class Upload
                     $read = Storage::get($file);                    // leemos el contenido del PDF
                     $archivo = $filesystem->write(end($name_file), $read);    // Guarda el archivo en el drive
                     $file_id = $filesystem->getMetadata(end($name_file));     // get data de file en Drive
-                    Storage::delete('files/'.$args['names'][$key1]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                    //Storage::delete('files/*'.$args['names'][$key1]);   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
+                    Storage::delete('files/*');   //eliminamos el file del Storage, ya que se encuentra cargado en el drive
 
                     //Para subir documento de actividad
                     $doc_ref_file->parent_document_id = DB::table('document_reference')->where('project_id', $args['project_id'])->where('activity_id', $args['activity_id'])->first()->id;
