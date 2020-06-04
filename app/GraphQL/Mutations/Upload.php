@@ -141,7 +141,7 @@ class Upload
                 }else {
                     if ($args['activity_id'] === null && $args['project_id'] === null && $args['con_id'] != null && $args['doc_id'] === null && $args['order_id'] != null && $args['accounting_movements_id'] === null)
                     {
-                        $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->documentRepo->getFolderOrderCurrent($args['order_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+                        $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderOrderCurrent($args['order_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
                         $filesystem = new Filesystem($adapter);
                         $files_graphql = $args['files'];//Archivos enviados
                         foreach ($files_graphql as $key1 => $files_gra) {
