@@ -2,8 +2,10 @@
 
 namespace App\Events;
 
-use App\Product;
-use Auminate\Broadcasting\Channel;
+use App\PaymentAgreement;
+use App\Order;
+use App\Project;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,12 +13,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class StatusLiked implements ShouldBroadcast
+class PaymentAgreetment implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $object;
-
+    public $paymentAgreement;
     public $message;
 
     /**
@@ -24,17 +25,18 @@ class StatusLiked implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Product $object)
+    public function __construct(PaymentAgreement $pay)
     {
-        $user = auth()->user();
-        $this->object = $object;
-        $this->message = "{$user->name} creó un {$object->name}";
+        $this->paymentAgreement = $pay;
+        $order = Order::where('id', $pay->order_id)->first();
+        $project = Project::where('id', $order->project_id)->first();
+        $this->message = "Proyecto {$project->name}, Pendiente a pagar esta semana {$pay->amount} en ordenes de compra";
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()
     {
