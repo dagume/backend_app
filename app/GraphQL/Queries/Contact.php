@@ -20,7 +20,7 @@ class Contact
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $contact = DB::select('
-        select doc_con.id as doc_con, req_doc.id as doc_id, doc_upload.folder_id, doc_upload.created_at, doc_upload.updated_at, doc_upload.drive_id, req_doc.name_required_documents, req_doc.role_id from
+        select req_doc.id as doc_id, doc_upload.folder_id, doc_upload.created_at, doc_upload.updated_at, doc_upload.drive_id, req_doc.name_required_documents, req_doc.role_id from
 (select con.folder_id, doc_con.created_at, doc_con.updated_at, doc_con.doc_id, doc_ref.drive_id
             from documents_contact as doc_con
             inner join contacts as con

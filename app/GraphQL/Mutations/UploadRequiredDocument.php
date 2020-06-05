@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Document_referenceRepository;
+use App\Document_contact;
 use DB;
 
 class UploadRequiredDocument
@@ -28,7 +29,10 @@ class UploadRequiredDocument
     {
         try {
             $mess = DB::transaction(function () use($args){
-                $docReference = $this->document_referenceRepo->getDocumentRequired($args['contact_id'], $args['doc_id']); //buscamos el registro del documento requerido
+                $doc_id = Document_contact::where('con_id', $args['contact_id'])
+                ->where('doc_id', $args['doc_id'])
+                ->first();
+                $docReference = $this->document_referenceRepo->getDocumentRequired($args['contact_id'], $doc_id->id); //buscamos el registro del documento requerido
                 if (!empty($docReference)) {//Si existe algun regstro debemos actualizarlo
 
                     $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderOrderCurrent($args['order_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
