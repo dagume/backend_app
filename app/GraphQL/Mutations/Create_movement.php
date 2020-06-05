@@ -36,7 +36,7 @@ class Create_movement
             $contact_origin = $this->contactRepo->find($args['origin_id']);
             $contact_destination = $this->contactRepo->find($args['destination_id']);
             if ($contact_origin->identification_number == $args['project_id'] || $contact_destination->identification_number == $args['project_id']) {//Validar que el dinero si entre o salga del proyecto(Que este en origin o destination)
-                if ($args['origin_role_id'] == $this->roleRepo->getRolCliente()->id){
+                if ($args['origin_role_id'] !== $this->roleRepo->getRolCliente()->id){
                     $args['registration_date'] = now();
                     $args['sender_id'] = auth()->user()->id;
                     $args['state_movement'] = True;
