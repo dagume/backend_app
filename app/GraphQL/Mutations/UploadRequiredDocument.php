@@ -5,7 +5,18 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\Document_referenceRepository;
+use App\Document_reference;
 use App\Document_contact;
+use App\Repositories\MemberRepository;
+use App\Repositories\Document_contactRepository;
+use App\Repositories\ContactRepository;
+use App\Repositories\Document_rolRepository;
+use App\Repositories\QuotationRepository;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Filesystem;
+use Illuminate\Support\Facades\Cache;
+use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+
 use DB;
 
 class UploadRequiredDocument
