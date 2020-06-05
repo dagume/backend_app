@@ -46,7 +46,7 @@ class UploadRequiredDocument
                 $docReference = $this->document_referenceRepo->getDocumentRequired($args['contact_id'], $doc_id->id); //buscamos el registro del documento requerido
                 if (!empty($docReference)) {//Si existe algun regstro debemos actualizarlo
 
-                    $adapter = new GoogleDriveAdapter(Conection_Drive(), $this->document_referenceRepo->getFolderOrderCurrent($args['order_id'])->drive_id); //Caarpeta donde vamos a guardar el documento
+                    $adapter = new GoogleDriveAdapter(Conection_Drive(), $docReference->drive_id); //Caarpeta donde vamos a guardar el documento
                     $filesystem = new Filesystem($adapter);
                     $files_graphql = $args['file'];//Archivos enviados
                     foreach ($files_graphql as $key1 => $files_gra) {
