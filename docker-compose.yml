@@ -3,13 +3,19 @@ services:
   app:
     image: nginx-php7.3-ideasoft:latest
     volumes:
-      - .:/var/www/html      
-      - ../access_backend_app/docker:/var/www/html/docker
+      - .:/var/www/html
     links:
       - pgsql
     ports:
       - 8085:80
       - 443:443
+  scheduler:
+    image: nginx-php7.3-ideasoft:latest
+    command: ./var/www/html/bin/run-scheduler.sh
+    volumes:
+      - .:/var/www/html
+    links:
+      - pgsql
   pgsql:
     image: postgres:10
     environment:
