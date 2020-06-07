@@ -1,0 +1,22 @@
+version: "3"
+services:
+  app:
+    image: nginx-php7.3-ideasoft:latest
+    volumes:
+      - .:/var/www/html      
+      - ../access_backend_app/docker:/var/www/html/docker
+    links:
+      - pgsql
+    ports:
+      - 8085:80
+      - 443:443
+  pgsql:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: app_admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app_db     
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/           
+    ports:
+      - 5432:5433
