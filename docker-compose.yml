@@ -23,6 +23,6 @@ services:
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: app_db     
     volumes:
-      - ./docker/postgres:/var/lib/postgresql/           
+      - ./docker/postgres/data:/var/lib/postgresql/data           
     ports:
       - 5432:5433
