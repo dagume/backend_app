@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use App\Repositories\PaymentAgreementRepository;
 use App\Events\PaymentAgreetment;
 use App\Events\StatusLiked;
-use App\User;
 
 class dailyPaymentAgreetment extends Command
 {
@@ -43,22 +42,16 @@ class dailyPaymentAgreetment extends Command
      */
     public function handle()
     {
-        //$day_week = date("w");
-//
-        //if ($day_week == 0){
-        //    $day_week = 7;
-        //}
-        //$first_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")-$day_week+1, date("Y"))).'\'';
-        //$last_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+(7 - $day_week), date("Y"))).'\'';
-        //$paymentAgreements = $this->pay_agreRepo->betweenPaymentAgreement($first_day, $last_day);
-        print(User::where('id','1')->name);
-        print("Hola");
-        echo(User::where('id','1')->name);
-        echo('hola');
-        //dd(User::where('id','1')->name);
+        $day_week = date("w");
 
-        //foreach ($paymentAgreements as $pay) {
-        //    event(new PaymentAgreetment($pay));
-        //}
+        if ($day_week == 0){
+            $day_week = 7;
+        }
+        $first_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")-$day_week+1, date("Y"))).'\'';
+        $last_day = '\''.date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+(7 - $day_week), date("Y"))).'\'';
+        $paymentAgreements = $this->pay_agreRepo->betweenPaymentAgreement($first_day, $last_day);
+        foreach ($paymentAgreements as $pay) {
+            event(new PaymentAgreetment($pay));
+        }
     }
 }
