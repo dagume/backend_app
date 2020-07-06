@@ -46,6 +46,7 @@ extend type Mutation {
     delete_member(
         member_id: Int!
     ): MessageSuccessMember @field(resolver: "App\\GraphQL\\Mutations\\DeleteMember@resolve") @middleware(checks:["auth:api", "can:project.destroy"])
+    
     deleteContact_Project(
         project_id:Int!
         contact_id:Int!

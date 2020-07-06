@@ -183,7 +183,7 @@ class CreateProject
             }
             return [
                 'project' => null,
-                'message' => $e.'El proyecto no fue registrado, vuelva a intentarlo',
+                'message' => $e .'El proyecto no fue registrado, vuelva a intentarlo',
                 'type' => 'Failed'
             ];
         }

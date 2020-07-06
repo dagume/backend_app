@@ -65,5 +65,10 @@ class Accounting_movementRepository extends BaseRepository
 		and CAST(puc_id AS CHAR) LIKE \''.$puc_id.'\';', [$project_id, $origin_id, $role_id]);
         return $this->getObjects($data);
     }
+    public function movements_for_member($member_id)
+    {   //movimientos por miembro
+        $data = DB::select('select * from accounting_movements where origin_id = ? or destination_id = ?;', [$member_id, $member_id]);
+        return empty($data);
+    }
 }
 

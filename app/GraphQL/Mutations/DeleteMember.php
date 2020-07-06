@@ -7,6 +7,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Repositories\MemberRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\ContactRepository;
+use App\Repositories\Accounting_movementRepository;
 use DB;
 
 class DeleteMember
@@ -14,12 +15,14 @@ class DeleteMember
     protected $memberRepo;
     protected $roleRepo;
     protected $contactRepo;
+    protected $accountRepo;
 
-    public function __construct(ContactRepository $conRepo, RoleRepository $rolRepo, MemberRepository $memRepo)
+    public function __construct(Accounting_movementRepository $accoRepo, ContactRepository $conRepo, RoleRepository $rolRepo, MemberRepository $memRepo)
     {
         $this->memberRepo = $memRepo;
         $this->roleRepo = $rolRepo;
         $this->contactRepo = $conRepo;
+        $this->accountRepo = $accoRepo;
     }
     /**
      * Return a value for the field.
@@ -31,14 +34,24 @@ class DeleteMember
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
+    {        
+        if (!$this->accountRepo->movements_for_member($args['member_id'])) {
+            return [
+                'member' => null,
+                'message' => 'El integrante ya tiene movimientos registrados, no se puede eliminar',
+                'type' => 'Failed'
+            ];
+        }
         try
 		{
             $delete_mem = DB::transaction(function () use($args){  //se crea la transacion
-
+                
                 $member = $this->memberRepo->find($args['member_id']);
                 $contact = $this->contactRepo->find($member->contact_id);
                 $project_role = $this->roleRepo->getRolProject()->id;
+
+                $this->accountRepo->movements_for_member($args['member_id']);
+
                 //Si es role proyecto se deben eliminar dos registros de member
                 if ($member->role_id == $project_role) {
                     $cont = $this->contactRepo->getContactIdentificatioNumber($member->project_id);
