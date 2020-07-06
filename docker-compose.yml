@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: nginx-php7.3-ideasoft:latest
+    image: dagume/nginx-php7.3-ideasoft:latest
     volumes:
       - .:/var/www/html
     links:
@@ -10,14 +10,14 @@ services:
       - 8085:80
       - 443:443
   scheduler:
-    image: nginx-php7.3-ideasoft:latest
+    image: dagume/nginx-php7.3-ideasoft:latest
     command: ./var/www/html/bin/run-scheduler.sh
     volumes:
       - .:/var/www/html
     links:
       - pgsql
   pgsql:
-    image: postgres:10
+    image: postgres:10-alpine
     environment:
       POSTGRES_USER: app_admin
       POSTGRES_PASSWORD: secret

@@ -34,7 +34,18 @@ class DeleteMember
      * @return mixed
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {        
+    {   
+        $member = $this->memberRepo->find($args['member_id']);
+        $contact = $this->contactRepo->find($member->contact_id);
+        $project_role = $this->roleRepo->getRolProject()->id;
+
+        if ($contact->identification_number == $member->project_id){
+            return [
+                'member' => null,
+                'message' => 'No se puede eliminar, Este hace referencia a la cuenta principal del proyecto',
+                'type' => 'Failed'
+            ];
+        }
         if (!$this->accountRepo->movements_for_member($args['member_id'])) {
             return [
                 'member' => null,
@@ -42,13 +53,10 @@ class DeleteMember
                 'type' => 'Failed'
             ];
         }
+
         try
 		{
-            $delete_mem = DB::transaction(function () use($args){  //se crea la transacion
-                
-                $member = $this->memberRepo->find($args['member_id']);
-                $contact = $this->contactRepo->find($member->contact_id);
-                $project_role = $this->roleRepo->getRolProject()->id;
+            $delete_mem = DB::transaction(function () use($args){//se crea la transacion
 
                 $this->accountRepo->movements_for_member($args['member_id']);
 
