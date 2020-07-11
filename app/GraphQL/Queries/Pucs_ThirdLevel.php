@@ -19,12 +19,34 @@ class Pucs_ThirdLevel
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $Pucs = DB::select('select firstLevel.id as firstlevel_id, firstLevel.name as firstlevel_name, secondLevel.id as secondlevel_id, secondLevel.name as secondlevel_name, thirdLevel.id as thirdlevel_id, thirdLevel.name as thirdlevel_name from(
-            select * from puc where parent_puc_id is null
-        ) as firstLevel 
-        inner join (select * from puc where parent_puc_id is not null) as secondLevel on firstLevel.id = secondLevel.parent_puc_id  
-        inner join (select * from puc where parent_puc_id is not null) as thirdLevel on secondLevel.id = thirdLevel.parent_puc_id');
-        //dd($Pucs);
+        $contact = auth()->user(); //usuario logueado
+        //DD($contact->id);
+        foreach ($contact->roles as $rol) { //Verificacomos si este usuario tiene role administrador
+            if (trim($rol->special) === 'all-access') {
+                $Pucs = DB::select('select firstLevel.id as firstlevel_id, firstLevel.name as firstlevel_name, secondLevel.id as secondlevel_id, secondLevel.name as secondlevel_name, thirdLevel.id as thirdlevel_id, thirdLevel.name as thirdlevel_name from(
+                    select * from puc where parent_puc_id is null
+                ) as firstLevel 
+                inner join (select * from puc where parent_puc_id is not null) as secondLevel on firstLevel.id = secondLevel.parent_puc_id  
+                inner join (select * from puc where parent_puc_id is not null) as thirdLevel on secondLevel.id = thirdLevel.parent_puc_id');
+                
+                return $Pucs;
+            }
+            $Pucs = DB::select('select distinct puc_role.puc_id as distincts, pucsenables.* from (
+                select firstLevel.id as firstlevel_id, firstLevel.name as firstlevel_name, secondLevel.id as secondlevel_id, secondLevel.name as secondlevel_name, thirdLevel.id as thirdlevel_id, thirdLevel.name as thirdlevel_name 
+                from(
+                    select * from puc where parent_puc_id is null
+                 ) as firstLevel 
+                    inner join (select * from puc where parent_puc_id is not null) as secondLevel on firstLevel.id = secondLevel.parent_puc_id  
+                    inner join (select * from puc where parent_puc_id is not null) as thirdLevel on secondLevel.id = thirdLevel.parent_puc_id
+            ) as pucsenables
+                    inner join puc_role on pucsenables.thirdlevel_id = puc_role.puc_id
+                    where puc_role.role_id in (select role_id from members where contact_id = ?)',[$contact->id]);
+            
+            return $Pucs;
+        }
+
+
+       //dd($Pucs);
         return $Pucs; 
     }
 }

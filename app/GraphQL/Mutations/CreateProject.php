@@ -45,7 +45,7 @@ class CreateProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        global $project_folder;
+        global $pro_fol;
         try {
             //dd(DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id);
             //Transaccion para create
@@ -57,9 +57,9 @@ class CreateProject
                 }
                 if ($args['parent_project_id'] != null) {
                     //hacemos conexion con el drive y creamos el folder. Metodos en Helper.php
-                    global $project_folder;
-                    $project_folder = Conection_Drive()->files->create(Create_Folder($folder_name, $this->documentRepo->getFolderActYear()->drive_id), ['fields' => 'id']);
-                    $args['folder_id'] = $project_folder->id; //Id del folder que se creo en drive
+                    global $pro_fol;
+                    $pro_fol = Conection_Drive()->files->create(Create_Folder($folder_name, $this->documentRepo->getFolderActYear()->drive_id), ['fields' => 'id']);
+                    $args['folder_id'] = $pro_fol->id; //Id del folder que se creo en drive
                 }
                 $someJSON = json_encode($args['place']);
                 $args['place'] = $someJSON;
@@ -86,11 +86,11 @@ class CreateProject
                     $doc_ref_project->is_folder = 1; // 0 = Tipo File, 1 = Tipo Folder
                     $doc_ref_project->project_id = $project->id;
                     $doc_ref_project->module_id = 2; //id 2 pertenece al modulo Project
-                    $doc_ref_project->drive_id = $project_folder->id;
+                    $doc_ref_project->drive_id = $pro_fol->id;
                     $doc_ref_project->save();
 
                     //Hacemos conexion con el drive y creamos el folder Actividades. Metodos en Helper.php
-                    $activity_folder = Conection_Drive()->files->create(Create_Folder('Actividades', $project_folder->id), ['fields' => 'id']);
+                    $activity_folder = Conection_Drive()->files->create(Create_Folder('Actividades', $pro_fol->id), ['fields' => 'id']);
                     $doc_ref_activity = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
                     $doc_ref_activity->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
                     $doc_ref_activity->name ='Actividades';
@@ -151,7 +151,7 @@ class CreateProject
                     }
 
                     //Hacemos conexion con el drive y creamos el folder de Contabilidad. Metodos en Helper.php
-                    $account_folder = Conection_Drive()->files->create(Create_Folder('Contabilidad', $project_folder->id), ['fields' => 'id']);
+                    $account_folder = Conection_Drive()->files->create(Create_Folder('Contabilidad', $pro_fol->id), ['fields' => 'id']);
                     $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
                     $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
                     $doc_ref_account->name = 'Contabilidad';
@@ -162,7 +162,7 @@ class CreateProject
                     $doc_ref_account->save();
 
                     //Hacemos conexion con el drive y creamos el folder de Contabilidad. Metodos en Helper.php
-                    $order_folder = Conection_Drive()->files->create(Create_Folder('Ordenes', $project_folder->id), ['fields' => 'id']);
+                    $order_folder = Conection_Drive()->files->create(Create_Folder('Ordenes', $pro_fol->id), ['fields' => 'id']);
                     $doc_ref_account = new Document_reference; // aqui vamos a guardar la estructura de las carpetas creadas
                     $doc_ref_account->parent_document_id = DB::table('document_reference')->where('name', $args['name'])->first()->id;
                     $doc_ref_account->name = 'Ordenes';
@@ -175,11 +175,11 @@ class CreateProject
                 return $project;
             }, 3);
         } catch (Exception $e) {
-            global $project_folder;
-            //dd($project_folder->id);
-            if (!is_null ($project_folder) || !empty($project_folder))
+            global $pro_fol;
+            //dd($pro_fol->id);
+            if (!is_null ($pro_fol) || !empty($pro_fol))
             {
-                Conection_Drive()->files->delete($project_folder->id);
+                Conection_Drive()->files->delete($pro_fol->id);
             }
             return [
                 'project' => null,
