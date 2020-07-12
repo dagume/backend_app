@@ -56,7 +56,7 @@ class ProjectController extends Controller
             ->select('id', 'name', 'description', 'progress')
             ->where('id', '=', $id)->get();
         //$project = Project::findOrFail($id);
-        return response()->json(['project'=>$data], 201);
+        return response()->json(['project'=>$data], 200);
     }
 
     /**
