@@ -50,9 +50,13 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project)
+    public function show($id)
     {
-        //
+        $data = DB::table('projects')
+            ->select('id', 'name', 'description', 'progress')
+            ->where('id', '=', $id)->get();
+        //$project = Project::findOrFail($id);
+        return response()->json(['project'=>$data], 201);
     }
 
     /**
