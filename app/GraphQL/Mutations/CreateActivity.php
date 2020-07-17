@@ -186,6 +186,7 @@ class CreateActivity
             }
         }
     }
+    
     public function missing_project_money($project_id){
         $acts_total = 0;
             $added_total = 0;

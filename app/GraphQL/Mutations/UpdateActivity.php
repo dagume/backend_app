@@ -68,6 +68,16 @@ class UpdateActivity
         {
             if($end_date_project >= $end_date_activity || $act->is_act === True || $act->is_added === True)
             {
+                // Si es adicional en tiempo o dinero solo debemos actualizar campos
+                if ($act->is_add) {
+                    //actualizamos los datos de la actividad
+                    $activity = $this->activityRepo->update($args['id'], $args);
+                    return [
+                        'activity' => $activity,
+                        'message' => 'Actividad actualizada Exitosamente',
+                    'type' => 'Successful'
+                    ];
+                }      
                 if ($amo <= $this->progress->missing_project_money($act->project_id)) //Validar que no exceda el faltante de recibir por el cliente, no puede entrar mas dinero del registrado en contrato
                 {
                     try
@@ -75,10 +85,12 @@ class UpdateActivity
                         //actualizamos los datos de la actividad
                         $activity = $this->activityRepo->update($args['id'], $args);
                         //actualizamos el progreso del proyecto segun cantad de dinero ingresado por actas
-                        if (!empty($args['amount'])) {
-                            $movement['value'] = $args['amount'];
-                            $this->progress->Progress($act->is_act, $act->project_id); //actualizamos el progrso del proyecto
-                            $this->accountRepo->update($this->accountRepo->getMovementAct($args['id'])->id, $movement);//Actualizamos el amount del movimiento
+                        if ($act->is_act) {
+                            if (!empty($args['amount'])) {
+                                $movement['value'] = $args['amount'];
+                                $this->progress->Progress($act->is_act, $act->project_id); //actualizamos el progrso del proyecto
+                                $this->accountRepo->update($this->accountRepo->getMovementAct($args['id'])->id, $movement);//Actualizamos el amount del movimiento
+                            }
                         }
                     }
                     catch (\Exception $e)
