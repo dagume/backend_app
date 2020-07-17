@@ -40,7 +40,7 @@ class Pucs_ThirdLevel
                     inner join (select * from puc where parent_puc_id is not null) as thirdLevel on secondLevel.id = thirdLevel.parent_puc_id
             ) as pucsenables
                     inner join puc_role on pucsenables.thirdlevel_id = puc_role.puc_id
-                    where puc_role.role_id in (select role_id from members where contact_id = ?)',[$contact->id]);
+                    where puc_role.role_id in (select role_id from members where contact_id = ? and project_id = ?)',[$contact->id, $args['project_id']]);
             
             return $Pucs;
         }

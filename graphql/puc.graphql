@@ -24,7 +24,7 @@ type MessageSuccessPuc{
 
 extend type Query{
     #Query Puc
-    pucs_thirdLevel: [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") @middleware(checks:["auth:api", "can:puc.list"])
+    pucs_thirdLevel(project_id:Int): [PucLevels!] @field(resolver: "App\\GraphQL\\Queries\\Pucs_ThirdLevel@resolve") @middleware(checks:["auth:api", "can:puc.list"])
     pucs: [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api"]) @middleware(checks:["auth:api", "can:puc.list"])
     puc(id:Int @eq name:String @eq): Puc @find(model: "App\\Puc") @middleware(checks:["auth:api", "can:puc.show"])
     pucs_parent(parent_puc_id: Int @where(operator: "=")): [Puc] @all(model: "App\\Puc") @middleware(checks:["auth:api", "can:puc.list"])
