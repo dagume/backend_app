@@ -31,11 +31,18 @@ class UpdateProject
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         try
-		{
-            if (!empty($args['name']) || !is_null($args['name'])){
+		{          
+            //Si se desea cambiar el nombre del proyecto hay que tener en cuenta que este tabien tiene un contacto
+            //se le debe actualizar el nombre tambien al contacto  
+            if (isset($args['name'])){
                 $contact = $this->contactRepo->getContactIdentificatioNumber($args['id']);
                 $cont['name'] = $args['name'];
                 $this->contactRepo->update($contact->id, $cont);
+            }  
+            //Si se quiere editar PLACE se tiene que pasar a Json para almacenar en la DB           
+            if (isset($args['place'])){
+                $someJSON = json_encode($args['place']);
+                $args['place'] = $someJSON;
             }
             $project = $this->projectRepo->update($args['id'], $args);
 		}
