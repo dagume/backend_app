@@ -26,7 +26,13 @@ class FilterNameProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $contact_id = auth()->user()->id; //usuario logueado
-        return $this->projectRepo->get_filter_permission_project($args['name'], $contact_id);
+        $contact = auth()->user(); //usuario logueado
+        
+        foreach ($contact->roles as $rol) { //Verificacomos si este usuario tiene role administrador
+            if (trim($rol->special) === 'all-access') {
+                return $this->projectRepo->get_project_admin($args['name']);
+            }
+        }
+        return $this->projectRepo->get_filter_permission_project($args['name'], $contact->id);
     }
 }

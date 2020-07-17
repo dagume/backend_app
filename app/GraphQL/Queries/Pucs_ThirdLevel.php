@@ -31,22 +31,18 @@ class Pucs_ThirdLevel
                 
                 return $Pucs;
             }
-            $Pucs = DB::select('select distinct puc_role.puc_id as distincts, pucsenables.* from (
-                select firstLevel.id as firstlevel_id, firstLevel.name as firstlevel_name, secondLevel.id as secondlevel_id, secondLevel.name as secondlevel_name, thirdLevel.id as thirdlevel_id, thirdLevel.name as thirdlevel_name 
-                from(
-                    select * from puc where parent_puc_id is null
-                 ) as firstLevel 
-                    inner join (select * from puc where parent_puc_id is not null) as secondLevel on firstLevel.id = secondLevel.parent_puc_id  
-                    inner join (select * from puc where parent_puc_id is not null) as thirdLevel on secondLevel.id = thirdLevel.parent_puc_id
-            ) as pucsenables
-                    inner join puc_role on pucsenables.thirdlevel_id = puc_role.puc_id
-                    where puc_role.role_id in (select role_id from members where contact_id = ? and project_id = ?)',[$contact->id, $args['project_id']]);
-            
-            return $Pucs;
         }
-
-
-       //dd($Pucs);
-        return $Pucs; 
+        $Pucs = DB::select('select distinct puc_role.puc_id as distincts, pucsenables.* from (
+            select firstLevel.id as firstlevel_id, firstLevel.name as firstlevel_name, secondLevel.id as secondlevel_id, secondLevel.name as secondlevel_name, thirdLevel.id as thirdlevel_id, thirdLevel.name as thirdlevel_name 
+            from(
+                select * from puc where parent_puc_id is null
+             ) as firstLevel 
+                inner join (select * from puc where parent_puc_id is not null) as secondLevel on firstLevel.id = secondLevel.parent_puc_id  
+                inner join (select * from puc where parent_puc_id is not null) as thirdLevel on secondLevel.id = thirdLevel.parent_puc_id
+        ) as pucsenables
+                inner join puc_role on pucsenables.thirdlevel_id = puc_role.puc_id
+                where puc_role.role_id in (select role_id from members where contact_id = ? and project_id = ?)',[$contact->id, $args['project_id']]);
+        
+        return $Pucs;
     }
 }

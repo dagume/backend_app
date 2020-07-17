@@ -40,6 +40,16 @@ class ProjectRepository extends BaseRepository
             ->whereNotNull('projects.parent_project_id')->get();
         return $data;
     }
+    public function get_project_admin($name)
+    {   //filtramos los projectos según este relacionados con usuario logueado y parametro enviado
+        $data = DB::table('projects')
+            ->select('projects.*')
+            ->distinct()
+            ->join('members', 'projects.id', '=', 'members.project_id')
+            ->where('projects.name', 'ilike', $name)
+            ->whereNotNull('projects.parent_project_id')->get();
+        return $data;
+    }
     public function projects_id_permission_for_user($state, $contact_id)
     {   //Buscamos los id de los projectos permitidos por usuario
         $data = DB::table('projects')
