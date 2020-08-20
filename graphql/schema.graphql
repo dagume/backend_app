@@ -69,7 +69,7 @@ type Mutation {
 
     uploadRequiredDocument(
         name:String @rules(apply: ["max:250", "required"]) #NO eliminarlo, lo nesecito para encontrar el aarchivo en el storage
-        file: Upload! @rules(apply: ["required"])
+        file: Upload @rules(apply: ["required"])
         contact_id:Int @rules(apply: ["required", "nullable"])
         doc_id:Int @rules(apply: ["required", "nullable"])
     ): MessageSuccessGeneral @field(resolver: "App\\GraphQL\\Mutations\\UploadRequiredDocument@resolve")

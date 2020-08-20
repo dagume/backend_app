@@ -38,6 +38,7 @@ class UploadRequiredDocument
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        dd($args['file']);
         try {
             $mess = DB::transaction(function () use($args){
                 $doc_id = Document_contact::where('con_id', $args['contact_id'])
@@ -52,7 +53,7 @@ class UploadRequiredDocument
                     foreach ($files_graphql as $key1 => $files_gra) {
                         Storage::deleteDirectory('files');
                         Storage::putFileAs(
-                           'files', $files_gra, $args['name']
+                            'files', $files_gra, $args['name']
                         ); //Guardamos archivo en el Storage
                         $files = Storage::files('files');      // Estamos cargando los archivos que estan en el Storage, traemos todos los documentos
                         foreach ($files as $file) {     // recorremos cada uno de los file encontrados
@@ -74,7 +75,7 @@ class UploadRequiredDocument
             }, 3);
         } catch (Exception $e) {
             return [
-                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar',
+                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar'. $e,
                 'type' => 'Failed'
             ];
         }
