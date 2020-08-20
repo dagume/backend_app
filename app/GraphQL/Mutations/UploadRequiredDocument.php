@@ -38,7 +38,6 @@ class UploadRequiredDocument
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        dd($args['file']);
         try {
             $mess = DB::transaction(function () use($args){
                 $doc_id = Document_contact::where('con_id', $args['contact_id'])
@@ -75,7 +74,7 @@ class UploadRequiredDocument
             }, 3);
         } catch (Exception $e) {
             return [
-                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar'. $e,
+                'message' => 'No se puedo actualizar el documento, vuelvalo a intentar',
                 'type' => 'Failed'
             ];
         }
