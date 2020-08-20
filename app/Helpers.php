@@ -114,6 +114,8 @@ function Conection_Drive()
     {
         $activity['project_id'] = $project_id;
         $activity['name'] = $name;
+        $activity['date_start'] = now();
+        $activity['date_end'] = now();
         $activity['state'] = 1;
         $activity['completed'] = false;
         $activity['priority'] = 'Media';

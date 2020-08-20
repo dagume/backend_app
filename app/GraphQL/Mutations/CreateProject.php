@@ -47,7 +47,6 @@ class CreateProject
     {
         global $pro_fol;
         try {
-            //dd(DB::select('select id from roles where name = ?', ['Proyecto'])[0]->id);
             //Transaccion para create
             $proj = DB::transaction(function () use($args){
                 if ($args['type'] == 0) {
