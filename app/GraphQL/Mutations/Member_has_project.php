@@ -38,7 +38,8 @@ class Member_has_project
     {
         if ($this->projectRepo->find($args['project_id'])->state !== '5') {
             $mem = DB::transaction(function () use($args){
-                $role_id = $this->roleRepo->getRolProject()->id;
+                $member = null;
+                $role_id = $this->roleRepo->getRolLender()->id; //El proyecto puede ser miembro de otro con el rol de prestamista, se hace la validacion mas adelante
                 $contact = $this->contactRepo->find($args['contact_id']);
                 if($contact->type != 0){
                     $args['state'] = 1;
@@ -55,7 +56,7 @@ class Member_has_project
                     $memberDos = $this->memberRepo->create($mem);
                     $message = 'Integrante agregado exitosamente';
                 }else{
-                    $message = 'El contacto no puede ser agregado como Integrante';
+                    $message = 'El contacto no puede ser agregado como Integrante, si es otro proyecto asegurece de ser agregado como prestamista';
                 }
                 return [
                     'member' => $member,

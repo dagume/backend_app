@@ -17,6 +17,11 @@ class RoleRepository extends BaseRepository
         $data = DB::select('select id from roles where name = ?', ['Proyecto']);
         return $data[0];
     }
+    public function getRolLender()
+    {
+        $data = DB::select('select id from roles where name = ?', ['Prestamista']);
+        return $data[0];
+    }
     public function getRolProveedor()
     {
         $data = DB::select('select id from roles where name = ?', ['Proveedor']);
