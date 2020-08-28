@@ -45,7 +45,6 @@ class CreateActivity
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //dd($this->missing_project_money($args['project_id']));
         $start_date_project = $this->projectRepo->find($args['project_id'])->start_date;
         $end_date_project = $this->projectRepo->find($args['project_id'])->end_date;
         $start_date_activity = $args['date_start'];
@@ -128,7 +127,6 @@ class CreateActivity
                             ];
 
                         }, 3);
-                        //dd($act);
                         return $act;
                     }else {
                         return [
@@ -203,6 +201,9 @@ class CreateActivity
             }
             $missing = $project_total - $acts_total;
             return $missing;
+    }
+    public function finishDateAdded(){ //Funcion para validar ultimo fecha de adicionales del projecto
+        return null;
     }
 }
 

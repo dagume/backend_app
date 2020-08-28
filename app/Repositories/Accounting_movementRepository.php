@@ -32,8 +32,8 @@ class Accounting_movementRepository extends BaseRepository
         $data = DB::select('select * from accounting_movements
         where project_id = ?
         and (origin_id = ? and destination_id = ? and origin_role_id = ?)
-        or (origin_id = ? and destination_id = ? and destination_role_id = ?)',
-        [$project_id, $contact_id, $projectContact_id, $role_id, $projectContact_id, $contact_id, $role_id]);
+        or (project_id = ? and origin_id = ? and destination_id = ? and destination_role_id = ?)',
+        [$project_id, $contact_id, $projectContact_id, $role_id, $project_id, $projectContact_id, $contact_id, $role_id]);
         return $this->getObjects($data);
     }
     public function project_income_refunds($project_id)
