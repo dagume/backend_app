@@ -29,11 +29,12 @@ class Accounting_movementRepository extends BaseRepository
     }
     public function partner_contributions_and_refunds($project_id, $contact_id, $role_id, $projectContact_id)
     {   //Aportes y reembolsos de socio o prestamista en un proyecto
+        //Le estamos parando los roles de origen y destino por defecto ya que a ultima hora se cambio el fucionamieto de que cuando un proyecto se vuelve miembro de otro proyecto, llega con el rol de prestamista(que es el rol 7)
         $data = DB::select('select * from accounting_movements
         where project_id = ?
-        and (origin_id = ? and destination_id = ? and origin_role_id = ?)
-        or (project_id = ? and origin_id = ? and destination_id = ? and destination_role_id = ?)',
-        [$project_id, $contact_id, $projectContact_id, $role_id, $project_id, $projectContact_id, $contact_id, $role_id]);
+        and (origin_id = ? and destination_id = ? and origin_role_id in(9,7))
+        or (project_id = ? and origin_id = ? and destination_id = ? and destination_role_id in(9,7))',
+        [$project_id, $contact_id, $projectContact_id, $project_id, $projectContact_id, $contact_id]);
         return $this->getObjects($data);
     }
     public function project_income_refunds($project_id)
