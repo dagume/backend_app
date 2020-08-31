@@ -32,8 +32,8 @@ class Accounting_movementRepository extends BaseRepository
         //Le estamos parando los roles de origen y destino por defecto ya que a ultima hora se cambio el fucionamieto de que cuando un proyecto se vuelve miembro de otro proyecto, llega con el rol de prestamista(que es el rol 7)
         $data = DB::select('select * from accounting_movements
         where project_id = ?
-        and (origin_id = ? and destination_id = ? and origin_role_id in(?,7))
-        or (project_id = ? and origin_id = ? and destination_id = ? and destination_role_id in(?,7))',
+        and (origin_id = ? and destination_id = ? and origin_role_id in(?,9))
+        or (project_id = ? and origin_id = ? and destination_id = ? and destination_role_id in(?,9))',
         [$project_id, $contact_id, $projectContact_id, $role_id, $project_id, $projectContact_id, $contact_id, $role_id]);
         return $this->getObjects($data);
     }
